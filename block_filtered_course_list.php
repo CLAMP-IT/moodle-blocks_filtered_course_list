@@ -1,20 +1,34 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once($CFG->dirroot . '/course/lib.php');
 
 class block_filtered_course_list extends block_list {
-    function init() {
+    public function init() {
         $this->title   = get_string('blockname', 'block_filtered_course_list');
     }
 
-    function has_config() {
+    public function has_config() {
         return true;
     }
 
-    function get_content() {
+    public function get_content() {
         global $CFG, $USER, $DB, $OUTPUT;
 
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
 
@@ -22,9 +36,9 @@ class block_filtered_course_list extends block_list {
         $this->content->items  = array();
         $this->content->icons  = array();
         $this->content->footer = '';
-	$icon  = '<img src="' . $OUTPUT->pix_url('i/course') . '" class="icon" alt="" />&nbsp;';
+        $icon  = '<img src="' . $OUTPUT->pix_url('i/course') . '" class="icon" alt="" />&nbsp;';
 
-        // Obtain values from our config settings
+        // Obtain values from our config settings.
         $filter_type = 'term';
         if (isset($CFG->block_filtered_course_list_filtertype)) {
             $filter_type = $CFG->block_filtered_course_list_filtertype;
@@ -47,7 +61,7 @@ class block_filtered_course_list extends block_list {
 
         $adminseesall = true;
         if (isset($CFG->block_filtered_course_list_adminview)) {
-            if ($CFG->block_filtered_course_list_adminview == 'own'){
+            if ($CFG->block_filtered_course_list_adminview == 'own') {
                 $adminseesall = false;
             }
         }
@@ -56,8 +70,8 @@ class block_filtered_course_list extends block_list {
             !empty($USER->id) and
             !(has_capability('moodle/course:view', get_context_instance(CONTEXT_SYSTEM))) and
             !isguestuser()) {
-            // If user can't view all courses, just print My Courses
-            $all_courses = enrol_get_my_courses(NULL, 'visible DESC, fullname ASC');
+            // If user can't view all courses, just print My Courses.
+            $all_courses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
 
             if ($all_courses) {
                 switch ($filter_type) {
@@ -68,7 +82,7 @@ class block_filtered_course_list extends block_list {
                         break;
 
                     case 'categories':
-			$filtered_courses = $this->_filter_by_category($all_courses,
+                        $filtered_courses = $this->_filter_by_category($all_courses,
                                                                        $category_ids);
                         break;
 
@@ -78,7 +92,7 @@ class block_filtered_course_list extends block_list {
                         break;
 
                     default:
-                        // This is unexpected
+                        // This is unexpected.
                         break;
                 }
 
@@ -104,8 +118,8 @@ class block_filtered_course_list extends block_list {
                     $this->content->items[]="<hr width=\"50%\">";
                     $this->content->icons[]="";
 
-                    // If we can update any course of the view all isn't hidden,
-                    // show the view all courses link
+                    // If we can update any course of the view all isn't hidden.
+                    // Show the view all courses link.
                     if (has_capability('moodle/course:update', get_context_instance(CONTEXT_SYSTEM)) ||
                         empty($CFG->block_filtered_course_list_hideallcourseslink)) {
                         $this->content->footer = "<a href=\"$CFG->wwwroot/course/index.php\">" .
@@ -115,12 +129,12 @@ class block_filtered_course_list extends block_list {
                 }
             }
         } else {
-            // Parent = 0   ie top-level categories only
+            // Parent = 0   ie top-level categories only.
             $categories = get_categories("0");
 
-            //Check we have categories
+            // Check we have categories.
             if ($categories) {
-                // Just print top level category links
+                // Just print top level category links.
                 if (count($categories) > 1 ||
                    (count($categories) == 1 &&
                     count($course_list) > 100)) {
@@ -136,8 +150,8 @@ class block_filtered_course_list extends block_list {
                                               get_string('searchcourses') .
                                               '</a> ...<br />';
 
-                    // If we can update any course of the view all isn't hidden,
-                    // show the view all courses link
+                    // If we can update any course of the view all isn't hidden.
+                    // Show the view all courses link.
                     if (has_capability('moodle/course:update', get_context_instance(CONTEXT_SYSTEM)) ||
                         empty($CFG->block_filtered_course_list_hideallcourseslink)) {
                         $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
@@ -147,7 +161,7 @@ class block_filtered_course_list extends block_list {
 
                     $this->title = get_string('blockname', 'block_filtered_course_list');
                 } else {
-                    // Just print course names of single category
+                    // Just print course names of single category.
                     $category = array_shift($categories);
                     $courses = get_courses($category->id);
 
@@ -164,8 +178,8 @@ class block_filtered_course_list extends block_list {
                             $this->content->icons[]=$icon;
                         }
 
-                        // If we can update any course of the view all isn't hidden,
-                        // show the view all courses link
+                        // If we can update any course of the view all isn't hidden.
+                        // Show the view all courses link.
                         if (has_capability('moodle/course:update', get_context_instance(CONTEXT_SYSTEM)) ||
                             empty($CFG->block_filtered_course_list_hideallcourseslink)) {
                             $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
@@ -179,7 +193,7 @@ class block_filtered_course_list extends block_list {
         return $this->content;
     }
 
-    function _filter_by_term($courses, $term_current, $term_future) {
+    private function _filter_by_term($courses, $term_current, $term_future) {
         $results = array('Current Courses' => array(),
                          'Future Courses'  => array(),
                          'Other Courses'     => array());
@@ -201,7 +215,7 @@ class block_filtered_course_list extends block_list {
         return $results;
     }
 
-    function _filter_by_category($courses, $cat_ids) {
+    private function _filter_by_category($courses, $cat_ids) {
         $filter_categories = explode(',', $cat_ids);
         $results           = array('Course List' => array());
 
@@ -221,5 +235,3 @@ class block_filtered_course_list extends block_list {
         return $results;
     }
 }
-
-?>
