@@ -41,7 +41,11 @@ if ($ADMIN->fulltree) {
         get_string('configtermfuture', 'block_filtered_course_list'), ''));
 
     $cat_list = array();
-    $categories = get_categories("0");
+    if (class_exists('coursecat')) {
+        $categories = coursecat::get(0)->get_children();
+    } else {
+        $categories = get_categories("0");
+    }
     if ($categories) {
         foreach ($categories as $cat) {
             $cat_list[$cat->id] = $cat->name;
