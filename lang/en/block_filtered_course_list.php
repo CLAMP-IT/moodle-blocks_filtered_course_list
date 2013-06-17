@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+$string['filtered_course_list:addinstance'] = 'Add a new Current Courses List block';
 $string['allcourses']               = 'Admin user sees all courses';
 $string['blockname']                = 'Current Courses List';
 $string['categories']               = 'Current Category';
