@@ -194,6 +194,7 @@ class block_filtered_course_list extends block_list {
     }
 
     private function _filter_by_term($courses, $term_current, $term_future) {
+        global $CFG;
         $results = array('Current Courses' => array(),
                          'Future Courses'  => array(),
                          'Other Courses'     => array());
@@ -207,7 +208,8 @@ class block_filtered_course_list extends block_list {
                 $results['Current Courses'] []= $course;
             } else if (stristr($course->shortname, $term_future)) {
                 $results['Future Courses']  []= $course;
-            } else {
+            } else if (empty($CFG->block_filtered_course_list_hideothercourses)
+                || (!$CFG->block_filtered_course_list_hideothercourses)){
                 $results['Other Courses']     []= $course;
             }
         }
