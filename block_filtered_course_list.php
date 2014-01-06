@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once($CFG->dirroot . '/course/lib.php');
+require_once($CFG->dirroot . '/lib/coursecatlib.php');
 
 class block_filtered_course_list extends block_base {
     public function init() {
@@ -118,7 +119,7 @@ class block_filtered_course_list extends block_base {
             }
         } else {
             // Parent = 0   ie top-level categories only.
-            $categories = get_categories("0");
+            $categories = coursecat::get(0)->get_children();
 
             // Check we have categories.
             if ($categories) {
