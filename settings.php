@@ -30,7 +30,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configselect('block_filtered_course_list_filtertype',
         get_string('filtertype', 'block_filtered_course_list'),
-        get_string('configfiltertype', 'block_filtered_course_list'), 0, $filters));
+        get_string('configfiltertype', 'block_filtered_course_list'), 'term', $filters));
 
     $settings->add(new admin_setting_configtext('block_filtered_course_list_termcurrent',
         get_string('termcurrent', 'block_filtered_course_list'),
@@ -49,7 +49,7 @@ if ($ADMIN->fulltree) {
     }
     $settings->add(new admin_setting_configselect('block_filtered_course_list_categories',
         get_string('categories', 'block_filtered_course_list'),
-        get_string('configcategories', 'block_filtered_course_list'), '', $cat_list));
+        get_string('configcategories', 'block_filtered_course_list'), 1, $cat_list));
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
         get_string('hideothercourses', 'block_filtered_course_list'),
         get_string('confighideothercourses', 'block_filtered_course_list'), 0));
