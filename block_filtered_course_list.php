@@ -66,6 +66,11 @@ class block_filtered_course_list extends block_base {
             }
         }
 
+        $maxallcourse = 10;
+        if (isset($CFG->block_filtered_course_list_maxallcourse)) {
+            $maxallcourse = $CFG->block_filtered_course_list_maxallcourse;
+        }
+
         if (empty($CFG->disablemycourses) and
             !empty($USER->id) and
             !(has_capability('moodle/course:view', $context)) and
@@ -126,7 +131,7 @@ class block_filtered_course_list extends block_base {
                 // Just print top level category links.
                 if (count($categories) > 1 ||
                    (count($categories) == 1 &&
-                    count($course_list) > 100)) {
+                    current($categories)->coursecount > $maxallcourse)) {
                     $this->content->text .= '<ul class="list">';
                     foreach ($categories as $category) {
                         $linkcss = $category->visible ? "" : "dimmed";

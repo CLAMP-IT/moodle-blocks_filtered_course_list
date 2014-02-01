@@ -53,4 +53,8 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
         get_string('hideothercourses', 'block_filtered_course_list'),
         get_string('confighideothercourses', 'block_filtered_course_list'), 0));
+
+    $settings->add(new admin_setting_configtext('block_filtered_course_list_maxallcourse',
+        get_string('maxallcourse', 'block_filtered_course_list'),
+        get_string('configmaxallcourse', 'block_filtered_course_list'), 10, PARAM_INT, 3));
 }
