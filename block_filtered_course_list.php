@@ -26,6 +26,10 @@ class block_filtered_course_list extends block_base {
         return true;
     }
 
+    public function specialization() {
+        $this->title = isset($this->config->title) ? $this->config->title : get_string('blockname', 'block_filtered_course_list');
+    }
+
     public function get_content() {
         global $CFG, $USER, $DB, $OUTPUT;
 
