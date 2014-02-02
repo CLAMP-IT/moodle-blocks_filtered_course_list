@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$string['filtered_course_list:addinstance'] = 'Add a new Current Courses List block';
+$string['filtered_course_list:addinstance'] = 'Add a new Filtered Course List block';
 $string['allcourses']               = 'Admin user sees all courses';
-$string['blockname']                = 'Current Courses List';
+$string['blockname']                = 'Filtered Course List';
 $string['categories']               = 'Current Category';
 $string['configadminview']          = 'What should the admin see in the course list block?';
 $string['configcategories']         = 'Select the category you want to display as current.';
@@ -25,6 +25,7 @@ $string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of 
 $string['confighideothercourses']   = 'Hide "Other Courses" in the block.';
 $string['configtermcurrent']        = 'Enter the string that designates the current term. <br>This must be part of the course shortname.';
 $string['configtermfuture']         = 'Enter the string that designates the next term. <br>This must be part of the course shortname.';
+$string['configtitle']              = 'Block title';
 $string['filtercategories']         = 'By Categories';
 $string['filtercustom']             = 'Custom';
 $string['filtertype']               = 'Filter Type';
@@ -32,6 +33,6 @@ $string['filterterm']               = 'By Term';
 $string['hideallcourseslink']       = 'Hide All courses link';
 $string['hideothercourses']         = 'Hide other courses';
 $string['owncourses']               = 'Admin user sees own courses';
-$string['pluginname']               = 'Current Courses List';
+$string['pluginname']               = 'Filtered Course List';
 $string['termcurrent']              = 'Current Term';
 $string['termfuture']               = 'Future Term';
