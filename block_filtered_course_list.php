@@ -212,18 +212,18 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _filter_by_category($courses, $cat_ids) {
-        $filter_categories = explode(',', $cat_ids);
-        $results           = array('Course List' => array());
+        $topcat = coursecat::get($cat_ids);
+        $childcats = $topcat->get_children();
+        array_unshift($childcats, $topcat);
+        $results = array();
 
-        foreach ($courses as $course) {
-            if ($course->id == SITEID) {
-                continue;
-            }
-
-            foreach ($filter_categories as $filter_category) {
-                if ($course->category == $filter_category) {
-                    $results['Course List'] []= $course;
-                    break;
+        foreach ($childcats as $cat) {
+            foreach ($courses as $course) {
+                if ($course->id == SITEID) {
+                    continue;
+                }
+                if ($course->category == $cat->id) {
+                    $results[$cat->name][]=$course;
                 }
             }
         }
