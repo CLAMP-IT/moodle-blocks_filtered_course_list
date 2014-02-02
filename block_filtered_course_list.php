@@ -207,9 +207,9 @@ class block_filtered_course_list extends block_base {
                 continue;
             }
 
-            if (stristr($course->shortname, $term_current)) {
+            if ($term_current && stristr($course->shortname, $term_current)) {
                 $results['Current Courses'] []= $course;
-            } else if (stristr($course->shortname, $term_future)) {
+            } else if ($term_future && stristr($course->shortname, $term_future)) {
                 $results['Future Courses']  []= $course;
             } else if (empty($CFG->block_filtered_course_list_hideothercourses)
                 || (!$CFG->block_filtered_course_list_hideothercourses)){
