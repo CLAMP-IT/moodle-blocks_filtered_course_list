@@ -43,24 +43,24 @@ class block_filtered_course_list extends block_base {
         $context = context_system::instance();
 
         // Obtain values from our config settings.
-        $filter_type = 'term';
+        $filtertype = 'term';
         if (isset($CFG->block_filtered_course_list_filtertype)) {
-            $filter_type = $CFG->block_filtered_course_list_filtertype;
+            $filtertype = $CFG->block_filtered_course_list_filtertype;
         }
 
-        $term_current = ' ';
+        $termcurrent = ' ';
         if (isset($CFG->block_filtered_course_list_termcurrent)) {
-            $term_current = $CFG->block_filtered_course_list_termcurrent;
+            $termcurrent = $CFG->block_filtered_course_list_termcurrent;
         }
 
-        $term_future = ' ';
+        $termfuture = ' ';
         if (isset($CFG->block_filtered_course_list_termfuture)) {
-            $term_future = $CFG->block_filtered_course_list_termfuture;
+            $termfuture = $CFG->block_filtered_course_list_termfuture;
         }
 
-        $category_ids = ' ';
+        $categoryids = ' ';
         if (isset($CFG->block_filtered_course_list_categories)) {
-            $category_ids = $CFG->block_filtered_course_list_categories;
+            $categoryids = $CFG->block_filtered_course_list_categories;
         }
 
         $adminseesall = true;
@@ -80,24 +80,24 @@ class block_filtered_course_list extends block_base {
             !(has_capability('moodle/course:view', $context)) and
             !isguestuser()) {
             // If user can't view all courses, just print My Courses.
-            $all_courses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
+            $allcourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
 
-            if ($all_courses) {
-                switch ($filter_type) {
+            if ($allcourses) {
+                switch ($filtertype) {
                     case 'term':
-                        $filtered_courses = $this->_filter_by_term($all_courses,
-                                                                   $term_current,
-                                                                   $term_future);
+                        $filteredcourses = $this->_filter_by_term($allcourses,
+                                                                   $termcurrent,
+                                                                   $termfuture);
                         break;
 
                     case 'categories':
-                        $filtered_courses = $this->_filter_by_category($all_courses,
-                                                                       $category_ids);
+                        $filteredcourses = $this->_filter_by_category($allcourses,
+                                                                       $categoryids);
                         break;
 
                     case 'custom':
-                        //$filtered_courses = $this->_filter_by_custom($all_courses,
-                        //                                             $category_ids);
+                        // We do not yet have a handler for custom filter types.
+
                         break;
 
                     default:
@@ -105,14 +105,14 @@ class block_filtered_course_list extends block_base {
                         break;
                 }
 
-                foreach ($filtered_courses as $section => $course_list) {
-                    if (count($course_list) == 0) {
+                foreach ($filteredcourses as $section => $courslist) {
+                    if (count($courslist) == 0) {
                         continue;
                     }
                     $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
                     $this->content->text .= '<ul class="list">';
 
-                    foreach ($course_list as $course) {
+                    foreach ($courslist as $course) {
                         $this->content->text .= $this->_print_single_course($course);
                     }
                     $this->content->text .= '</ul>';
@@ -191,12 +191,13 @@ class block_filtered_course_list extends block_base {
         $linkcss = $course->visible ? "" : "dimmed";
         $html = html_writer::tag('li',
             html_writer::tag('a', format_string($course->fullname),
-                array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id, 'title' => format_string($course->shortname))),
-                array('class' => $linkcss));
+            array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id,
+                'title' => format_string($course->shortname))),
+        array('class' => $linkcss));
         return $html;
     }
 
-    private function _filter_by_term($courses, $term_current, $term_future) {
+    private function _filter_by_term($courses, $termcurrent, $termfuture) {
         global $CFG;
         $results = array('Current Courses' => array(),
                          'Future Courses'  => array(),
@@ -207,21 +208,21 @@ class block_filtered_course_list extends block_base {
                 continue;
             }
 
-            if ($term_current && stristr($course->shortname, $term_current)) {
-                $results['Current Courses'] []= $course;
-            } else if ($term_future && stristr($course->shortname, $term_future)) {
-                $results['Future Courses']  []= $course;
-            } else if (empty($CFG->block_filtered_course_list_hideothercourses)
-                || (!$CFG->block_filtered_course_list_hideothercourses)){
-                $results['Other Courses']     []= $course;
+            if ($termcurrent && stristr($course->shortname, $termcurrent)) {
+                $results['Current Courses'] [] = $course;
+            } else if ($termfuture && stristr($course->shortname, $termfuture)) {
+                $results['Future Courses']  [] = $course;
+            } else if (empty($CFG->block_filtered_course_list_hideothercourses) ||
+                (!$CFG->block_filtered_course_list_hideothercourses)) {
+                $results['Other Courses']     [] = $course;
             }
         }
 
         return $results;
     }
 
-    private function _filter_by_category($courses, $cat_ids) {
-        $topcat = coursecat::get($cat_ids);
+    private function _filter_by_category($courses, $catids) {
+        $topcat = coursecat::get($catids);
         $childcats = $topcat->get_children();
         array_unshift($childcats, $topcat);
         $results = array();
@@ -232,7 +233,7 @@ class block_filtered_course_list extends block_base {
                     continue;
                 }
                 if ($course->category == $cat->id) {
-                    $results[$cat->name][]=$course;
+                    $results[$cat->name][] = $course;
                 }
             }
         }

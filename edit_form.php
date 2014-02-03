@@ -20,10 +20,10 @@ class block_filtered_course_list_edit_form extends block_edit_form {
 
     protected function specific_definition($mform) {
 
-        // Section header title according to language file
+        // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
-        // Set the title for the block
+        // Set the title for the block.
         $mform->addElement('text', 'config_title', get_string('configtitle', 'block_filtered_course_list'));
         $mform->setDefault('config_title', get_string('blockname', 'block_filtered_course_list'));
         $mform->setType('config_title', PARAM_TEXT);
