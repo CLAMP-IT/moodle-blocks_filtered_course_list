@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once($CFG->dirroot . '/course/lib.php');
+require_once($CFG->dirroot . '/course/externallib.php');
 require_once($CFG->dirroot . '/lib/coursecatlib.php');
 
 class block_filtered_course_list extends block_base {
@@ -222,18 +223,17 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _filter_by_category($courses, $catids) {
-        $topcat = coursecat::get($catids);
-        $childcats = $topcat->get_children();
-        array_unshift($childcats, $topcat);
+        $mycats = core_course_external::get_categories(array(
+            array('key'=>'id', 'value'=>$catids)));
         $results = array();
 
-        foreach ($childcats as $cat) {
+        foreach ($mycats as $cat) {
             foreach ($courses as $course) {
                 if ($course->id == SITEID) {
                     continue;
                 }
-                if ($course->category == $cat->id) {
-                    $results[$cat->name][] = $course;
+                if ($course->category == $cat['id']) {
+                    $results[$cat['name']][] = $course;
                 }
             }
         }
