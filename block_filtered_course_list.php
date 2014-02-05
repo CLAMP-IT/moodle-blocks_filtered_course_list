@@ -224,7 +224,7 @@ class block_filtered_course_list extends block_base {
 
     private function _filter_by_category($courses, $catids) {
         $mycats = core_course_external::get_categories(array(
-            array('key'=>'id', 'value'=>$catids)));
+            array('key' => 'id', 'value' => $catids)));
         $results = array();
 
         foreach ($mycats as $cat) {
