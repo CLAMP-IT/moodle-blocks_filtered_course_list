@@ -40,16 +40,11 @@ if ($ADMIN->fulltree) {
         get_string('termfuture', 'block_filtered_course_list'),
         get_string('configtermfuture', 'block_filtered_course_list'), ''));
 
-    $catlist = array();
-    $categories = coursecat::get(0)->get_children();
-    if ($categories) {
-        foreach ($categories as $cat) {
-            $catlist[$cat->id] = $cat->name;
-        }
-    }
+    $categories = coursecat::make_categories_list();
     $settings->add(new admin_setting_configselect('block_filtered_course_list_categories',
         get_string('categories', 'block_filtered_course_list'),
-        get_string('configcategories', 'block_filtered_course_list'), 1, $catlist));
+        get_string('configcategories', 'block_filtered_course_list'), 1, $categories));
+
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
         get_string('hideothercourses', 'block_filtered_course_list'),
         get_string('confighideothercourses', 'block_filtered_course_list'), 0));
