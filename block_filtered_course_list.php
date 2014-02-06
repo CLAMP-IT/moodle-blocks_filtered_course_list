@@ -64,10 +64,10 @@ class block_filtered_course_list extends block_base {
             $categoryids = $CFG->block_filtered_course_list_categories;
         }
 
-        $adminseesall = true;
+        $adminview = 'all';
         if (isset($CFG->block_filtered_course_list_adminview)) {
             if ($CFG->block_filtered_course_list_adminview == 'own') {
-                $adminseesall = false;
+                $adminview = 'own';
             }
         }
 
@@ -76,11 +76,18 @@ class block_filtered_course_list extends block_base {
             $maxallcourse = $CFG->block_filtered_course_list_maxallcourse;
         }
 
-        if (empty($CFG->disablemycourses) and
-            !empty($USER->id) and
-            !(has_capability('moodle/course:view', $context)) and
-            !isguestuser()) {
-            // If user can't view all courses, just print My Courses.
+        /* Given that 'my courses' has not been disabled in the config,
+         * these are the two types of user who should get to see 'my courses':
+         * 1. A logged in user who is neither an admin nor a guest
+         * 2. An admin, in the case that $adminview is set to 'own'
+         */
+
+        if (empty($CFG->disablemycourses) &&
+            (!empty($USER->id) &&
+            !has_capability('moodle/course:view', $context) &&
+            !isguestuser()) ||
+            (has_capability('moodle/course:view', $context) and $adminview == 'own')) {
+
             $allcourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
 
             if ($allcourses) {

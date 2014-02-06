@@ -17,9 +17,19 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
+
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideallcourseslink',
         get_string('hideallcourseslink', 'block_filtered_course_list'),
         get_string('confighideallcourseslink', 'block_filtered_course_list'), 0));
+
+    $adminviews = array(
+        'all' => get_string('allcourses', 'block_filtered_course_list'),
+        'own' => get_string('owncourses', 'block_filtered_course_list')
+    );
+    $settings->add(new admin_setting_configselect('block_filtered_course_list_adminview',
+        get_string('adminview', 'block_filtered_course_list'),
+        get_string('configadminview', 'block_filtered_course_list'), 'all', $adminviews));
+
     $filters = array(
         'term' => get_string('filterterm', 'block_filtered_course_list'),
         'categories' => get_string('filtercategories', 'block_filtered_course_list')
@@ -27,7 +37,6 @@ if ($ADMIN->fulltree) {
         2 => get_string('filtercustom','block_filtered_course_list')
         */
     );
-
     $settings->add(new admin_setting_configselect('block_filtered_course_list_filtertype',
         get_string('filtertype', 'block_filtered_course_list'),
         get_string('configfiltertype', 'block_filtered_course_list'), 'term', $filters));
