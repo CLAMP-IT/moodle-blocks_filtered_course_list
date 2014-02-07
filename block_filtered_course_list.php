@@ -44,19 +44,19 @@ class block_filtered_course_list extends block_base {
         $context = context_system::instance();
 
         // Obtain values from our config settings.
-        $filtertype = 'term';
+        $filtertype = 'shortname';
         if (isset($CFG->block_filtered_course_list_filtertype)) {
             $filtertype = $CFG->block_filtered_course_list_filtertype;
         }
 
-        $termcurrent = ' ';
-        if (isset($CFG->block_filtered_course_list_termcurrent)) {
-            $termcurrent = $CFG->block_filtered_course_list_termcurrent;
+        $currentshortname = ' ';
+        if (isset($CFG->block_filtered_course_list_currentshortname)) {
+            $currentshortname = $CFG->block_filtered_course_list_currentshortname;
         }
 
-        $termfuture = ' ';
-        if (isset($CFG->block_filtered_course_list_termfuture)) {
-            $termfuture = $CFG->block_filtered_course_list_termfuture;
+        $futureshortname = ' ';
+        if (isset($CFG->block_filtered_course_list_futureshortname)) {
+            $futureshortname = $CFG->block_filtered_course_list_futureshortname;
         }
 
         $categoryids = ' ';
@@ -92,10 +92,10 @@ class block_filtered_course_list extends block_base {
 
             if ($allcourses) {
                 switch ($filtertype) {
-                    case 'term':
-                        $filteredcourses = $this->_filter_by_term($allcourses,
-                                                                   $termcurrent,
-                                                                   $termfuture);
+                    case 'shortname':
+                        $filteredcourses = $this->_filter_by_shortname($allcourses,
+                                                                   $currentshortname,
+                                                                   $futureshortname);
                         break;
 
                     case 'categories':
@@ -129,7 +129,7 @@ class block_filtered_course_list extends block_base {
                     if (has_capability('moodle/course:update', $context) ||
                         empty($CFG->block_filtered_course_list_hideallcourseslink)) {
                         $this->content->footer = "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                                 get_string("fulllistofcourses") .
+                                                 get_string('fulllistofcourses') .
                                                  "</a> ...";
                     }
                 }
@@ -205,24 +205,24 @@ class block_filtered_course_list extends block_base {
         return $html;
     }
 
-    private function _filter_by_term($courses, $termcurrent, $termfuture) {
+    private function _filter_by_shortname($courses, $currentshortname, $futureshortname) {
         global $CFG;
-        $results = array('Current Courses' => array(),
-                         'Future Courses'  => array(),
-                         'Other Courses'     => array());
+        $results = array(get_string('currentcourses', 'block_filtered_course_list') => array(),
+                         get_string('futurecourses', 'block_filtered_course_list')  => array(),
+                         get_string('othercourses', 'block_filtered_course_list')   => array());
 
         foreach ($courses as $course) {
             if ($course->id == SITEID) {
                 continue;
             }
 
-            if ($termcurrent && stristr($course->shortname, $termcurrent)) {
-                $results['Current Courses'] [] = $course;
-            } else if ($termfuture && stristr($course->shortname, $termfuture)) {
-                $results['Future Courses']  [] = $course;
+            if ($currentshortname && stristr($course->shortname, $currentshortname)) {
+                $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
+            } else if ($futureshortname && stristr($course->shortname, $futureshortname)) {
+                $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
             } else if (empty($CFG->block_filtered_course_list_hideothercourses) ||
                 (!$CFG->block_filtered_course_list_hideothercourses)) {
-                $results['Other Courses']     [] = $course;
+                $results[get_string('othercourses', 'block_filtered_course_list')][] = $course;
             }
         }
 
