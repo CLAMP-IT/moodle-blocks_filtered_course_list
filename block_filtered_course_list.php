@@ -230,19 +230,30 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _filter_by_category($courses, $catids) {
+        global $CFG;
         $mycats = core_course_external::get_categories(array(
             array('key' => 'id', 'value' => $catids)));
         $results = array();
+        $other = array();
 
         foreach ($mycats as $cat) {
-            foreach ($courses as $course) {
+            foreach ($courses as $key => $course) {
                 if ($course->id == SITEID) {
                     continue;
                 }
                 if ($course->category == $cat['id']) {
                     $results[$cat['name']][] = $course;
+                    unset($courses[$key]);
                 }
             }
+        }
+
+        if (empty($CFG->block_filtered_course_list_hideothercourses) ||
+            (!$CFG->block_filtered_course_list_hideothercourses)) {
+            foreach ($courses as $course) {
+                $other[] = $course;
+            }
+            $results[get_string('othercourses', 'block_filtered_course_list')] = $other;
         }
 
         return $results;
