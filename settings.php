@@ -18,9 +18,20 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
 
+    $settings->add(new admin_setting_heading('block_filtered_course_list/general',
+        get_string('generalsettings', 'block_filtered_course_list'), ''));
+
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideallcourseslink',
         get_string('hideallcourseslink', 'block_filtered_course_list'),
         get_string('confighideallcourseslink', 'block_filtered_course_list'), 0));
+
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
+        get_string('hideothercourses', 'block_filtered_course_list'),
+        get_string('confighideothercourses', 'block_filtered_course_list'), 0));
+
+    $settings->add(new admin_setting_configtext('block_filtered_course_list_maxallcourse',
+        get_string('maxallcourse', 'block_filtered_course_list'),
+        get_string('configmaxallcourse', 'block_filtered_course_list'), 10, PARAM_INT, 3));
 
     $adminviews = array(
         'all' => get_string('allcourses', 'block_filtered_course_list'),
@@ -41,6 +52,10 @@ if ($ADMIN->fulltree) {
         get_string('filtertype', 'block_filtered_course_list'),
         get_string('configfiltertype', 'block_filtered_course_list'), 'shortname', $filters));
 
+    $settings->add(new admin_setting_heading('block_filtered_course_list/shortname',
+        get_string('shortnamesettings', 'block_filtered_course_list'),
+        get_string('shortnamesettingsinfo', 'block_filtered_course_list')));
+
     $settings->add(new admin_setting_configtext('block_filtered_course_list_currentshortname',
         get_string('currentshortname', 'block_filtered_course_list'),
         get_string('configcurrentshortname', 'block_filtered_course_list'), ''));
@@ -49,16 +64,36 @@ if ($ADMIN->fulltree) {
         get_string('futureshortname', 'block_filtered_course_list'),
         get_string('configfutureshortname', 'block_filtered_course_list'), ''));
 
+    $howmanylabels = array();
+    for ($i = 0; $i <= 10; $i++) {
+        $howmanylabels[] = $i;
+    }
+    $settings->add(new admin_setting_configselect('block_filtered_courselist_labelscount',
+        get_string('labelscount', 'block_filtered_course_list'),
+        get_string('configlabelscount', 'block_filtered_course_list'), '2', $howmanylabels));
+
+    $labelscount = 2;
+    if (isset($CFG->block_filtered_courselist_labelscount)) {
+        $labelscount = $CFG->block_filtered_courselist_labelscount;
+    }
+
+    for ($i = 1; $i <= $labelscount; $i++) {
+
+        $settings->add(new admin_setting_configtext("block_filtered_course_list_customlabel$i",
+            get_string('customlabel', 'block_filtered_course_list') . " $i",
+            get_string('configcustomlabel', 'block_filtered_course_list'), ''));
+
+        $settings->add(new admin_setting_configtext("block_filtered_course_list_customshortname$i",
+            get_string('customshortname', 'block_filtered_course_list') . " $i",
+            get_string('configcustomshortname', 'block_filtered_course_list'), ''));
+    }
+
+    $settings->add(new admin_setting_heading('block_filtered_course_list/categories',
+        get_string('categorysettings', 'block_filtered_course_list'),
+        get_string('categorysettingsinfo', 'block_filtered_course_list')));
+
     $categories = coursecat::make_categories_list();
     $settings->add(new admin_setting_configselect('block_filtered_course_list_categories',
         get_string('categories', 'block_filtered_course_list'),
         get_string('configcategories', 'block_filtered_course_list'), 1, $categories));
-
-    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
-        get_string('hideothercourses', 'block_filtered_course_list'),
-        get_string('confighideothercourses', 'block_filtered_course_list'), 0));
-
-    $settings->add(new admin_setting_configtext('block_filtered_course_list_maxallcourse',
-        get_string('maxallcourse', 'block_filtered_course_list'),
-        get_string('configmaxallcourse', 'block_filtered_course_list'), 10, PARAM_INT, 3));
 }

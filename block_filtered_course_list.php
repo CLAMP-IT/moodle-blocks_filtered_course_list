@@ -59,6 +59,26 @@ class block_filtered_course_list extends block_base {
             $futureshortname = $CFG->block_filtered_course_list_futureshortname;
         }
 
+        $labelscount = 2;
+        if (isset($CFG->block_filtered_courselist_labelscount)) {
+            $labelscount = $CFG->block_filtered_courselist_labelscount;
+        }
+
+        $customlabels = array();
+        $customshortnames = array();
+
+        for ($i = 1; $i <= $labelscount; $i++) {
+            $property = 'block_filtered_course_list_customlabel'.$i;
+            if (isset($CFG->$property) && $CFG->$property != '') {
+                $customlabels[$i] = $CFG->$property;
+            }
+            $customshortnames[$i] = '';
+            $property = 'block_filtered_course_list_customshortname'.$i;
+            if (isset($CFG->$property) && $CFG->$property != '') {
+                $customshortnames[$i] = $CFG->$property;
+            }
+        }
+
         $categoryids = ' ';
         if (isset($CFG->block_filtered_course_list_categories)) {
             $categoryids = $CFG->block_filtered_course_list_categories;
@@ -95,7 +115,10 @@ class block_filtered_course_list extends block_base {
                     case 'shortname':
                         $filteredcourses = $this->_filter_by_shortname($allcourses,
                                                                    $currentshortname,
-                                                                   $futureshortname);
+                                                                   $futureshortname,
+                                                                   $labelscount,
+                                                                   $customlabels,
+                                                                   $customshortnames);
                         break;
 
                     case 'categories':
@@ -205,25 +228,55 @@ class block_filtered_course_list extends block_base {
         return $html;
     }
 
-    private function _filter_by_shortname($courses, $currentshortname, $futureshortname) {
+    private function _filter_by_shortname($courses,
+                                        $currentshortname,
+                                        $futureshortname,
+                                        $labelscount,
+                                        $customlabels,
+                                        $customshortnames) {
+
         global $CFG;
         $results = array(get_string('currentcourses', 'block_filtered_course_list') => array(),
-                         get_string('futurecourses', 'block_filtered_course_list')  => array(),
-                         get_string('othercourses', 'block_filtered_course_list')   => array());
+                         get_string('futurecourses', 'block_filtered_course_list')  => array());
 
-        foreach ($courses as $course) {
+        foreach ($customlabels as $label) {
+            $results[$label] = array();
+        }
+
+        $other = array();
+
+        foreach ($courses as $key => $course) {
             if ($course->id == SITEID) {
+                unset($courses[$key]);
                 continue;
             }
 
             if ($currentshortname && stristr($course->shortname, $currentshortname)) {
                 $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
+                unset($courses[$key]);
             } else if ($futureshortname && stristr($course->shortname, $futureshortname)) {
                 $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
-            } else if (empty($CFG->block_filtered_course_list_hideothercourses) ||
-                (!$CFG->block_filtered_course_list_hideothercourses)) {
-                $results[get_string('othercourses', 'block_filtered_course_list')][] = $course;
+                unset($courses[$key]);
+            } else {
+                for ($i = 1; $i <= $labelscount; $i++) {
+                    if (isset($customlabels[$i])) {
+                        if ($customshortnames[$i] && stristr($course->shortname, $customshortnames[$i])) {
+                            $label = $customlabels[$i];
+                            $results[$label][] = $course;
+                            unset($courses[$key]);
+                            break;
+                        }
+                    }
+                }
             }
+        }
+
+        if (empty($CFG->block_filtered_course_list_hideothercourses) ||
+            (!$CFG->block_filtered_course_list_hideothercourses)) {
+            foreach ($courses as $course) {
+                $other[] = $course;
+            }
+            $results[get_string('othercourses', 'block_filtered_course_list')] = $other;
         }
 
         return $results;
