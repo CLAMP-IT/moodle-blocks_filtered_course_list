@@ -9,6 +9,8 @@
 }
 
 .block_filtered_course_list .course-section {
-    text-align: center;
+    text-align: auto;
+    padding-left: 1em;
+    padding-right: 1em;
     font-weight: bold;
 }
