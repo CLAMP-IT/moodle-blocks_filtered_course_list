@@ -172,7 +172,7 @@ class block_filtered_course_list extends block_base {
                         $linkcss = $category->visible ? "" : "dimmed";
                         $this->content->text .= html_writer::tag('li',
                             html_writer::tag('a', format_string($category->name),
-                            array('href' => $CFG->wwwroot . '/course/category.php?id=' . $category->id)),
+                            array('href' => $CFG->wwwroot . '/course/index.php?categoryid=' . $category->id)),
                             array('class' => $linkcss));
                     }
                     $this->content->text .= '</ul>';
