@@ -189,7 +189,6 @@ class block_filtered_course_list extends block_base {
                                                   '</a> ...<br>';
                     }
 
-                    $this->title = get_string('blockname', 'block_filtered_course_list');
                 } else {
                     // Just print course names of single category.
                     $category = array_shift($categories);
