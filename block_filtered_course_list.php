@@ -49,6 +49,11 @@ class block_filtered_course_list extends block_base {
             $filtertype = $CFG->block_filtered_course_list_filtertype;
         }
 
+        $hidefromguests = 0;
+        if (isset($CFG->block_filtered_course_list_hidefromguests)) {
+            $hidefromguests = $CFG->block_filtered_course_list_hidefromguests;
+        }
+
         $currentshortname = ' ';
         if (isset($CFG->block_filtered_course_list_currentshortname)) {
             $currentshortname = $CFG->block_filtered_course_list_currentshortname;
@@ -158,6 +163,12 @@ class block_filtered_course_list extends block_base {
                 }
             }
         } else {
+
+            if ($hidefromguests == true) {
+                $this->content = null;
+                return $this->content;;
+            }
+
             // Parent = 0   ie top-level categories only.
             $categories = coursecat::get(0)->get_children();
 

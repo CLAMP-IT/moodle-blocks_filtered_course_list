@@ -25,6 +25,10 @@ if ($ADMIN->fulltree) {
         get_string('hideallcourseslink', 'block_filtered_course_list'),
         get_string('confighideallcourseslink', 'block_filtered_course_list'), 0));
 
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hidefromguests',
+        get_string('hidefromguests', 'block_filtered_course_list'),
+        get_string('confighidefromguests', 'block_filtered_course_list'), 0));
+
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
         get_string('hideothercourses', 'block_filtered_course_list'),
         get_string('confighideothercourses', 'block_filtered_course_list'), 0));
