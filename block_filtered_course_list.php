@@ -261,10 +261,10 @@ class block_filtered_course_list extends block_base {
                 continue;
             }
 
-            if ($currentshortname && stristr($course->shortname, $currentshortname)) {
+            if (!empty($currentshortname) && stristr($course->shortname, $currentshortname)) {
                 $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
                 unset($courses[$key]);
-            } else if ($futureshortname && stristr($course->shortname, $futureshortname)) {
+            } else if (!empty($futureshortname) && stristr($course->shortname, $futureshortname)) {
                 $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
                 unset($courses[$key]);
             } else {
