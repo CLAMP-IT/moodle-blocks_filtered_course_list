@@ -17,6 +17,7 @@
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->dirroot . '/course/externallib.php');
 require_once($CFG->dirroot . '/lib/coursecatlib.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
 class block_filtered_course_list extends block_base {
     public function init() {
@@ -64,7 +65,7 @@ class block_filtered_course_list extends block_base {
             $futureshortname = $CFG->block_filtered_course_list_futureshortname;
         }
 
-        $labelscount = 2;
+        $labelscount = BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT;
         if (isset($CFG->block_filtered_courselist_labelscount)) {
             $labelscount = $CFG->block_filtered_courselist_labelscount;
         }

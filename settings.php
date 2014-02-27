@@ -16,6 +16,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once(dirname(__FILE__) . '/locallib.php');
+
 if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('block_filtered_course_list/general',
@@ -74,9 +76,10 @@ if ($ADMIN->fulltree) {
     }
     $settings->add(new admin_setting_configselect('block_filtered_courselist_labelscount',
         get_string('labelscount', 'block_filtered_course_list'),
-        get_string('configlabelscount', 'block_filtered_course_list'), '2', $howmanylabels));
+        get_string('configlabelscount', 'block_filtered_course_list'),
+        BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT, $howmanylabels));
 
-    $labelscount = 2;
+    $labelscount = BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT;
     if (isset($CFG->block_filtered_courselist_labelscount)) {
         $labelscount = $CFG->block_filtered_courselist_labelscount;
     }
