@@ -165,7 +165,7 @@ class block_filtered_course_list extends block_base {
             }
         } else {
 
-            if ($hidefromguests == true) {
+            if ($hidefromguests == true && !has_capability('moodle/course:update', $context)) {
                 $this->content = null;
                 return $this->content;;
             }
