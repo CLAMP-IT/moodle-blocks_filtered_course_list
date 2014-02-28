@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 $plugin->version   = 2014010601;
-$plugin->requires  = 2013051400;
+$plugin->requires  = 2013051400; // Requires Moodle 2.5.
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '2.3.0';
 $plugin->component = 'block_filtered_course_list';
