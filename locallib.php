@@ -14,4 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+define('BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL', 'all');
+define('BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN', 'own');
 define('BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT', 2);

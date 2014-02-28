@@ -90,10 +90,10 @@ class block_filtered_course_list extends block_base {
             $categoryids = $CFG->block_filtered_course_list_categories;
         }
 
-        $adminview = 'all';
+        $adminview = BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL;
         if (isset($CFG->block_filtered_course_list_adminview)) {
-            if ($CFG->block_filtered_course_list_adminview == 'own') {
-                $adminview = 'own';
+            if ($CFG->block_filtered_course_list_adminview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN) {
+                $adminview = BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN;
             }
         }
 
@@ -112,7 +112,7 @@ class block_filtered_course_list extends block_base {
             (!empty($USER->id) &&
             !has_capability('moodle/course:view', $context) &&
             !isguestuser()) ||
-            (has_capability('moodle/course:view', $context) and $adminview == 'own')) {
+            (has_capability('moodle/course:view', $context) and $adminview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN)) {
 
             $allcourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
 

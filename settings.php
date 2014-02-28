@@ -40,12 +40,13 @@ if ($ADMIN->fulltree) {
         get_string('configmaxallcourse', 'block_filtered_course_list'), 10, PARAM_INT, 3));
 
     $adminviews = array(
-        'all' => get_string('allcourses', 'block_filtered_course_list'),
-        'own' => get_string('owncourses', 'block_filtered_course_list')
+        BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
+        BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list')
     );
     $settings->add(new admin_setting_configselect('block_filtered_course_list_adminview',
         get_string('adminview', 'block_filtered_course_list'),
-        get_string('configadminview', 'block_filtered_course_list'), 'all', $adminviews));
+        get_string('configadminview', 'block_filtered_course_list'),
+        BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL, $adminviews));
 
     $filters = array(
         'shortname' => get_string('filtershortname', 'block_filtered_course_list'),
