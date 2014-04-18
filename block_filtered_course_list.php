@@ -66,8 +66,8 @@ class block_filtered_course_list extends block_base {
         }
 
         $labelscount = BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT;
-        if (isset($CFG->block_filtered_courselist_labelscount)) {
-            $labelscount = $CFG->block_filtered_courselist_labelscount;
+        if (isset($CFG->block_filtered_course_list_labelscount)) {
+            $labelscount = $CFG->block_filtered_course_list_labelscount;
         }
 
         $customlabels = array();

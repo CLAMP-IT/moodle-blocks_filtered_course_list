@@ -75,14 +75,14 @@ if ($ADMIN->fulltree) {
     for ($i = 0; $i <= 10; $i++) {
         $howmanylabels[] = $i;
     }
-    $settings->add(new admin_setting_configselect('block_filtered_courselist_labelscount',
+    $settings->add(new admin_setting_configselect('block_filtered_course_list_labelscount',
         get_string('labelscount', 'block_filtered_course_list'),
         get_string('configlabelscount', 'block_filtered_course_list'),
         BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT, $howmanylabels));
 
     $labelscount = BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT;
-    if (isset($CFG->block_filtered_courselist_labelscount)) {
-        $labelscount = $CFG->block_filtered_courselist_labelscount;
+    if (isset($CFG->block_filtered_course_list_labelscount)) {
+        $labelscount = $CFG->block_filtered_course_list_labelscount;
     }
 
     for ($i = 1; $i <= $labelscount; $i++) {
