@@ -256,29 +256,30 @@ class block_filtered_course_list extends block_base {
             $results[$label] = array();
         }
 
-        $other = array();
+        $other = $courses;
 
         foreach ($courses as $key => $course) {
             if ($course->id == SITEID) {
                 unset($courses[$key]);
+                unset($other[$key]);
                 continue;
             }
 
             if (!empty($currentshortname) && stristr($course->shortname, $currentshortname)) {
                 $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
-                unset($courses[$key]);
-            } else if (!empty($futureshortname) && stristr($course->shortname, $futureshortname)) {
+                unset($other[$key]);
+            }
+            if (!empty($futureshortname) && stristr($course->shortname, $futureshortname)) {
                 $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
-                unset($courses[$key]);
-            } else {
-                for ($i = 1; $i <= $labelscount; $i++) {
-                    if (isset($customlabels[$i])) {
-                        if ($customshortnames[$i] && stristr($course->shortname, $customshortnames[$i])) {
-                            $label = $customlabels[$i];
-                            $results[$label][] = $course;
-                            unset($courses[$key]);
-                            break;
-                        }
+                unset($other[$key]);
+            }
+            for ($i = 1; $i <= $labelscount; $i++) {
+                if (isset($customlabels[$i])) {
+                    if ($customshortnames[$i] && stristr($course->shortname, $customshortnames[$i])) {
+                        $label = $customlabels[$i];
+                        $results[$label][] = $course;
+                        unset($other[$key]);
+                        break;
                     }
                 }
             }
@@ -286,9 +287,6 @@ class block_filtered_course_list extends block_base {
 
         if (empty($CFG->block_filtered_course_list_hideothercourses) ||
             (!$CFG->block_filtered_course_list_hideothercourses)) {
-            foreach ($courses as $course) {
-                $other[] = $course;
-            }
             $results[get_string('othercourses', 'block_filtered_course_list')] = $other;
         }
 
