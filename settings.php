@@ -43,6 +43,7 @@ if ($ADMIN->fulltree) {
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list')
     );
+
     $settings->add(new admin_setting_configselect('block_filtered_course_list_adminview',
         get_string('adminview', 'block_filtered_course_list'),
         get_string('configadminview', 'block_filtered_course_list'),
@@ -51,10 +52,8 @@ if ($ADMIN->fulltree) {
     $filters = array(
         'shortname' => get_string('filtershortname', 'block_filtered_course_list'),
         'categories' => get_string('filtercategories', 'block_filtered_course_list')
-        /* we haven't setup custom filters yet
-        2 => get_string('filtercustom','block_filtered_course_list')
-        */
     );
+
     $settings->add(new admin_setting_configselect('block_filtered_course_list_filtertype',
         get_string('filtertype', 'block_filtered_course_list'),
         get_string('configfiltertype', 'block_filtered_course_list'), 'shortname', $filters));
@@ -75,6 +74,7 @@ if ($ADMIN->fulltree) {
     for ($i = 0; $i <= 10; $i++) {
         $howmanylabels[] = $i;
     }
+
     $settings->add(new admin_setting_configselect('block_filtered_course_list_labelscount',
         get_string('labelscount', 'block_filtered_course_list'),
         get_string('configlabelscount', 'block_filtered_course_list'),
@@ -89,7 +89,7 @@ if ($ADMIN->fulltree) {
 
         $settings->add(new admin_setting_configtext("block_filtered_course_list_customlabel$i",
             get_string('customlabel', 'block_filtered_course_list') . " $i",
-            get_string('configcustomlabel', 'block_filtered_course_list'), ''));
+            get_string('configcustomlabel', 'block_filtered_course_list'), '', PARAM_TEXT));
 
         $settings->add(new admin_setting_configtext("block_filtered_course_list_customshortname$i",
             get_string('customshortname', 'block_filtered_course_list') . " $i",
