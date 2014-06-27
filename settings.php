@@ -37,7 +37,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configtext('block_filtered_course_list_maxallcourse',
         get_string('maxallcourse', 'block_filtered_course_list'),
-        get_string('configmaxallcourse', 'block_filtered_course_list'), 10, PARAM_INT, 3));
+        get_string('configmaxallcourse', 'block_filtered_course_list'), 10, '/^\d{1,3}$/', 3));
 
     $adminviews = array(
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
