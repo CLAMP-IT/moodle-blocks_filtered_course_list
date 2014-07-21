@@ -102,6 +102,19 @@ class block_filtered_course_list extends block_base {
             $maxallcourse = $CFG->block_filtered_course_list_maxallcourse;
         }
 
+        $collapsible = 1;
+        if (isset($CFG->block_filtered_course_list_collapsible)) {
+            $collapsible = $CFG->block_filtered_course_list_collapsible;
+        }
+
+        $collapsibleclass = ($collapsible == 1) ? 'collapsible ' : '';
+
+        /* Call accordion YUI module */
+        if ($collapsible == 1) {
+            $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
+                'M.block_filtered_course_list.accordion.init', array());
+        }
+
         /* Given that 'my courses' has not been disabled in the config,
          * these are the two types of user who should get to see 'my courses':
          * 1. A logged in user who is neither an admin nor a guest
@@ -147,7 +160,7 @@ class block_filtered_course_list extends block_base {
                         continue;
                     }
                     $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
-                    $this->content->text .= '<ul class="list">';
+                    $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
 
                     foreach ($courslist as $course) {
                         $this->content->text .= $this->_print_single_course($course);
@@ -179,7 +192,7 @@ class block_filtered_course_list extends block_base {
                 if (count($categories) > 1 ||
                    (count($categories) == 1 &&
                     current($categories)->coursecount > $maxallcourse)) {
-                    $this->content->text .= '<ul class="list">';
+                    $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
                     foreach ($categories as $category) {
                         $linkcss = $category->visible ? "" : "dimmed";
                         $this->content->text .= html_writer::tag('li',
@@ -209,7 +222,7 @@ class block_filtered_course_list extends block_base {
                     $courses = get_courses($category->id);
 
                     if ($courses) {
-                        $this->content->text .= '<ul class="list">';
+                        $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
                         foreach ($courses as $course) {
                             $this->content->text .= $this->_print_single_course($course);
                         }

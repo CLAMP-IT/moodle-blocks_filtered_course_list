@@ -8,9 +8,39 @@
     padding: 0 0 10px 20px;
 }
 
+.jsenabled .block_filtered_course_list.block .list li {
+    background-position: 10px 1px;
+    padding: 0 0 10px 31px;
+}
+
 .block_filtered_course_list .course-section {
     text-align: auto;
-    padding-left: 1em;
+    padding-left: 21px;
     padding-right: 1em;
+    margin-top: 3px;
     font-weight: bold;
+}
+
+.jsenabled .block_filtered_course_list .course-section {
+    cursor: pointer;
+}
+
+.jsenabled .block_filtered_course_list .course-section a {
+    text-decoration: none;
+}
+
+.jsenabled .block_filtered_course_list .course-section + .collapsible.list {
+    display: none;
+}
+
+.block_filtered_course_list .course-section.collapsed {
+    background: url([[pix:t/collapsed]]) no-repeat 0px 2px transparent;
+}
+
+.block_filtered_course_list .course-section.expanded + .collapsible.list {
+    display: block;
+}
+
+.block_filtered_course_list .course-section.expanded {
+    background: url([[pix:t/expanded]]) no-repeat 0px 2px transparent;
 }
