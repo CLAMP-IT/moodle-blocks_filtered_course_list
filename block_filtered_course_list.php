@@ -55,6 +55,11 @@ class block_filtered_course_list extends block_base {
             $hidefromguests = $CFG->block_filtered_course_list_hidefromguests;
         }
 
+        $useregex = 0;
+        if (isset($CFG->block_filtered_course_list_useregex)) {
+            $useregex = $CFG->block_filtered_course_list_useregex;
+        }
+
         $currentshortname = ' ';
         if (isset($CFG->block_filtered_course_list_currentshortname)) {
             $currentshortname = $CFG->block_filtered_course_list_currentshortname;
@@ -124,7 +129,8 @@ class block_filtered_course_list extends block_base {
                                                                    $futureshortname,
                                                                    $labelscount,
                                                                    $customlabels,
-                                                                   $customshortnames);
+                                                                   $customshortnames,
+                                                                   $useregex);
                         break;
 
                     case 'categories':
@@ -246,7 +252,8 @@ class block_filtered_course_list extends block_base {
                                         $futureshortname,
                                         $labelscount,
                                         $customlabels,
-                                        $customshortnames) {
+                                        $customshortnames,
+                                        $useregex) {
 
         global $CFG;
         $results = array(get_string('currentcourses', 'block_filtered_course_list') => array(),
@@ -265,17 +272,17 @@ class block_filtered_course_list extends block_base {
                 continue;
             }
 
-            if (!empty($currentshortname) && stristr($course->shortname, $currentshortname)) {
+            if (!empty($currentshortname) && $this->_satisfies_match($course->shortname, $currentshortname, $useregex)) {
                 $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
                 unset($other[$key]);
             }
-            if (!empty($futureshortname) && stristr($course->shortname, $futureshortname)) {
+            if (!empty($futureshortname) && $this->_satisfies_match($course->shortname, $futureshortname, $useregex)) {
                 $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
                 unset($other[$key]);
             }
             for ($i = 1; $i <= $labelscount; $i++) {
                 if (isset($customlabels[$i])) {
-                    if ($customshortnames[$i] && stristr($course->shortname, $customshortnames[$i])) {
+                    if ($customshortnames[$i] && $this->_satisfies_match($course->shortname, $customshortnames[$i], $useregex)) {
                         $label = $customlabels[$i];
                         $results[$label][] = $course;
                         unset($other[$key]);
@@ -291,6 +298,16 @@ class block_filtered_course_list extends block_base {
         }
 
         return $results;
+    }
+
+    private function _satisfies_match($coursename, $teststring, $useregex) {
+        if ($useregex == 0) {
+            $satisfies = stristr($coursename, $teststring);
+        } else {
+            $teststring = str_replace('`', '', $teststring);
+            $satisfies = preg_match("`$teststring`", $coursename);
+        }
+        return $satisfies;
     }
 
     private function _filter_by_category($courses, $catids) {
