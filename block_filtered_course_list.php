@@ -279,7 +279,6 @@ class block_filtered_course_list extends block_base {
                         $label = $customlabels[$i];
                         $results[$label][] = $course;
                         unset($other[$key]);
-                        break;
                     }
                 }
             }
