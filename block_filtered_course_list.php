@@ -115,7 +115,7 @@ class block_filtered_course_list extends block_base {
         $collapsibleclass = ($collapsible == 1) ? 'collapsible ' : '';
 
         /* Call accordion YUI module */
-        if ($collapsible == 1) {
+        if ($collapsible == 1 && $this->page) {
             $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
                 'M.block_filtered_course_list.accordion.init', array());
         }
@@ -251,7 +251,7 @@ class block_filtered_course_list extends block_base {
 
     private function _print_single_course($course) {
         global $CFG;
-        $linkcss = $course->visible ? "" : "dimmed";
+        $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
         $html = html_writer::tag('li',
             html_writer::tag('a', format_string($course->fullname),
             array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id,
