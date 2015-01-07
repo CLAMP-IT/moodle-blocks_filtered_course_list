@@ -1,4 +1,4 @@
-# [Filtered Course List v2.4]
+# [Filtered Course List v2.5]
 
 for Moodle 2.6 or higher
 
@@ -37,6 +37,13 @@ To change the name of the block, turn editing on on a screen that displays the b
 Please report any bugs or feature requests to the public repository page: <https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list>.
 
 ## Changelog ##
+
+### [v2.5] ###
+* Feature: Course rubrics can now be set to be collapsible
+* Feature: Shortname matches can be powered by regex
+* Bug fix: One course can now satisfy multiple shortname matches
+* Testing: Adds comprehensive PHPunit testing
+* Testing: Adds Behat acceptance tests for selected features
 
 ### [v2.4] ###
 * Fixes style issues for the Clean family of themes
