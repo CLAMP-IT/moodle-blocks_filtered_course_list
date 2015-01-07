@@ -66,6 +66,10 @@ if ($ADMIN->fulltree) {
         get_string('shortnamesettings', 'block_filtered_course_list'),
         get_string('shortnamesettingsinfo', 'block_filtered_course_list')));
 
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_useregex',
+        get_string('useregex', 'block_filtered_course_list'),
+        get_string('configuseregex', 'block_filtered_course_list'), 0));
+
     $settings->add(new admin_setting_configtext('block_filtered_course_list_currentshortname',
         get_string('currentshortname', 'block_filtered_course_list'),
         get_string('configcurrentshortname', 'block_filtered_course_list'), ''));
