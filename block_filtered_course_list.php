@@ -90,7 +90,7 @@ class block_filtered_course_list extends block_base {
             }
         }
 
-        $categoryids = ' ';
+        $categoryids = BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY;
         if (isset($CFG->block_filtered_course_list_categories)) {
             $categoryids = $CFG->block_filtered_course_list_categories;
         }
@@ -324,8 +324,12 @@ class block_filtered_course_list extends block_base {
 
     private function _filter_by_category($courses, $catids) {
         global $CFG;
-        $mycats = core_course_external::get_categories(array(
-            array('key' => 'id', 'value' => $catids)));
+        if ( $catids == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
+            $mycats = core_course_external::get_categories();
+        } else {
+            $criteria = array(array('key' => 'id', 'value' => $catids));
+            $mycats = core_course_external::get_categories($criteria);
+        }
         $results = array();
         $other = array();
 

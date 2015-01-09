@@ -109,7 +109,9 @@ if ($ADMIN->fulltree) {
         get_string('categorysettingsinfo', 'block_filtered_course_list')));
 
     $categories = coursecat::make_categories_list();
+    $top = array(BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY  => get_string('top', 'block_filtered_course_list'));
+    $categories = $top + $categories;
     $settings->add(new admin_setting_configselect('block_filtered_course_list_categories',
         get_string('categories', 'block_filtered_course_list'),
-        get_string('configcategories', 'block_filtered_course_list'), 1, $categories));
+        get_string('configcategories', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY, $categories));
 }
