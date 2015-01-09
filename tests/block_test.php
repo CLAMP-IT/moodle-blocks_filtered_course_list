@@ -58,7 +58,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'customshortname1'   => '',
             'customlabel2'       => '',
             'customshortname2'   => '',
-            'categories'         => 1
+            'categories'         => 0
         );
 
         foreach ($settings as $setting => $value) {
@@ -243,12 +243,21 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         // Regular users should see links to visible courses under corresponding visible categories.
         // Teachers should see links to all their courses, visible or hidden, and under hidden categories.
+        // Courses under a hidden category will appear under "Other courses" to those who can't see the category.
+        // With admins_sees_own an admin should see hidden courses under hidden categories.
+
+        // Change the adminview setting to 'own'.
+        $CFG->block_filtered_course_list_adminview = 'own';
+
+        // Enroll admin in 'hc_1'.
+        $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['hc_1']->id, 3 );
+
         $this->_courseunderrubric( array(
             'user1' => array(
                 'c_1'   => 'Miscellaneous',
                 'cc1_2' => 'Child category 1',
                 'gc1_1' => 'Grandchild category 1',
-                'sc_2'  => 'Other courses',
+                'sc_2'  => 'Sibling category',
             ),
             'user2' => array(
                 'c_1'   => 'Miscellaneous',
@@ -256,7 +265,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'gc1_1' => 'Grandchild category 1',
                 'hc_1'  => 'Other courses',
                 'hcc_3' => 'Other courses',
-                'sc_2'  => 'Other courses',
+                'sc_2'  => 'Sibling category',
+            ),
+            'admin' => array(
+                'hc_1' => 'Hidden category'
             )
         ));
 

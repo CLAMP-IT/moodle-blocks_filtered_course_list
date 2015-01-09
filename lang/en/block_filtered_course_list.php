@@ -58,4 +58,5 @@ $string['owncourses']               = 'Admin user sees own courses';
 $string['pluginname']               = 'Filtered course list';
 $string['shortnamesettings']        = 'Shortname settings';
 $string['shortnamesettingsinfo']    = 'These settings apply only when using the shortname filter type.';
+$string['top']                      = 'Top';
 $string['useregex']                 = 'Use regex';
