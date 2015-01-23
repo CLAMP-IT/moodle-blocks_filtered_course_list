@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 $string['filtered_course_list:addinstance'] = 'Add a new Filtered Course List block';
+$string['filtered_course_list:myaddinstance'] = 'Add a new Filtered Course List block to My home';
 $string['adminview']                = 'Admin view';
 $string['allcourses']               = 'Admin user sees all courses';
 $string['blockname']                = 'Filtered Course List';
