@@ -20,6 +20,28 @@ require_once($CFG->dirroot . '/lib/coursecatlib.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 class block_filtered_course_list extends block_base {
+
+    private $fclsettings = array(
+        'filtertype'       => 'shortname',
+        'hidefromguests'   => 0,
+        'useregex'         => 0,
+        'currentshortname' => ' ',
+        'futureshortname'  => ' ',
+        'labelscount'      => BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT,
+        'categories'       => ' ',
+        'adminview'        => BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL,
+        'maxallcourse'     => 10,
+        'collapsible'      => 1,
+    );
+
+    private $customlabels = array();
+
+    private $customshortnames = array();
+
+    private $collapsibleclass = '';
+
+    private $mycourses = array();
+
     public function init() {
         $this->title   = get_string('blockname', 'block_filtered_course_list');
     }
@@ -45,77 +67,11 @@ class block_filtered_course_list extends block_base {
         $context = context_system::instance();
 
         // Obtain values from our config settings.
-        $filtertype = 'shortname';
-        if (isset($CFG->block_filtered_course_list_filtertype)) {
-            $filtertype = $CFG->block_filtered_course_list_filtertype;
-        }
 
-        $hidefromguests = 0;
-        if (isset($CFG->block_filtered_course_list_hidefromguests)) {
-            $hidefromguests = $CFG->block_filtered_course_list_hidefromguests;
-        }
-
-        $useregex = 0;
-        if (isset($CFG->block_filtered_course_list_useregex)) {
-            $useregex = $CFG->block_filtered_course_list_useregex;
-        }
-
-        $currentshortname = ' ';
-        if (isset($CFG->block_filtered_course_list_currentshortname)) {
-            $currentshortname = $CFG->block_filtered_course_list_currentshortname;
-        }
-
-        $futureshortname = ' ';
-        if (isset($CFG->block_filtered_course_list_futureshortname)) {
-            $futureshortname = $CFG->block_filtered_course_list_futureshortname;
-        }
-
-        $labelscount = BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT;
-        if (isset($CFG->block_filtered_course_list_labelscount)) {
-            $labelscount = $CFG->block_filtered_course_list_labelscount;
-        }
-
-        $customlabels = array();
-        $customshortnames = array();
-
-        for ($i = 1; $i <= $labelscount; $i++) {
-            $property = 'block_filtered_course_list_customlabel'.$i;
-            if (isset($CFG->$property) && $CFG->$property != '') {
-                $customlabels[$i] = $CFG->$property;
-            }
-            $customshortnames[$i] = '';
-            $property = 'block_filtered_course_list_customshortname'.$i;
-            if (isset($CFG->$property) && $CFG->$property != '') {
-                $customshortnames[$i] = $CFG->$property;
-            }
-        }
-
-        $categoryids = BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY;
-        if (isset($CFG->block_filtered_course_list_categories)) {
-            $categoryids = $CFG->block_filtered_course_list_categories;
-        }
-
-        $adminview = BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL;
-        if (isset($CFG->block_filtered_course_list_adminview)) {
-            if ($CFG->block_filtered_course_list_adminview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN) {
-                $adminview = BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN;
-            }
-        }
-
-        $maxallcourse = 10;
-        if (isset($CFG->block_filtered_course_list_maxallcourse)) {
-            $maxallcourse = $CFG->block_filtered_course_list_maxallcourse;
-        }
-
-        $collapsible = 1;
-        if (isset($CFG->block_filtered_course_list_collapsible)) {
-            $collapsible = $CFG->block_filtered_course_list_collapsible;
-        }
-
-        $collapsibleclass = ($collapsible == 1) ? 'collapsible ' : '';
+        $this->_calculate_settings();
 
         /* Call accordion YUI module */
-        if ($collapsible == 1 && $this->page) {
+        if ($this->fclsettings['collapsible'] == 1 && $this->page) {
             $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
                 'M.block_filtered_course_list.accordion.init', array());
         }
@@ -123,32 +79,25 @@ class block_filtered_course_list extends block_base {
         /* Given that 'my courses' has not been disabled in the config,
          * these are the two types of user who should get to see 'my courses':
          * 1. A logged in user who is neither an admin nor a guest
-         * 2. An admin, in the case that $adminview is set to 'own'
+         * 2. An admin, in the case that adminview is set to 'own'
          */
 
         if (empty($CFG->disablemycourses) &&
             (!empty($USER->id) &&
             !has_capability('moodle/course:view', $context) &&
             !isguestuser()) ||
-            (has_capability('moodle/course:view', $context) and $adminview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN)) {
+            (has_capability('moodle/course:view', $context) and $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN)) {
 
-            $allcourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
+            $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
 
-            if ($allcourses) {
-                switch ($filtertype) {
+            if ($this->mycourses) {
+                switch ($this->fclsettings['filtertype']) {
                     case 'shortname':
-                        $filteredcourses = $this->_filter_by_shortname($allcourses,
-                                                                   $currentshortname,
-                                                                   $futureshortname,
-                                                                   $labelscount,
-                                                                   $customlabels,
-                                                                   $customshortnames,
-                                                                   $useregex);
+                        $filteredcourses = $this->_filter_by_shortname();
                         break;
 
                     case 'categories':
-                        $filteredcourses = $this->_filter_by_category($allcourses,
-                                                                       $categoryids);
+                        $filteredcourses = $this->_filter_by_category();
                         break;
 
                     case 'custom':
@@ -166,7 +115,7 @@ class block_filtered_course_list extends block_base {
                         continue;
                     }
                     $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
-                    $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
+                    $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
 
                     foreach ($courslist as $course) {
                         $this->content->text .= $this->_print_single_course($course);
@@ -184,7 +133,7 @@ class block_filtered_course_list extends block_base {
             }
         } else {
 
-            if ($hidefromguests == true && !has_capability('moodle/course:update', $context)) {
+            if ($this->fclsettings['hidefromguests'] == true && !has_capability('moodle/course:update', $context)) {
                 $this->content = null;
                 return $this->content;;
             }
@@ -197,8 +146,8 @@ class block_filtered_course_list extends block_base {
                 // Just print top level category links.
                 if (count($categories) > 1 ||
                    (count($categories) == 1 &&
-                    current($categories)->coursecount > $maxallcourse)) {
-                    $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
+                    current($categories)->coursecount > $this->fclsettings['maxallcourse'])) {
+                    $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
                     foreach ($categories as $category) {
                         $linkcss = $category->visible ? "" : "dimmed";
                         $this->content->text .= html_writer::tag('li',
@@ -228,7 +177,7 @@ class block_filtered_course_list extends block_base {
                     $courses = get_courses($category->id);
 
                     if ($courses) {
-                        $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
+                        $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
                         foreach ($courses as $course) {
                             $this->content->text .= $this->_print_single_course($course);
                         }
@@ -249,6 +198,32 @@ class block_filtered_course_list extends block_base {
         return $this->content;
     }
 
+    private function _calculate_settings() {
+        global $CFG;
+
+        foreach ($this->fclsettings as $name => $value) {
+            $siteconfigname = "block_filtered_course_list_$name";
+            if (isset($CFG->{$siteconfigname})) {
+                $this->fclsettings[$name] = $CFG->{$siteconfigname};
+            }
+        }
+
+        $this->collapsibleclass = ($this->fclsettings['collapsible'] == 1) ? 'collapsible ' : '';
+
+        for ($i = 1; $i <= $this->fclsettings['labelscount']; $i++) {
+            $property = 'block_filtered_course_list_customlabel'.$i;
+            if (isset($CFG->$property) && $CFG->$property != '') {
+                $this->customlabels[$i] = $CFG->$property;
+            }
+            $this->customshortnames[$i] = '';
+            $property = 'block_filtered_course_list_customshortname'.$i;
+            if (isset($CFG->$property) && $CFG->$property != '') {
+                $this->customshortnames[$i] = $CFG->$property;
+            }
+        }
+
+    }
+
     private function _print_single_course($course) {
         global $CFG;
         $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
@@ -260,43 +235,39 @@ class block_filtered_course_list extends block_base {
         return $html;
     }
 
-    private function _filter_by_shortname($courses,
-                                        $currentshortname,
-                                        $futureshortname,
-                                        $labelscount,
-                                        $customlabels,
-                                        $customshortnames,
-                                        $useregex) {
+    private function _filter_by_shortname() {
 
         global $CFG;
         $results = array(get_string('currentcourses', 'block_filtered_course_list') => array(),
                          get_string('futurecourses', 'block_filtered_course_list')  => array());
 
-        foreach ($customlabels as $label) {
+        foreach ($this->customlabels as $label) {
             $results[$label] = array();
         }
 
-        $other = $courses;
+        $other = $this->mycourses;
 
-        foreach ($courses as $key => $course) {
+        foreach ($this->mycourses as $key => $course) {
             if ($course->id == SITEID) {
-                unset($courses[$key]);
+                unset($this->mycourses[$key]);
                 unset($other[$key]);
                 continue;
             }
 
-            if (!empty($currentshortname) && $this->_satisfies_match($course->shortname, $currentshortname, $useregex)) {
+            $currentshortname = $this->fclsettings['currentshortname'];
+            if (!empty($currentshortname) && $this->_satisfies_match($course->shortname, $currentshortname)) {
                 $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
                 unset($other[$key]);
             }
-            if (!empty($futureshortname) && $this->_satisfies_match($course->shortname, $futureshortname, $useregex)) {
+            $futureshortname = $this->fclsettings['futureshortname'];
+            if (!empty($futureshortname) && $this->_satisfies_match($course->shortname, $futureshortname)) {
                 $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
                 unset($other[$key]);
             }
-            for ($i = 1; $i <= $labelscount; $i++) {
-                if (isset($customlabels[$i])) {
-                    if ($customshortnames[$i] && $this->_satisfies_match($course->shortname, $customshortnames[$i], $useregex)) {
-                        $label = $customlabels[$i];
+            for ($i = 1; $i <= $this->fclsettings['labelscount']; $i++) {
+                if (isset($this->customlabels[$i])) {
+                    if ($this->customshortnames[$i] && $this->_satisfies_match($course->shortname, $this->customshortnames[$i])) {
+                        $label = $this->customlabels[$i];
                         $results[$label][] = $course;
                         unset($other[$key]);
                     }
@@ -312,8 +283,8 @@ class block_filtered_course_list extends block_base {
         return $results;
     }
 
-    private function _satisfies_match($coursename, $teststring, $useregex) {
-        if ($useregex == 0) {
+    private function _satisfies_match($coursename, $teststring) {
+        if ($this->fclsettings['useregex'] == 0) {
             $satisfies = stristr($coursename, $teststring);
         } else {
             $teststring = str_replace('`', '', $teststring);
@@ -322,32 +293,34 @@ class block_filtered_course_list extends block_base {
         return $satisfies;
     }
 
-    private function _filter_by_category($courses, $catids) {
+    private function _filter_by_category() {
         global $CFG;
-        if ( $catids == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
+
+        if ( $this->fclsettings['categories'] == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
             $mycats = core_course_external::get_categories();
         } else {
-            $criteria = array(array('key' => 'id', 'value' => $catids));
+            $criteria = array(array('key' => 'id', 'value' => $this->fclsettings['categories']));
             $mycats = core_course_external::get_categories($criteria);
         }
+
         $results = array();
         $other = array();
 
         foreach ($mycats as $cat) {
-            foreach ($courses as $key => $course) {
+            foreach ($this->mycourses as $key => $course) {
                 if ($course->id == SITEID) {
                     continue;
                 }
                 if ($course->category == $cat['id']) {
                     $results[$cat['name']][] = $course;
-                    unset($courses[$key]);
+                    unset($this->mycourses[$key]);
                 }
             }
         }
 
         if (empty($CFG->block_filtered_course_list_hideothercourses) ||
             (!$CFG->block_filtered_course_list_hideothercourses)) {
-            foreach ($courses as $course) {
+            foreach ($this->mycourses as $course) {
                 $other[] = $course;
             }
             $results[get_string('othercourses', 'block_filtered_course_list')] = $other;
