@@ -42,6 +42,12 @@ class block_filtered_course_list extends block_base {
 
     private $mycourses = array();
 
+    public $context;
+
+    private $usertype;
+
+    private $liststyle = 'generic_list';
+
     public function init() {
         $this->title   = get_string('blockname', 'block_filtered_course_list');
     }
@@ -64,7 +70,7 @@ class block_filtered_course_list extends block_base {
         $this->content         = new stdClass;
         $this->content->text   = '';
         $this->content->footer = '';
-        $context = context_system::instance();
+        $this->context = context_system::instance();
 
         // Obtain values from our config settings.
 
@@ -76,125 +82,24 @@ class block_filtered_course_list extends block_base {
                 'M.block_filtered_course_list.accordion.init', array());
         }
 
-        /* Given that 'my courses' has not been disabled in the config,
-         * these are the two types of user who should get to see 'my courses':
-         * 1. A logged in user who is neither an admin nor a guest
-         * 2. An admin, in the case that adminview is set to 'own'
-         */
+        $this->_calculate_usertype();
 
-        if (empty($CFG->disablemycourses) &&
-            (!empty($USER->id) &&
-            !has_capability('moodle/course:view', $context) &&
-            !isguestuser()) ||
-            (has_capability('moodle/course:view', $context) and $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN)) {
+        // The default liststyle is 'generic_list' but ...
 
-            $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
-
-            if ($this->mycourses) {
-                switch ($this->fclsettings['filtertype']) {
-                    case 'shortname':
-                        $filteredcourses = $this->_filter_by_shortname();
-                        break;
-
-                    case 'categories':
-                        $filteredcourses = $this->_filter_by_category();
-                        break;
-
-                    case 'custom':
-                        // We do not yet have a handler for custom filter types.
-
-                        break;
-
-                    default:
-                        // This is unexpected.
-                        break;
-                }
-
-                foreach ($filteredcourses as $section => $courslist) {
-                    if (count($courslist) == 0) {
-                        continue;
-                    }
-                    $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
-                    $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
-
-                    foreach ($courslist as $course) {
-                        $this->content->text .= $this->_print_single_course($course);
-                    }
-                    $this->content->text .= '</ul>';
-                    // If we can update any course of the view all isn't hidden.
-                    // Show the view all courses link.
-                    if (has_capability('moodle/course:update', $context) ||
-                        empty($CFG->block_filtered_course_list_hideallcourseslink)) {
-                        $this->content->footer = "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                                 get_string('fulllistofcourses') .
-                                                 "</a> ...";
-                    }
-                }
-            }
-        } else {
-
-            if ($this->fclsettings['hidefromguests'] == true && !has_capability('moodle/course:update', $context)) {
-                $this->content = null;
-                return $this->content;;
-            }
-
-            // Parent = 0   ie top-level categories only.
-            $categories = coursecat::get(0)->get_children();
-
-            // Check we have categories.
-            if ($categories) {
-                // Just print top level category links.
-                if (count($categories) > 1 ||
-                   (count($categories) == 1 &&
-                    current($categories)->coursecount > $this->fclsettings['maxallcourse'])) {
-                    $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
-                    foreach ($categories as $category) {
-                        $linkcss = $category->visible ? "" : "dimmed";
-                        $this->content->text .= html_writer::tag('li',
-                            html_writer::tag('a', format_string($category->name),
-                            array(
-                                'href' => $CFG->wwwroot . '/course/index.php?categoryid=' . $category->id,
-                                'class' => $linkcss))
-                            );
-                    }
-                    $this->content->text .= '</ul>';
-                    $this->content->footer .= "<br><a href=\"$CFG->wwwroot/course/index.php\">" .
-                                              get_string('searchcourses') .
-                                              '</a> ...<br />';
-
-                    // If we can update any course of the view all isn't hidden.
-                    // Show the view all courses link.
-                    if (has_capability('moodle/course:update', $context) ||
-                        empty($CFG->block_filtered_course_list_hideallcourseslink)) {
-                        $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                                  get_string('fulllistofcourses') .
-                                                  '</a> ...<br>';
-                    }
-
-                } else {
-                    // Just print course names of single category.
-                    $category = array_shift($categories);
-                    $courses = get_courses($category->id);
-
-                    if ($courses) {
-                        $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
-                        foreach ($courses as $course) {
-                            $this->content->text .= $this->_print_single_course($course);
-                        }
-                        $this->content->text .= '</ul>';
-
-                        // If we can update any course of the view all isn't hidden.
-                        // Show the view all courses link.
-                        if (has_capability('moodle/course:update', $context) ||
-                            empty($CFG->block_filtered_course_list_hideallcourseslink)) {
-                            $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                                      get_string('fulllistofcourses') .
-                                                      '</a> ...';
-                        }
-                    }
-                }
-            }
+        if ($this->usertype == 'user' && empty($CFG->disablemycourses)) {
+            $this->liststyle = "filtered_list";
         }
+
+        if ($this->usertype == 'admin' && $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN) {
+            $this->liststyle = "filtered_list";
+        }
+        
+        if ($this->fclsettings['hidefromguests'] == true && $this->usertype == 'guest') {
+            $this->liststyle = "empty_block";
+        }
+
+        $process = '_process_' . $this->liststyle;
+        $this->$process();
         return $this->content;
     }
 
@@ -222,6 +127,134 @@ class block_filtered_course_list extends block_base {
             }
         }
 
+    }
+
+    private function _calculate_usertype() {
+
+        global $USER;
+
+        if (empty($USER->id) || isguestuser()) {
+            $this->usertype = 'guest';
+        } else if (has_capability('moodle/course:view', $this->context)) {
+            $this->usertype = 'admin';
+        } else {
+            $this->usertype = 'user';
+        }
+    }
+
+    private function _process_empty_block() {
+        $this->content = null;
+    }
+
+    private function _process_filtered_list() {
+
+        global $CFG;
+
+        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
+
+        if ($this->mycourses) {
+            switch ($this->fclsettings['filtertype']) {
+                case 'shortname':
+                    $filteredcourses = $this->_filter_by_shortname();
+                    break;
+
+                case 'categories':
+                    $filteredcourses = $this->_filter_by_category();
+                    break;
+
+                case 'custom':
+                    // We do not yet have a handler for custom filter types.
+
+                    break;
+
+                default:
+                    // This is unexpected.
+                    break;
+            }
+
+            foreach ($filteredcourses as $section => $courslist) {
+                if (count($courslist) == 0) {
+                    continue;
+                }
+                $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
+                $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
+
+                foreach ($courslist as $course) {
+                    $this->content->text .= $this->_print_single_course($course);
+                }
+                $this->content->text .= '</ul>';
+                // If we can update any course of the view all isn't hidden.
+                // Show the view all courses link.
+                if (has_capability('moodle/course:update', $this->context) ||
+                    empty($CFG->block_filtered_course_list_hideallcourseslink)) {
+                    $this->content->footer = "<a href=\"$CFG->wwwroot/course/index.php\">" .
+                                             get_string('fulllistofcourses') .
+                                             "</a> ...";
+                }
+            }
+        }
+    }
+
+    private function _process_generic_list() {
+
+        global $CFG;
+
+        // Parent = 0   ie top-level categories only.
+        $categories = coursecat::get(0)->get_children();
+
+        // Check we have categories.
+        if ($categories) {
+            // Just print top level category links.
+            if (count($categories) > 1 ||
+               (count($categories) == 1 &&
+                current($categories)->coursecount > $this->fclsettings['maxallcourse'])) {
+                $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
+                foreach ($categories as $category) {
+                    $linkcss = $category->visible ? "" : "dimmed";
+                    $this->content->text .= html_writer::tag('li',
+                        html_writer::tag('a', format_string($category->name),
+                        array(
+                            'href' => $CFG->wwwroot . '/course/index.php?categoryid=' . $category->id,
+                            'class' => $linkcss))
+                        );
+                }
+                $this->content->text .= '</ul>';
+                $this->content->footer .= "<br><a href=\"$CFG->wwwroot/course/index.php\">" .
+                                          get_string('searchcourses') .
+                                          '</a> ...<br />';
+
+                // If we can update any course of the view all isn't hidden.
+                // Show the view all courses link.
+                if (has_capability('moodle/course:update', $this->context) ||
+                    empty($CFG->block_filtered_course_list_hideallcourseslink)) {
+                    $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
+                                              get_string('fulllistofcourses') .
+                                              '</a> ...<br>';
+                }
+
+            } else {
+                // Just print course names of single category.
+                $category = array_shift($categories);
+                $courses = get_courses($category->id);
+
+                if ($courses) {
+                    $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
+                    foreach ($courses as $course) {
+                        $this->content->text .= $this->_print_single_course($course);
+                    }
+                    $this->content->text .= '</ul>';
+
+                    // If we can update any course of the view all isn't hidden.
+                    // Show the view all courses link.
+                    if (has_capability('moodle/course:update', $this->context) ||
+                        empty($CFG->block_filtered_course_list_hideallcourseslink)) {
+                        $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
+                                                  get_string('fulllistofcourses') .
+                                                  '</a> ...';
+                    }
+                }
+            }
+        }
     }
 
     private function _print_single_course($course) {
