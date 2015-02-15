@@ -567,6 +567,36 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    public function test_setting_cfg_disablemycourses() {
+
+        global $CFG;
+        $this->_create_rich_site();
+
+        $CFG->disablemycourses = 1;
+
+        // Enrolled users, like guests, should see a generic list of categories.
+        $this->_courselistincludes ( array (
+            'user1' => array ( 'Miscellaneous', 'Sibling' )
+        ));
+
+        // Enrolled users, like guests, should not see subcategories or specific courses.
+        $this->_courselistexcludes ( array (
+            'user1' => array ( 'Course', 'Child', 'Grandchild' )
+        ));
+
+        // On the other hand, adminview = own trumps disablemycourses;
+        $CFG->block_filtered_course_list_adminview = 'own';
+
+        // Enroll admin in 'hc_1'.
+        $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['hc_1']->id, 3 );
+
+        $this->_courseunderrubric ( array (
+            'admin' => array (
+                'hc_1' => 'Other courses'
+            )
+        ));
+    }
+
     private function _setupusers() {
 
         global $CFG, $USER;
