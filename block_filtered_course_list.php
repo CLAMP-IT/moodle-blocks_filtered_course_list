@@ -22,16 +22,17 @@ require_once(dirname(__FILE__) . '/locallib.php');
 class block_filtered_course_list extends block_base {
 
     private $fclsettings = array(
-        'filtertype'       => 'shortname',
-        'hidefromguests'   => 0,
-        'useregex'         => 0,
-        'currentshortname' => ' ',
-        'futureshortname'  => ' ',
-        'labelscount'      => BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT,
-        'categories'       => ' ',
-        'adminview'        => BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL,
-        'maxallcourse'     => 10,
-        'collapsible'      => 1,
+        'filtertype'         => 'shortname',
+        'hideallcourseslink' => 0,
+        'hidefromguests'     => 0,
+        'useregex'           => 0,
+        'currentshortname'   => ' ',
+        'futureshortname'    => ' ',
+        'labelscount'        => BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT,
+        'categories'         => ' ',
+        'adminview'          => BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL,
+        'maxallcourse'       => 10,
+        'collapsible'        => 1,
     );
 
     private $customlabels = array();
@@ -183,15 +184,9 @@ class block_filtered_course_list extends block_base {
                     $this->content->text .= $this->_print_single_course($course);
                 }
                 $this->content->text .= '</ul>';
-                // If we can update any course of the view all isn't hidden.
-                // Show the view all courses link.
-                if (has_capability('moodle/course:update', $this->context) ||
-                    empty($CFG->block_filtered_course_list_hideallcourseslink)) {
-                    $this->content->footer = "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                             get_string('fulllistofcourses') .
-                                             "</a> ...";
-                }
             }
+
+            $this->_print_allcourseslink();
         }
     }
 
@@ -223,14 +218,7 @@ class block_filtered_course_list extends block_base {
                                           get_string('searchcourses') .
                                           '</a> ...<br />';
 
-                // If we can update any course of the view all isn't hidden.
-                // Show the view all courses link.
-                if (has_capability('moodle/course:update', $this->context) ||
-                    empty($CFG->block_filtered_course_list_hideallcourseslink)) {
-                    $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                              get_string('fulllistofcourses') .
-                                              '</a> ...<br>';
-                }
+                $this->_print_allcourseslink();
 
             } else {
                 // Just print course names of single category.
@@ -244,14 +232,7 @@ class block_filtered_course_list extends block_base {
                     }
                     $this->content->text .= '</ul>';
 
-                    // If we can update any course of the view all isn't hidden.
-                    // Show the view all courses link.
-                    if (has_capability('moodle/course:update', $this->context) ||
-                        empty($CFG->block_filtered_course_list_hideallcourseslink)) {
-                        $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
-                                                  get_string('fulllistofcourses') .
-                                                  '</a> ...';
-                    }
+                    $this->_print_allcourseslink();
                 }
             }
         }
@@ -360,5 +341,16 @@ class block_filtered_course_list extends block_base {
         }
 
         return $results;
+    }
+
+    private function _print_allcourseslink() {
+        global $CFG;
+        // If we can update any course of the view all isn't hidden.
+        // Show the view all courses link.
+        if ($this->usertype == 'admin' || $this->fclsettings['hideallcourseslink'] == 0) {
+            $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
+                                      get_string('fulllistofcourses') .
+                                      '</a> ...<br>';
+        }
     }
 }
