@@ -21,19 +21,19 @@ require_once(dirname(__FILE__) . '/locallib.php');
 if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('block_filtered_course_list/general',
-        get_string('generalsettings', 'block_filtered_course_list'), ''));
+        get_string('generalsettings', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideallcourseslink',
         get_string('hideallcourseslink', 'block_filtered_course_list'),
-        get_string('confighideallcourseslink', 'block_filtered_course_list'), 0));
+        get_string('confighideallcourseslink', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hidefromguests',
         get_string('hidefromguests', 'block_filtered_course_list'),
-        get_string('confighidefromguests', 'block_filtered_course_list'), 0));
+        get_string('confighidefromguests', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_hideothercourses',
         get_string('hideothercourses', 'block_filtered_course_list'),
-        get_string('confighideothercourses', 'block_filtered_course_list'), 0));
+        get_string('confighideothercourses', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
 
     $settings->add(new admin_setting_configtext('block_filtered_course_list_maxallcourse',
         get_string('maxallcourse', 'block_filtered_course_list'),
@@ -41,7 +41,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_collapsible',
         get_string('collapsible', 'block_filtered_course_list'),
-        get_string('configcollapsible', 'block_filtered_course_list'), 1));
+        get_string('configcollapsible', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_TRUE));
 
     $adminviews = array(
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
@@ -68,15 +68,15 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_useregex',
         get_string('useregex', 'block_filtered_course_list'),
-        get_string('configuseregex', 'block_filtered_course_list'), 0));
+        get_string('configuseregex', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
 
     $settings->add(new admin_setting_configtext('block_filtered_course_list_currentshortname',
         get_string('currentshortname', 'block_filtered_course_list'),
-        get_string('configcurrentshortname', 'block_filtered_course_list'), ''));
+        get_string('configcurrentshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
 
     $settings->add(new admin_setting_configtext('block_filtered_course_list_futureshortname',
         get_string('futureshortname', 'block_filtered_course_list'),
-        get_string('configfutureshortname', 'block_filtered_course_list'), ''));
+        get_string('configfutureshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
 
     $howmanylabels = array();
     for ($i = 0; $i <= 10; $i++) {
@@ -101,7 +101,7 @@ if ($ADMIN->fulltree) {
 
         $settings->add(new admin_setting_configtext("block_filtered_course_list_customshortname$i",
             get_string('customshortname', 'block_filtered_course_list') . " $i",
-            get_string('configcustomshortname', 'block_filtered_course_list'), ''));
+            get_string('configcustomshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
     }
 
     $settings->add(new admin_setting_heading('block_filtered_course_list/categories',
