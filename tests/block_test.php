@@ -584,7 +584,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'user1' => array ( 'Course', 'Child', 'Grandchild' )
         ));
 
-        // On the other hand, adminview = own trumps disablemycourses;
+        // On the other hand, adminview = own trumps disablemycourses.
         $CFG->block_filtered_course_list_adminview = 'own';
 
         // Enroll admin in 'hc_1'.
