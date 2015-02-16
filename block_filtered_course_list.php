@@ -23,16 +23,17 @@ class block_filtered_course_list extends block_base {
 
     private $fclsettings = array(
         'filtertype'         => 'shortname',
-        'hideallcourseslink' => 0,
-        'hidefromguests'     => 0,
-        'useregex'           => 0,
-        'currentshortname'   => ' ',
-        'futureshortname'    => ' ',
+        'hideallcourseslink' => BLOCK_FILTERED_COURSE_LIST_FALSE,
+        'hidefromguests'     => BLOCK_FILTERED_COURSE_LIST_FALSE,
+        'hideothercourses'   => BLOCK_FILTERED_COURSE_LIST_FALSE,
+        'useregex'           => BLOCK_FILTERED_COURSE_LIST_FALSE,
+        'currentshortname'   => BLOCK_FILTERED_COURSE_LIST_EMPTY,
+        'futureshortname'    => BLOCK_FILTERED_COURSE_LIST_EMPTY,
         'labelscount'        => BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT,
-        'categories'         => ' ',
+        'categories'         => BLOCK_FILTERED_COURSE_LIST_EMPTY,
         'adminview'          => BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL,
         'maxallcourse'       => 10,
-        'collapsible'        => 1,
+        'collapsible'        => BLOCK_FILTERED_COURSE_LIST_TRUE,
     );
 
     private $customlabels = array();
@@ -78,7 +79,7 @@ class block_filtered_course_list extends block_base {
         $this->_calculate_settings();
 
         /* Call accordion YUI module */
-        if ($this->fclsettings['collapsible'] == 1 && $this->page) {
+        if ($this->fclsettings['collapsible'] == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
             $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
                 'M.block_filtered_course_list.accordion.init', array());
         }
@@ -95,7 +96,7 @@ class block_filtered_course_list extends block_base {
             $this->liststyle = "filtered_list";
         }
         
-        if ($this->fclsettings['hidefromguests'] == true && $this->usertype == 'guest') {
+        if ($this->fclsettings['hidefromguests'] == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->usertype == 'guest') {
             $this->liststyle = "empty_block";
         }
 
@@ -114,7 +115,7 @@ class block_filtered_course_list extends block_base {
             }
         }
 
-        $this->collapsibleclass = ($this->fclsettings['collapsible'] == 1) ? 'collapsible ' : '';
+        $this->collapsibleclass = ($this->fclsettings['collapsible'] == BLOCK_FILTERED_COURSE_LIST_TRUE) ? 'collapsible ' : '';
 
         for ($i = 1; $i <= $this->fclsettings['labelscount']; $i++) {
             $property = 'block_filtered_course_list_customlabel'.$i;
@@ -289,8 +290,7 @@ class block_filtered_course_list extends block_base {
             }
         }
 
-        if (empty($CFG->block_filtered_course_list_hideothercourses) ||
-            (!$CFG->block_filtered_course_list_hideothercourses)) {
+        if ($this->fclsettings['hideothercourses'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $results[get_string('othercourses', 'block_filtered_course_list')] = $other;
         }
 
@@ -298,7 +298,7 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _satisfies_match($coursename, $teststring) {
-        if ($this->fclsettings['useregex'] == 0) {
+        if ($this->fclsettings['useregex'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $satisfies = stristr($coursename, $teststring);
         } else {
             $teststring = str_replace('`', '', $teststring);
@@ -332,8 +332,7 @@ class block_filtered_course_list extends block_base {
             }
         }
 
-        if (empty($CFG->block_filtered_course_list_hideothercourses) ||
-            (!$CFG->block_filtered_course_list_hideothercourses)) {
+        if ($this->fclsettings['hideothercourses'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             foreach ($this->mycourses as $course) {
                 $other[] = $course;
             }
@@ -347,7 +346,7 @@ class block_filtered_course_list extends block_base {
         global $CFG;
         // If we can update any course of the view all isn't hidden.
         // Show the view all courses link.
-        if ($this->usertype == 'admin' || $this->fclsettings['hideallcourseslink'] == 0) {
+        if ($this->usertype == 'admin' || $this->fclsettings['hideallcourseslink'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
                                       get_string('fulllistofcourses') .
                                       '</a> ...<br>';
