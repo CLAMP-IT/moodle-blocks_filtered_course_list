@@ -95,7 +95,7 @@ class block_filtered_course_list extends block_base {
         if ($this->usertype == 'admin' && $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN) {
             $this->liststyle = "filtered_list";
         }
-        
+
         if ($this->fclsettings['hidefromguests'] == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->usertype == 'guest') {
             $this->liststyle = "empty_block";
         }
