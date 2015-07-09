@@ -27,9 +27,9 @@ Feature: Select category to filter by
         And I add the "filtered_course_list" block
         When I navigate to "Filtered course list" node in "Site administration>Plugins>Blocks"
         Then I should see "Top" in the "#id_s__block_filtered_course_list_categories" "css_element"
-        And "Cat 1" "link" should be visible
-        And "Cat 2" "link" should be visible
+        And "Cat 1" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Cat 2" "link" in the ".block_filtered_course_list" "css_element" should be visible
         When I set the field "s__block_filtered_course_list_categories" to "Cat 1"
         And I click on "Save changes" "button"
-        Then "Cat 1" "link" should be visible
-        And "Cat 2" "link" should not be visible
+        Then "Cat 1" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Cat 2" "link" in the ".block_filtered_course_list" "css_element" should not be visible
