@@ -40,8 +40,8 @@ Feature: Course rubrics are collapsible
         And I log out
         When I log in as "testuser"
         Then I should see "Filtered Course List"
-        And "Cat 1" "link" should be visible
-        And "Cat 2" "link" should be visible
-        And "Course 11" "link" should not be visible
+        And "Cat 1" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Cat 2" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should not be visible
         When I follow "Cat 1"
-        Then "Course 11" "link" should be visible
+        Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
