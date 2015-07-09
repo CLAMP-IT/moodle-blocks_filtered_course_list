@@ -30,5 +30,6 @@ Feature: Select category to filter by
         And "Cat 1" "link" should be visible
         And "Cat 2" "link" should be visible
         When I set the field "s__block_filtered_course_list_categories" to "Cat 1"
+        And I click on "Save changes" "button"
         Then "Cat 1" "link" should be visible
         And "Cat 2" "link" should not be visible
