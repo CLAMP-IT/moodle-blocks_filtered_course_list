@@ -32,4 +32,4 @@ Feature: Select category to filter by
         When I set the field "s__block_filtered_course_list_categories" to "Cat 1"
         And I click on "Save changes" "button"
         Then "Cat 1" "link" in the ".block_filtered_course_list" "css_element" should be visible
-        And "Cat 2" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+        And I should not see "Cat 2" in the ".block_filtered_course_list" "css_element"
