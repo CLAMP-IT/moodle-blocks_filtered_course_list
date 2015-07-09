@@ -31,7 +31,7 @@ Feature: Course rubrics are collapsible
             | testuser | course22 | student |
             | testuser | course23 | student |
         And I log in as "admin"
-        And I am on homepage
+        And I am on site homepage
         And I follow "Turn editing on"
         And I add the "filtered_course_list" block
         And I set the following administration settings values:
@@ -39,6 +39,7 @@ Feature: Course rubrics are collapsible
             | block_filtered_course_list_categories | Test       |
         And I log out
         When I log in as "testuser"
+        And I am on site homepage
         Then I should see "Filtered Course List"
         And "Cat 1" "link" in the ".block_filtered_course_list" "css_element" should be visible
         And "Cat 2" "link" in the ".block_filtered_course_list" "css_element" should be visible
