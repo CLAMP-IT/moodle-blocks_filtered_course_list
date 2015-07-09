@@ -1,6 +1,6 @@
-# [Filtered Course List v2.5]
+# [Filtered Course List v2.6.0]
 
-for Moodle 2.6 or higher
+for Moodle 2.8 or higher
 
 This is a block which displays a configurable list of courses. It is intended as a replacement for the My Courses block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
 
@@ -37,6 +37,14 @@ To change the name of the block, turn editing on on a screen that displays the b
 Please report any bugs or feature requests to the public repository page: <https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list>.
 
 ## Changelog ##
+
+### [v2.6.0] ###
+Dependency: Requires Moodle 2.8
+Behind the scenes: Updates automated testing for newer Moodles
+
+### [v2.5.1] ###
+* Feature: Admin can designate "Top" when organizing by categories
+* Behind the scenes: automated testing and healthier code
 
 ### [v2.5] ###
 * Feature: Course rubrics can now be set to be collapsible
