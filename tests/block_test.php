@@ -548,9 +548,13 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         // Change the adminview setting to 'own'.
         $CFG->block_filtered_course_list_adminview = 'own';
 
-        // An admin enrolled in no courses will not see the block.
-        $this->_noblock ( array (
-            'admin' => true,
+        // An admin enrolled in no courses should still see only the top level.
+        $this->_courselistexcludes ( array (
+            'admin' => array ( 'Course', 'Child', 'Grandchild' )
+        ));
+
+        $this->_courselistincludes ( array (
+            'admin' => array ( 'Miscellaneous', 'Sibling' )
         ));
 
         // Put the admin in a course.

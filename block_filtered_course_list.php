@@ -74,6 +74,8 @@ class block_filtered_course_list extends block_base {
         $this->content->footer = '';
         $this->context = context_system::instance();
 
+        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
+
         // Obtain values from our config settings.
 
         $this->_calculate_settings();
@@ -92,7 +94,9 @@ class block_filtered_course_list extends block_base {
             $this->liststyle = "filtered_list";
         }
 
-        if ($this->usertype == 'admin' && $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN) {
+        if ($this->usertype == 'admin' &&
+            $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN &&
+            $this->mycourses ) {
             $this->liststyle = "filtered_list";
         }
 
@@ -151,8 +155,6 @@ class block_filtered_course_list extends block_base {
     private function _process_filtered_list() {
 
         global $CFG;
-
-        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
 
         if ($this->mycourses) {
             switch ($this->fclsettings['filtertype']) {
