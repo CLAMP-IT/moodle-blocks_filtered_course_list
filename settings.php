@@ -70,14 +70,6 @@ if ($ADMIN->fulltree) {
         get_string('useregex', 'block_filtered_course_list'),
         get_string('configuseregex', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
 
-    $settings->add(new admin_setting_configtext('block_filtered_course_list_currentshortname',
-        get_string('currentshortname', 'block_filtered_course_list'),
-        get_string('configcurrentshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
-
-    $settings->add(new admin_setting_configtext('block_filtered_course_list_futureshortname',
-        get_string('futureshortname', 'block_filtered_course_list'),
-        get_string('configfutureshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
-
     $howmanylabels = array();
     for ($i = 0; $i <= 10; $i++) {
         $howmanylabels[] = $i;
@@ -93,7 +85,32 @@ if ($ADMIN->fulltree) {
         $labelscount = $CFG->block_filtered_course_list_labelscount;
     }
 
+    $settings->add(new admin_setting_heading('block_filtered_course_list/currentcourses',
+        get_string('currentshortname', 'block_filtered_course_list'), ''));
+
+    $settings->add(new admin_setting_configtext('block_filtered_course_list_currentshortname',
+        get_string('currentshortname', 'block_filtered_course_list'),
+        get_string('configcurrentshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
+
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_currentexpanded',
+        get_string('expanded', 'block_filtered_course_list'),
+        get_string('configexpanded', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
+
+    $settings->add(new admin_setting_heading('block_filtered_course_list/futurecourses',
+        get_string('futureshortname', 'block_filtered_course_list'), ''));
+
+    $settings->add(new admin_setting_configtext('block_filtered_course_list_futureshortname',
+        get_string('futureshortname', 'block_filtered_course_list'),
+        get_string('configfutureshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
+
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list_futureexpanded',
+        get_string('expanded', 'block_filtered_course_list'),
+        get_string('configexpanded', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
+
     for ($i = 1; $i <= $labelscount; $i++) {
+
+        $settings->add(new admin_setting_heading("block_filtered_course_list/customlabel$i",
+            get_string('customlabel', 'block_filtered_course_list') . " $i", ''));
 
         $settings->add(new admin_setting_configtext("block_filtered_course_list_customlabel$i",
             get_string('customlabel', 'block_filtered_course_list') . " $i",
@@ -102,6 +119,10 @@ if ($ADMIN->fulltree) {
         $settings->add(new admin_setting_configtext("block_filtered_course_list_customshortname$i",
             get_string('customshortname', 'block_filtered_course_list') . " $i",
             get_string('configcustomshortname', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_EMPTY));
+
+        $settings->add(new admin_setting_configcheckbox("block_filtered_course_list_labelexpanded$i",
+            get_string('expanded', 'block_filtered_course_list'),
+            get_string('configexpanded', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
     }
 
     $settings->add(new admin_setting_heading('block_filtered_course_list/categories',

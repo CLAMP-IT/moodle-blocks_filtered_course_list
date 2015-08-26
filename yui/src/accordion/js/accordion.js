@@ -12,11 +12,9 @@ FCLA.init = function (params) {
   Y.on('domready', function () {
     sectionTitles = Y.all('.block_filtered_course_list .course-section');
     sectionTitles.each(function (title) {
-      title.addClass('collapsed');
-      // var anchor = Y.Node.create('<a href="#"></a>');
-      // anchor.append(title.replace(anchor));
-      // title.append(anchor);
-      // console.log(title.getHTML());
+      if (!(title.hasClass('expanded'))) {
+        title.addClass('collapsed');
+      }
       var html = title.getHTML();
       title.setHTML('<a href="#">' + html + '</a>');
       title.on('click', function (e) {
@@ -25,6 +23,7 @@ FCLA.init = function (params) {
       });
     });
   });
+  console.log(params);
 };
 
 FCLA.toggle = function (title) {
