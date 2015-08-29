@@ -46,3 +46,21 @@ Feature: Course rubrics are collapsible
         And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should not be visible
         When I follow "Cat 1"
         Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        When I log out
+        And I log in as "admin"
+        And I set the following administration settings values:
+            | block_filtered_course_list_filtertype       | shortname |
+            | block_filtered_course_list_currentshortname | 3         |
+            | block_filtered_course_list_currentexpanded  | 1         |
+            | block_filtered_course_list_futureshortname  | 2         |
+            | block_filtered_course_list_customlabel1     | Ones      |
+            | block_filtered_course_list_customshortname1 | 1         |
+            | block_filtered_course_list_labelexpanded1   | 1         |
+            | block_filtered_course_list_customlabel2     | Twos      |
+            | block_filtered_course_list_customshortname2 | 22        |
+        And I log out
+        And I log in as "testuser"
+        And I am on site homepage
+        Then "Course 23" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Course 22" "link" in the ".block_filtered_course_list" "css_element" should not be visible

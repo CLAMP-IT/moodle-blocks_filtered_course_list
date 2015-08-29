@@ -52,12 +52,16 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'filtertype'         => 'shortname',
             'useregex'           => 0,
             'currentshortname'   => '',
+            'currentexpanded'    => 0,
             'futureshortname'    => '',
+            'futureexpanded'     => 0,
             'labelscount'        => 2,
             'customlabel1'       => '',
             'customshortname1'   => '',
+            'labelexpanded1'     => 0,
             'customlabel2'       => '',
             'customshortname2'   => '',
+            'labelexpanded2'     => 0,
             'categories'         => 0
         );
 
@@ -530,6 +534,41 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         ));
     }
 
+    public function test_setting_expanded_section() {
+
+        global $CFG;
+        $this->_create_rich_site();
+
+        // Set up some shortname rubrics.
+        $CFG->block_filtered_course_list_currentshortname = '_1';
+        $CFG->block_filtered_course_list_futureshortname  = '_2';
+        $CFG->block_filtered_course_list_customlabel1     = 'Child courses';
+        $CFG->block_filtered_course_list_customshortname1 = 'cc';
+        $CFG->block_filtered_course_list_customlabel2     = 'Unnumbered categories';
+        $CFG->block_filtered_course_list_customshortname2 = 'c_';
+
+        // All sections should be collapsed.
+        $this->_sectionexpanded ( array(
+            'Current courses'       => 'collapsed',
+            'Future courses'        => 'collapsed',
+            'Child courses'         => 'collapsed',
+            'Unnumbered categories' => 'collapsed'
+        ));
+
+        // Now set a couple sections to be expanded by default.
+        $CFG->block_filtered_course_list_currentexpanded = 1;
+        $CFG->block_filtered_course_list_labelexpanded2  = 1;
+
+        // The corresponding sections should be expanded.
+        $this->_sectionexpanded ( array(
+            'Current courses'       => 'expanded',
+            'Future courses'        => 'collapsed',
+            'Child courses'         => 'collapsed',
+            'Unnumbered categories' => 'expanded'
+        ));
+
+    }
+
     public function test_setting_adminview() {
 
         global $CFG;
@@ -836,6 +875,24 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 } else {
                     $this->assertGreaterThan( 0, $hits, "$user should see $course under $rubricmatch" );
                 }
+            }
+        }
+    }
+
+    private function _sectionexpanded ( $expectations=array(), $operator='' ) {
+        $this->_switchuser('user1');
+        $bi = new block_filtered_course_list;
+        $html = new DOMDocument;
+        $html->loadHTML( $bi->get_content()->text );
+        $rubrics = $html->getElementsByTagName('div');
+        foreach ($rubrics as $rubric) {
+            $title = $rubric->textContent;
+            $state = $expectations[$title];
+            $class = $rubric->getAttribute('class');
+            if ($operator == 'not') {
+                $this->assertNotContains ( $state , $class, "The class attribute of '$title' should not contain $state.");
+            } else {
+                $this->assertContains ( $state , $class, "The class attribute of '$title' should contain $state.");
             }
         }
     }

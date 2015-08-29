@@ -28,7 +28,9 @@ class block_filtered_course_list extends block_base {
         'hideothercourses'   => BLOCK_FILTERED_COURSE_LIST_FALSE,
         'useregex'           => BLOCK_FILTERED_COURSE_LIST_FALSE,
         'currentshortname'   => BLOCK_FILTERED_COURSE_LIST_EMPTY,
+        'currentexpanded'    => BLOCK_FILTERED_COURSE_LIST_FALSE,
         'futureshortname'    => BLOCK_FILTERED_COURSE_LIST_EMPTY,
+        'futureexpanded'     => BLOCK_FILTERED_COURSE_LIST_FALSE,
         'labelscount'        => BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT,
         'categories'         => BLOCK_FILTERED_COURSE_LIST_EMPTY,
         'adminview'          => BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL,
@@ -39,6 +41,8 @@ class block_filtered_course_list extends block_base {
     private $customlabels = array();
 
     private $customshortnames = array();
+
+    private $labelexpanded = array();
 
     private $collapsibleclass = '';
 
@@ -121,15 +125,28 @@ class block_filtered_course_list extends block_base {
 
         $this->collapsibleclass = ($this->fclsettings['collapsible'] == BLOCK_FILTERED_COURSE_LIST_TRUE) ? 'collapsible ' : '';
 
+        if ($this->fclsettings['collapsible']) {
+            $this->labelexpanded[get_string('currentcourses', 'block_filtered_course_list')] =
+                $this->fclsettings['currentexpanded'];
+            $this->labelexpanded[get_string('futurecourses', 'block_filtered_course_list')] = $this->fclsettings['futureexpanded'];
+        }
+
         for ($i = 1; $i <= $this->fclsettings['labelscount']; $i++) {
-            $property = 'block_filtered_course_list_customlabel'.$i;
-            if (isset($CFG->$property) && $CFG->$property != '') {
-                $this->customlabels[$i] = $CFG->$property;
+            $label = 'block_filtered_course_list_customlabel'.$i;
+            if (isset($CFG->$label) && $CFG->$label != '') {
+                $this->customlabels[$i] = $CFG->$label;
             }
             $this->customshortnames[$i] = '';
-            $property = 'block_filtered_course_list_customshortname'.$i;
-            if (isset($CFG->$property) && $CFG->$property != '') {
-                $this->customshortnames[$i] = $CFG->$property;
+            $shortname = 'block_filtered_course_list_customshortname'.$i;
+            if (isset($CFG->$shortname) && $CFG->$shortname != '') {
+                $this->customshortnames[$i] = $CFG->$shortname;
+            }
+            if ($this->fclsettings['collapsible']) {
+                $this->labelexpanded[$i] = BLOCK_FILTERED_COURSE_LIST_FALSE;
+                $initialstate = 'block_filtered_course_list_labelexpanded'.$i;
+                if (isset($CFG->$initialstate)) {
+                    $this->labelexpanded[$CFG->$label] = $CFG->$initialstate;
+                }
             }
         }
 
@@ -180,7 +197,11 @@ class block_filtered_course_list extends block_base {
                 if (count($courslist) == 0) {
                     continue;
                 }
-                $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
+                $initialstate = '';
+                if ($this->fclsettings['collapsible'] && array_key_exists($section, $this->labelexpanded)) {
+                    $initialstate = $this->labelexpanded[$section] == 1 ? 'expanded' : 'collapsed';
+                }
+                $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section ' . $initialstate));
                 $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
 
                 foreach ($courslist as $course) {
