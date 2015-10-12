@@ -1,5 +1,7 @@
 # [Filtered Course List v2.6.0]
 
+[![Build Status](https://travis-ci.org/kwiliarty/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/kwiliarty/moodle-blocks_filtered_course_list)
+
 for Moodle 2.8 or higher
 
 This is a block which displays a configurable list of courses. It is intended as a replacement for the My Courses block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
