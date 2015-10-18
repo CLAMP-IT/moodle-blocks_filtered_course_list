@@ -784,7 +784,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     private function _noblock ( $expectations=array() ) {
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
-            $bi     = new block_filtered_course_list;
+            $bi = new block_filtered_course_list;
+            $bi->instance = new StdClass;
+            $bi->instance->id = 17;
             if ( $result === true ) {
                 if ( isset ( $bi->get_content()->text ) ) {
                     // In some cases the text exists but is empty.
@@ -802,7 +804,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     private function _allcourseslink ( $expectations=array() ) {
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
-            $bi     = new block_filtered_course_list;
+            $bi = new block_filtered_course_list;
+            $bi->instance = new StdClass;
+            $bi->instance->id = 17;
             $footer = $bi->get_content()->footer;
             if ( $result === true ) {
                 $this->assertContains ( 'All courses' , $footer , "$user should see the All-courses link." );
@@ -815,7 +819,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     private function _courselistincludes ( $expectations=array() ) {
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
-            $bi     = new block_filtered_course_list;
+            $bi = new block_filtered_course_list;
+            $bi->instance = new StdClass;
+            $bi->instance->id = 17;
             foreach ($courses as $course) {
                 $this->assertContains ( $course , $bi->get_content()->text , "$user should see $course." );
             }
@@ -825,7 +831,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     private function _courselistexcludes ( $expectations=array() ) {
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
-            $bi     = new block_filtered_course_list;
+            $bi = new block_filtered_course_list;
+            $bi->instance = new StdClass;
+            $bi->instance->id = 17;
             foreach ($courses as $course) {
                 $this->assertNotContains ( $course , $bi->get_content()->text , "$user should not see $course." );
             }
@@ -848,6 +856,8 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
             $bi = new block_filtered_course_list;
+            $bi->instance = new StdClass;
+            $bi->instance->id = 17;
             $html = new DOMDocument;
             $html->loadHTML( $bi->get_content()->text );
             $rubrics = $html->getElementsByTagName('div');
@@ -855,7 +865,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 $hits = 0;
                 foreach ($rubrics as $rubric) {
                     $rubrictitle = $rubric->nodeValue;
-                    if ( $rubrictitle != $rubricmatch ) {
+                    if ( $rubrictitle != $rubricmatch || $rubric->getAttribute('class') == 'tablist') {
                         continue;
                     }
                     $ul = $rubric->nextSibling;
@@ -882,11 +892,16 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     private function _sectionexpanded ( $expectations=array(), $operator='' ) {
         $this->_switchuser('user1');
         $bi = new block_filtered_course_list;
+        $bi->instance = new StdClass;
+        $bi->instance->id = 17;
         $html = new DOMDocument;
         $html->loadHTML( $bi->get_content()->text );
         $rubrics = $html->getElementsByTagName('div');
         foreach ($rubrics as $rubric) {
             $title = $rubric->textContent;
+            if (!(array_key_exists($title, $expectations))) {
+                continue;
+            }
             $state = $expectations[$title];
             $class = $rubric->getAttribute('class');
             if ($operator == 'not') {

@@ -66,6 +66,15 @@ class block_filtered_course_list extends block_base {
         $this->title = isset($this->config->title) ? $this->config->title : get_string('blockname', 'block_filtered_course_list');
     }
 
+    /**
+     * Returns the role that best describes the block... 'navigation'
+     *
+     * @return string 'navigation'
+     */
+    public function get_aria_role() {
+        return 'navigation';
+    }
+
     public function get_content() {
         global $CFG, $USER, $DB, $OUTPUT;
 
@@ -110,6 +119,12 @@ class block_filtered_course_list extends block_base {
 
         $process = '_process_' . $this->liststyle;
         $this->$process();
+
+        if (is_object($this->content) && $this->content->text != '') {
+            $atts = array('role' => 'tablist', 'aria-multiselectable' => 'true');
+            $this->content->text = html_writer::div($this->content->text, 'tablist', $atts);
+        }
+
         return $this->content;
     }
 
@@ -193,21 +208,47 @@ class block_filtered_course_list extends block_base {
                     break;
             }
 
+            $sectioncount = 1;
+            $id = $this->instance->id;
+
             foreach ($filteredcourses as $section => $courslist) {
                 if (count($courslist) == 0) {
                     continue;
                 }
-                $initialstate = '';
+                $initialstate = 'collapsed';
+                $ariaexpanded = 'false';
+                $ariahidden = 'true';
                 if ($this->fclsettings['collapsible'] && array_key_exists($section, $this->labelexpanded)) {
-                    $initialstate = $this->labelexpanded[$section] == 1 ? 'expanded' : 'collapsed';
+                    if ($this->labelexpanded[$section] == 1) {
+                        $initialstate = 'expanded';
+                        $ariaexpanded = 'true';
+                        $ariahidden = 'false';
+                    }
                 }
-                $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section ' . $initialstate));
-                $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
+                $sectionatts = array(
+                    'id'            => "fcl_{$id}_tab{$sectioncount}",
+                    'class'         => "course-section tab{$sectioncount} $initialstate",
+                    'role'          => 'tab',
+                    'aria-controls' => "fcl_{$id}_tabpanel{$sectioncount}",
+                    'aria-expanded' => "$ariaexpanded",
+                    'aria-selected' => 'false',
+                );
+                $this->content->text .= html_writer::tag('div', $section, $sectionatts);
 
+                $ulatts = array(
+                    'id'              => "fcl_{$id}_tabpanel{$sectioncount}",
+                    'class'           => "$this->collapsibleclass list tabpanel{$sectioncount}",
+                    'role'            => "tabpanel",
+                    'aria-labelledby' => "fcl_{$id}_tab{$sectioncount}",
+                    'aria-hidden'     => "$ariahidden",
+                );
+                $listitems = '';
                 foreach ($courslist as $course) {
-                    $this->content->text .= $this->_print_single_course($course);
+                    $listitems .= $this->_print_single_course($course);
                 }
-                $this->content->text .= '</ul>';
+                $this->content->text .= html_writer::tag('ul', $listitems, $ulatts);
+
+                ++$sectioncount;
             }
 
             $this->_print_allcourseslink();
