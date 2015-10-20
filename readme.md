@@ -1,6 +1,6 @@
 # [Filtered Course List v2.7.0]
 
-Master: [![Build Status](https://travis-ci.org/kwiliarty/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/kwiliarty/moodle-blocks_filtered_course_list)
+Master: [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-it/moodle-blocks_filtered_course_list)
 
 for Moodle 2.8 or higher
 
