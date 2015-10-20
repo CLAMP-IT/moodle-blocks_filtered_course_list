@@ -1,4 +1,4 @@
-# [Filtered Course List v2.6.0]
+# [Filtered Course List v2.7.0rc]
 
 [![Build Status](https://travis-ci.org/kwiliarty/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/kwiliarty/moodle-blocks_filtered_course_list)
 
@@ -39,6 +39,12 @@ To change the name of the block, turn editing on on a screen that displays the b
 Please report any bugs or feature requests to the public repository page: <https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list>.
 
 ## Changelog ##
+
+### [v2.7.0] ###
+* Feature: An admin can set arbitrary rubrics to be expanded by default
+* Feature: Aria accessibility improvements 
+* Bug fix: Admins should see a block under all circumstances
+* Back end: Continuous integration with Travis CI
 
 ### [v2.6.0] ###
 Dependency: Requires Moodle 2.8
