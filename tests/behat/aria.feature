@@ -34,11 +34,11 @@ Feature: The block includes ARIA support
         And I am on site homepage
         And I follow "Turn editing on"
         And I add the "filtered_course_list" block
-        And I set the following administration settings values:
-            | block_filtered_course_list_filtertype       | shortname |
-            | block_filtered_course_list_currentshortname | 3         |
-            | block_filtered_course_list_futureshortname  | 2         |
-            | block_filtered_course_list_futureexpanded   | 1         |
+        And the following config values are set as admin:
+            | filtertype       | shortname | block_filtered_course_list |
+            | currentshortname | 3         | block_filtered_course_list |
+            | futureshortname  | 2         | block_filtered_course_list |
+            | futureexpanded   | 1         | block_filtered_course_list |
         And I log out
         When I log in as "testuser"
         And I am on site homepage

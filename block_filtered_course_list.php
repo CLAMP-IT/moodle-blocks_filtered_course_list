@@ -21,22 +21,7 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 class block_filtered_course_list extends block_base {
 
-    private $fclsettings = array(
-        'filtertype'         => 'shortname',
-        'hideallcourseslink' => BLOCK_FILTERED_COURSE_LIST_FALSE,
-        'hidefromguests'     => BLOCK_FILTERED_COURSE_LIST_FALSE,
-        'hideothercourses'   => BLOCK_FILTERED_COURSE_LIST_FALSE,
-        'useregex'           => BLOCK_FILTERED_COURSE_LIST_FALSE,
-        'currentshortname'   => BLOCK_FILTERED_COURSE_LIST_EMPTY,
-        'currentexpanded'    => BLOCK_FILTERED_COURSE_LIST_FALSE,
-        'futureshortname'    => BLOCK_FILTERED_COURSE_LIST_EMPTY,
-        'futureexpanded'     => BLOCK_FILTERED_COURSE_LIST_FALSE,
-        'labelscount'        => BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT,
-        'categories'         => BLOCK_FILTERED_COURSE_LIST_EMPTY,
-        'adminview'          => BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL,
-        'maxallcourse'       => 10,
-        'collapsible'        => BLOCK_FILTERED_COURSE_LIST_TRUE,
-    );
+    private $fclconfig;
 
     private $customlabels = array();
 
@@ -91,10 +76,11 @@ class block_filtered_course_list extends block_base {
 
         // Obtain values from our config settings.
 
+        $this->fclconfig = get_config('block_filtered_course_list');
         $this->_calculate_settings();
 
         /* Call accordion YUI module */
-        if ($this->fclsettings['collapsible'] == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
+        if ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
             $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
                 'M.block_filtered_course_list.accordion.init', array());
         }
@@ -108,12 +94,12 @@ class block_filtered_course_list extends block_base {
         }
 
         if ($this->usertype == 'admin' &&
-            $this->fclsettings['adminview'] == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN &&
+            $this->fclconfig->adminview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN &&
             $this->mycourses ) {
             $this->liststyle = "filtered_list";
         }
 
-        if ($this->fclsettings['hidefromguests'] == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->usertype == 'guest') {
+        if ($this->fclconfig->hidefromguests == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->usertype == 'guest') {
             $this->liststyle = "empty_block";
         }
 
@@ -129,42 +115,30 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _calculate_settings() {
-        global $CFG;
 
-        foreach ($this->fclsettings as $name => $value) {
-            $siteconfigname = "block_filtered_course_list_$name";
-            if (isset($CFG->{$siteconfigname})) {
-                $this->fclsettings[$name] = $CFG->{$siteconfigname};
-            }
-        }
+        $this->collapsibleclass = ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE) ? 'collapsible ' : '';
 
-        $this->collapsibleclass = ($this->fclsettings['collapsible'] == BLOCK_FILTERED_COURSE_LIST_TRUE) ? 'collapsible ' : '';
-
-        if ($this->fclsettings['collapsible']) {
+        if ($this->fclconfig->collapsible) {
             $this->labelexpanded[get_string('currentcourses', 'block_filtered_course_list')] =
-                $this->fclsettings['currentexpanded'];
-            $this->labelexpanded[get_string('futurecourses', 'block_filtered_course_list')] = $this->fclsettings['futureexpanded'];
+                $this->fclconfig->currentexpanded;
+            $this->labelexpanded[get_string('futurecourses', 'block_filtered_course_list')] = $this->fclconfig->futureexpanded;
         }
 
-        for ($i = 1; $i <= $this->fclsettings['labelscount']; $i++) {
-            $label = 'block_filtered_course_list_customlabel'.$i;
-            if (isset($CFG->$label) && $CFG->$label != '') {
-                $this->customlabels[$i] = $CFG->$label;
-            }
-            $this->customshortnames[$i] = '';
-            $shortname = 'block_filtered_course_list_customshortname'.$i;
-            if (isset($CFG->$shortname) && $CFG->$shortname != '') {
-                $this->customshortnames[$i] = $CFG->$shortname;
-            }
-            if ($this->fclsettings['collapsible']) {
-                $this->labelexpanded[$i] = BLOCK_FILTERED_COURSE_LIST_FALSE;
-                $initialstate = 'block_filtered_course_list_labelexpanded'.$i;
-                if (isset($CFG->$initialstate)) {
-                    $this->labelexpanded[$CFG->$label] = $CFG->$initialstate;
+        for ($i = 1; $i <= $this->fclconfig->labelscount; $i++) {
+            $labelsetting = 'customlabel' . $i;
+            if (array_key_exists($labelsetting, $this->fclconfig)) {
+                $label = $this->fclconfig->$labelsetting;
+                $this->customlabels[$i] = $label;
+                $shortnamesetting = 'customshortname' . $i;
+                $this->customshortnames[$i] = $this->fclconfig->$shortnamesetting;
+                if ($this->fclconfig->collapsible) {
+                    $expandedsetting = 'labelexpanded' . $i;
+                    if (array_key_exists($expandedsetting, $this->fclconfig)) {
+                        $this->labelexpanded[$label] = $this->fclconfig->$expandedsetting;
+                    }
                 }
             }
         }
-
     }
 
     private function _calculate_usertype() {
@@ -186,10 +160,8 @@ class block_filtered_course_list extends block_base {
 
     private function _process_filtered_list() {
 
-        global $CFG;
-
         if ($this->mycourses) {
-            switch ($this->fclsettings['filtertype']) {
+            switch ($this->fclconfig->filtertype) {
                 case 'shortname':
                     $filteredcourses = $this->_filter_by_shortname();
                     break;
@@ -218,7 +190,7 @@ class block_filtered_course_list extends block_base {
                 $initialstate = 'collapsed';
                 $ariaexpanded = 'false';
                 $ariahidden = 'true';
-                if ($this->fclsettings['collapsible'] && array_key_exists($section, $this->labelexpanded)) {
+                if ($this->fclconfig->collapsible && array_key_exists($section, $this->labelexpanded)) {
                     if ($this->labelexpanded[$section] == 1) {
                         $initialstate = 'expanded';
                         $ariaexpanded = 'true';
@@ -267,7 +239,7 @@ class block_filtered_course_list extends block_base {
             // Just print top level category links.
             if (count($categories) > 1 ||
                (count($categories) == 1 &&
-                current($categories)->coursecount > $this->fclsettings['maxallcourse'])) {
+                current($categories)->coursecount > $this->fclconfig->maxallcourse)) {
                 $this->content->text .= '<ul class="' . $this->collapsibleclass . 'list">';
                 foreach ($categories as $category) {
                     $linkcss = $category->visible ? "" : "dimmed";
@@ -316,7 +288,6 @@ class block_filtered_course_list extends block_base {
 
     private function _filter_by_shortname() {
 
-        global $CFG;
         $results = array(get_string('currentcourses', 'block_filtered_course_list') => array(),
                          get_string('futurecourses', 'block_filtered_course_list')  => array());
 
@@ -333,17 +304,17 @@ class block_filtered_course_list extends block_base {
                 continue;
             }
 
-            $currentshortname = $this->fclsettings['currentshortname'];
+            $currentshortname = $this->fclconfig->currentshortname;
             if (!empty($currentshortname) && $this->_satisfies_match($course->shortname, $currentshortname)) {
                 $results[get_string('currentcourses', 'block_filtered_course_list')][] = $course;
                 unset($other[$key]);
             }
-            $futureshortname = $this->fclsettings['futureshortname'];
+            $futureshortname = $this->fclconfig->futureshortname;
             if (!empty($futureshortname) && $this->_satisfies_match($course->shortname, $futureshortname)) {
                 $results[get_string('futurecourses', 'block_filtered_course_list')][] = $course;
                 unset($other[$key]);
             }
-            for ($i = 1; $i <= $this->fclsettings['labelscount']; $i++) {
+            for ($i = 1; $i <= $this->fclconfig->labelscount; $i++) {
                 if (isset($this->customlabels[$i])) {
                     if ($this->customshortnames[$i] && $this->_satisfies_match($course->shortname, $this->customshortnames[$i])) {
                         $label = $this->customlabels[$i];
@@ -354,7 +325,7 @@ class block_filtered_course_list extends block_base {
             }
         }
 
-        if ($this->fclsettings['hideothercourses'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
+        if ($this->fclconfig->hideothercourses == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $results[get_string('othercourses', 'block_filtered_course_list')] = $other;
         }
 
@@ -362,7 +333,7 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _satisfies_match($coursename, $teststring) {
-        if ($this->fclsettings['useregex'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
+        if ($this->fclconfig->useregex == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $satisfies = stristr($coursename, $teststring);
         } else {
             $teststring = str_replace('`', '', $teststring);
@@ -372,12 +343,11 @@ class block_filtered_course_list extends block_base {
     }
 
     private function _filter_by_category() {
-        global $CFG;
 
-        if ( $this->fclsettings['categories'] == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
+        if ( $this->fclconfig->categories == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
             $mycats = core_course_external::get_categories();
         } else {
-            $criteria = array(array('key' => 'id', 'value' => $this->fclsettings['categories']));
+            $criteria = array(array('key' => 'id', 'value' => $this->fclconfig->categories));
             $mycats = core_course_external::get_categories($criteria);
         }
 
@@ -396,7 +366,7 @@ class block_filtered_course_list extends block_base {
             }
         }
 
-        if ($this->fclsettings['hideothercourses'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
+        if ($this->fclconfig->hideothercourses == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             foreach ($this->mycourses as $course) {
                 $other[] = $course;
             }
@@ -410,7 +380,7 @@ class block_filtered_course_list extends block_base {
         global $CFG;
         // If we can update any course of the view all isn't hidden.
         // Show the view all courses link.
-        if ($this->usertype == 'admin' || $this->fclsettings['hideallcourseslink'] == BLOCK_FILTERED_COURSE_LIST_FALSE) {
+        if ($this->usertype == 'admin' || $this->fclconfig->hideallcourseslink == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
                                       get_string('fulllistofcourses') .
                                       '</a> ...<br>';
