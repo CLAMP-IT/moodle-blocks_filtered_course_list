@@ -10,9 +10,9 @@ var FCLA;
 M.block_filtered_course_list = M.block_filtered_course_list || {};
 FCLA = M.block_filtered_course_list.accordion = {};
 
-FCLA.init = function (params) {
+FCLA.init = function () {
   Y.on('domready', function () {
-    sectionTitles = Y.all('.block_filtered_course_list .course-section');
+    var sectionTitles = Y.all('.block_filtered_course_list .course-section');
     sectionTitles.each(function (title) {
       if (!(title.hasClass('expanded'))) {
         title.addClass('collapsed');
@@ -31,7 +31,6 @@ FCLA.init = function (params) {
       });
     });
   });
-  console.log(params);
 };
 
 FCLA.toggle = function (title) {

@@ -61,7 +61,7 @@ class block_filtered_course_list extends block_base {
     }
 
     public function get_content() {
-        global $CFG, $USER, $DB, $OUTPUT;
+        global $CFG;
 
         if ($this->content !== null) {
             return $this->content;
@@ -119,8 +119,8 @@ class block_filtered_course_list extends block_base {
         $this->collapsibleclass = ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE) ? 'collapsible ' : '';
 
         if ($this->fclconfig->collapsible) {
-            $this->labelexpanded[get_string('currentcourses', 'block_filtered_course_list')] =
-                $this->fclconfig->currentexpanded;
+            $this->labelexpanded[get_string('currentcourses', 'block_filtered_course_list')]
+                = $this->fclconfig->currentexpanded;
             $this->labelexpanded[get_string('futurecourses', 'block_filtered_course_list')] = $this->fclconfig->futureexpanded;
         }
 
