@@ -11,7 +11,7 @@ The Filtered Course List block displays a configurable list of courses. It is in
 Unzip files into your Moodle blocks directory. This will create a folder called filtered_course_list. Alternatively, you may install it with git. In the top-level folder of your Moodle install, type the command: 
 
 ```
-git clone https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list blocks/filtered_course_list.
+git clone https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list blocks/filtered_course_list
 ```
 
 Then visit the admin screen to allow the install to complete.
