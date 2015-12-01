@@ -14,39 +14,66 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file contains the class used to display a Filtered Course List block.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2015 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->dirroot . '/course/externallib.php');
 require_once($CFG->dirroot . '/lib/coursecatlib.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
+/**
+ * The Filtered Course List block class
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2015 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class block_filtered_course_list extends block_base {
 
+    /** @var array Admin settings for the FCL block */
     private $fclconfig;
-
+    /** @var array A variable number of custom labels to organize courses by */
     private $customlabels = array();
-
+    /** @var array A variable number of custom shortnames to match against */
     private $customshortnames = array();
-
+    /** @var array A list of labels to be expanded by default */
     private $labelexpanded = array();
-
+    /** @var string The string to use when writing HTML for collapsible list sections */
     private $collapsibleclass = '';
-
+    /** @var arrray A list of courses for the current user */
     private $mycourses = array();
-
+    /** @var stdClass This block's context */
     public $context;
-
+    /** @var string A type of user for purposes of list display, should be 'user', 'admin' or 'guest' */
     private $usertype;
-
+    /** @var string The type of list to create, should be 'generic_list', 'filtered_list' or 'empty_block' */
     private $liststyle = 'generic_list';
 
+    /**
+     * Set the initial properties for the block
+     */
     public function init() {
         $this->title   = get_string('blockname', 'block_filtered_course_list');
     }
 
+    /**
+     * The FCL block uses a settings.php file
+     *
+     * @return bool Returns true
+     */
     public function has_config() {
         return true;
     }
 
+    /**
+     * Set the instance title just after the instance data is loaded
+     */
     public function specialization() {
         $this->title = isset($this->config->title) ? $this->config->title : get_string('blockname', 'block_filtered_course_list');
     }
@@ -60,6 +87,11 @@ class block_filtered_course_list extends block_base {
         return 'navigation';
     }
 
+    /**
+     * Return the block contents
+     *
+     * @return stdClass The block contents
+     */
     public function get_content() {
         global $CFG;
 
@@ -114,6 +146,9 @@ class block_filtered_course_list extends block_base {
         return $this->content;
     }
 
+    /**
+     * Determine admin settings for the block
+     */
     private function _calculate_settings() {
 
         $this->collapsibleclass = ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE) ? 'collapsible ' : '';
@@ -141,6 +176,9 @@ class block_filtered_course_list extends block_base {
         }
     }
 
+    /**
+     * Set the usertype for purposes of the course list display
+     */
     private function _calculate_usertype() {
 
         global $USER;
@@ -154,10 +192,16 @@ class block_filtered_course_list extends block_base {
         }
     }
 
+    /**
+     * Set block contents to null to display an empty block
+     */
     private function _process_empty_block() {
         $this->content = null;
     }
 
+    /**
+     * Build a user-specific Filtered Course List block
+     */
     private function _process_filtered_list() {
 
         if ($this->mycourses) {
@@ -227,6 +271,9 @@ class block_filtered_course_list extends block_base {
         }
     }
 
+    /**
+     * Build a generic Filtered Course List block
+     */
     private function _process_generic_list() {
 
         global $CFG;
@@ -275,6 +322,12 @@ class block_filtered_course_list extends block_base {
         }
     }
 
+    /**
+     * Build the HTML to display a single course in a filtered list
+     *
+     * @param object $course The course to display
+     * @return string HTML to display a link to a course
+     */
     private function _print_single_course($course) {
         global $CFG;
         $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
@@ -286,6 +339,11 @@ class block_filtered_course_list extends block_base {
         return $html;
     }
 
+    /**
+     * Apply filtering based on a shortname match
+     *
+     * @return array The structured list of courses as organized by the filter
+     */
     private function _filter_by_shortname() {
 
         $results = array(get_string('currentcourses', 'block_filtered_course_list') => array(),
@@ -332,6 +390,13 @@ class block_filtered_course_list extends block_base {
         return $results;
     }
 
+    /**
+     * Test whether a course shortname matches a string. Use regex if indicated by the admin settings.
+     *
+     * @param string $coursename The shortname of a course
+     * @param string $teststring The string to match against
+     * @return mixed Depending on which evaluation is used may return 1, 0, false or a matched string
+     */
     private function _satisfies_match($coursename, $teststring) {
         if ($this->fclconfig->useregex == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $satisfies = stristr($coursename, $teststring);
@@ -342,6 +407,11 @@ class block_filtered_course_list extends block_base {
         return $satisfies;
     }
 
+    /**
+     * Apply filtering based on a shortname match
+     *
+     * @return array The structured list of courses as organized by the filter
+     */
     private function _filter_by_category() {
 
         if ( $this->fclconfig->categories == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
@@ -376,6 +446,9 @@ class block_filtered_course_list extends block_base {
         return $results;
     }
 
+    /**
+     * Print or do not print a link to all courses, depending on admin settings
+     */
     private function _print_allcourseslink() {
         global $CFG;
         // If we can update any course of the view all isn't hidden.

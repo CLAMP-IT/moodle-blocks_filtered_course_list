@@ -14,19 +14,42 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file defines PHPUnit tests for the Filtered Course List block.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2015 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 global $CFG;
 
 require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
 require_once(dirname(__FILE__) . '/../block_filtered_course_list.php');
 
+/**
+ * PHPUnit tests
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2015 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class block_filtered_course_list_block_testcase extends advanced_testcase {
 
+    /** @var int The admin user's id number */
     private $adminid;
+    /** @var object A test user */
     private $user1;
+    /** @var object A test user */
     private $user2;
+    /** @var array A list of course objects to be used in several tests */
     private $courses = array();
+    /** @var array A list of categories into which the test courses can be grouped */
     private $categories = array();
 
+    /**
+     * General setup for PHPUnit testing
+     */
     protected function setUp() {
 
         global $CFG;
@@ -36,6 +59,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test that the default settings are applying as expected
+     */
     public function test_default_settings() {
 
          // Confirm expected defaults.
@@ -72,6 +98,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test a site that has no courses
+     */
     public function test_site_with_no_courses() {
 
         // On a site with no courses, no users should see a block.
@@ -84,6 +113,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test a site that has only one category and no enrollments
+     */
     public function test_single_category_site_with_no_enrollments() {
 
         // Create 8 courses in the default category: Miscellaneous.
@@ -103,6 +135,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test a small site with one category and some enrollments
+     */
     public function test_small_single_category_site_with_enrollments() {
 
         // Create 8 courses in the default category: Miscellaneous.
@@ -132,6 +167,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test a larger site with enrollments in one category
+     */
     public function test_larger_single_category_site_with_enrollments() {
 
         // Create 12 courses in the default category: Miscellaneous.
@@ -168,6 +206,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test a rich site with several courses in various categories
+     */
     public function test_rich_site_with_defaults() {
 
         $this->_create_rich_site();
@@ -220,6 +261,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test a complicated site filtered by category
+     */
     public function test_rich_site_filtered_by_category() {
 
         $this->_create_rich_site();
@@ -309,6 +353,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         ));
     }
 
+    /**
+     * Test current and future shortname filtering on a rich site
+     */
     public function test_rich_site_current_and_future_shortnames() {
 
         $this->_create_rich_site();
@@ -355,6 +402,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test custom shortnames on a rich site
+     */
     public function test_rich_site_custom_shortnames() {
 
         $this->_create_rich_site();
@@ -430,6 +480,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test the ability to use the admin settings to hide the link to 'All courses'
+     */
     public function test_setting_hideallcourseslink() {
 
         $this->_create_rich_site();
@@ -456,6 +509,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test whether an admin can hide the block from guests
+     */
     public function test_setting_hidefromguests() {
 
         $this->_create_rich_site();
@@ -483,6 +539,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test whether an admin can choose whether or not to display a link to 'Other courses'
+     * not covered by the filter
+     */
     public function test_setting_hideothercourses() {
 
         $this->_create_rich_site();
@@ -507,6 +567,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test whether an admin can choose to have the course rubrics be collapsible
+     */
     public function test_setting_collapsible_sections() {
 
         $this->_create_rich_site();
@@ -525,6 +588,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         ));
     }
 
+    /**
+     * Test whether an admin can designate particular rubrics to be expanded automatically
+     */
     public function test_setting_expanded_section() {
 
         $this->_create_rich_site();
@@ -559,6 +625,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test whether an admin can choose whether to see all courses or only her own
+     */
     public function test_setting_adminview() {
 
         $this->_create_rich_site();
@@ -599,6 +668,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Ensure that the block honors a possible 'disablemycourses' setting
+     */
     public function test_setting_cfg_disablemycourses() {
 
         global $CFG;
@@ -629,6 +701,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         ));
     }
 
+    /**
+     * Generate some users to test against
+     */
     private function _setupusers() {
 
         global $USER;
@@ -659,6 +734,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Generate some courses in the Miscellaneous category
+     *
+     * @param int $start A first value to apply incrementally to several courses
+     * @param int $end The value at which to stop generating courses
+     */
     private function _create_misc_courses( $start=1, $end=8 ) {
 
         for ($i = $start; $i <= $end; $i++) {
@@ -670,40 +751,40 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Build a more complicated site for more intresting testing
+     * Use the following structure
+     *
+     * Miscellaneous
+     *   Course 1, c_1
+     *   ...
+     *   Course 12, c_12
+     *   Child category 1
+     *     Course 1 in Child category 1, cc1_1
+     *     ...
+     *     Course 3 in Child category 1, cc1_3, hidden
+     *   Child category 2
+     *     Course 1 in Child category 2, cc2_1
+     *     ...
+     *     Course 3 in Child category 2, cc2_3, hidden
+     *     Grandchild category 1
+     *       Course 1 in Grandchild category, gc1_1
+     *       ...
+     *       Course 3 in Grandchild category, gc1_3, hidden
+     *   Hidden category
+     *     Course 1 in Hidden category, hc_1
+     *     ...
+     *     Course 3 in Hidden category, hc_3, hidden
+     *     Hidden category child
+     *       Course 1 in Hidden category child, hcc_1
+     *       ...
+     *       Course 3 in Hidden category child, hcc_3, hidden
+     * Sibling category
+     *   Course 1 in Sibling category, sc_1
+     *   ...
+     *   Course 3 in Sibling category, sc_3, hidden
+     */
     private function _create_rich_site() {
-
-        /*
-         * Category structure
-         *
-         * Miscellaneous
-         *   Course 1, c_1
-         *   ...
-         *   Course 12, c_12
-         *   Child category 1
-         *     Course 1 in Child category 1, cc1_1
-         *     ...
-         *     Course 3 in Child category 1, cc1_3, hidden
-         *   Child category 2
-         *     Course 1 in Child category 2, cc2_1
-         *     ...
-         *     Course 3 in Child category 2, cc2_3, hidden
-         *     Grandchild category 1
-         *       Course 1 in Grandchild category, gc1_1
-         *       ...
-         *       Course 3 in Grandchild category, gc1_3, hidden
-         *   Hidden category
-         *     Course 1 in Hidden category, hc_1
-         *     ...
-         *     Course 3 in Hidden category, hc_3, hidden
-         *     Hidden category child
-         *       Course 1 in Hidden category child, hcc_1
-         *       ...
-         *       Course 3 in Hidden category child, hcc_3, hidden
-         * Sibling category
-         *   Course 1 in Sibling category, sc_1
-         *   ...
-         *   Course 3 in Sibling category, sc_3, hidden
-         */
 
         // Add some courses under Miscellaneous.
         $this->_create_misc_courses ( 1, 3 );
@@ -770,6 +851,11 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test whether a given users see any block at all
+     *
+     * @param array $expectations A list of users and whether or not they should see any block
+     */
     private function _noblock ( $expectations=array() ) {
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
@@ -790,6 +876,11 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test whether given users can see a link to 'All courses'
+     *
+     * @param array $expectations A list of users and whether or not they should see the link
+     */
     private function _allcourseslink ( $expectations=array() ) {
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
@@ -805,6 +896,11 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test whether the course listing includes a particular course for a given user
+     *
+     * @param array $expectations A list of users and courses they should see
+     */
     private function _courselistincludes ( $expectations=array() ) {
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
@@ -817,6 +913,11 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test whether the course listing includes a particular course for a given user
+     *
+     * @param array $expectations A list of users and courses they should not see
+     */
     private function _courselistexcludes ( $expectations=array() ) {
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
@@ -829,6 +930,11 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Change the current user
+     *
+     * @param mixed $user Can be a user type or a specific user object
+     */
     private function _switchuser ( $user ) {
         if ( $user == 'none' ) {
             $this->setUser( null );
@@ -841,6 +947,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test whether the course listing includes a particular course for a given user under a particular heading
+     *
+     * @param array $expectations A list of users and courses they should or should not see
+     * @param string $relation 'under' indicates that the user should see the course, otherwise not
+     */
     private function _courseunderrubric ( $expectations=array() , $relation='under' ) {
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
@@ -878,6 +990,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         }
     }
 
+    /**
+     * Test whether a given rubric is expanded or not
+     *
+     * @param array $expectations A list of rubric titles
+     * @param string $operator Indicates whether to expect expanded or collapsed
+     */
     private function _sectionexpanded ( $expectations=array(), $operator='' ) {
         $this->_switchuser('user1');
         $bi = new block_filtered_course_list;

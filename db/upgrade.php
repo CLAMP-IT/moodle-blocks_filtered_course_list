@@ -26,9 +26,8 @@
 /**
  * Upgrade code for the section links block.
  *
- * @global moodle_database $DB
  * @param int $oldversion
- * @param object $block
+ * @return bool
  */
 function xmldb_block_filtered_course_list_upgrade($oldversion) {
 

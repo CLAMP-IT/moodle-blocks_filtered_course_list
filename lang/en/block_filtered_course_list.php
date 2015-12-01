@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file defines language strings for the Filtered Course List block.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2015 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 $string['filtered_course_list:addinstance'] = 'Add a new Filtered Course List block';
 $string['filtered_course_list:myaddinstance'] = 'Add a new Filtered Course List block to My home';
 $string['adminview']                = 'Admin view';

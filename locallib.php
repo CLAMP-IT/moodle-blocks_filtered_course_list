@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file defines constants used by the Filtered Course List block.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2015 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define('BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL', 'all');
 define('BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN', 'own');
 define('BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT', 2);
