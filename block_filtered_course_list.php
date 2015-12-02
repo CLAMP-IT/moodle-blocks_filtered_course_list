@@ -395,14 +395,14 @@ class block_filtered_course_list extends block_base {
      *
      * @param string $coursename The shortname of a course
      * @param string $teststring The string to match against
-     * @return mixed Depending on which evaluation is used may return 1, 0, false or a matched string
+     * @return bool
      */
     private function _satisfies_match($coursename, $teststring) {
         if ($this->fclconfig->useregex == BLOCK_FILTERED_COURSE_LIST_FALSE) {
-            $satisfies = stristr($coursename, $teststring);
+            $satisfies = (core_text::strpos($coursename, $teststring) !== false) ?: false;
         } else {
             $teststring = str_replace('`', '', $teststring);
-            $satisfies = preg_match("`$teststring`", $coursename);
+            $satisfies = (preg_match("`$teststring`", $coursename) == 1) ?: false;
         }
         return $satisfies;
     }
