@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file defines language strings for the Filtered Course List block.
+ * This file defines language strings for the Filtered course list block.
  *
  * @package    block_filtered_course_list
  * @copyright  2015 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['filtered_course_list:addinstance'] = 'Add a new Filtered Course List block';
-$string['filtered_course_list:myaddinstance'] = 'Add a new Filtered Course List block to My home';
+$string['filtered_course_list:addinstance'] = 'Add a new Filtered course list block';
+$string['filtered_course_list:myaddinstance'] = 'Add a new Filtered course list block to My home';
 $string['adminview']                = 'Admin view';
 $string['allcourses']               = 'Admin user sees all courses';
-$string['blockname']                = 'Filtered Course List';
+$string['blockname']                = 'Filtered course list';
 $string['categories']               = 'Current category';
 $string['categorysettings']         = 'Category settings';
 $string['categorysettingsinfo']     = 'These settings apply only when using the category filter type.';

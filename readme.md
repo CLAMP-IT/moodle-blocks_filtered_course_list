@@ -1,10 +1,10 @@
-# [Filtered Course List v2.8.0]
+# [Filtered course list v2.8.0]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
 for Moodle 2.8 or higher
 
-The Filtered Course List block displays a configurable list of courses. It is intended as a replacement for the My Courses block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
+The Filtered course list block displays a configurable list of courses. It is intended as a replacement for the My Courses block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
 
 ## Installation
 
