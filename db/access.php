@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file define the capabilities used by the Filtered Course List block.
+ * This file define the capabilities used by the Filtered course list block.
  *
  * @package    block_filtered_course_list
  * @copyright  2015 CLAMP

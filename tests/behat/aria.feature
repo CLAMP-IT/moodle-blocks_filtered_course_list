@@ -42,7 +42,7 @@ Feature: The block includes ARIA support
         And I log out
         When I log in as "testuser"
         And I am on site homepage
-        Then I should see "Filtered Course List"
+        Then I should see "Filtered course list"
         And the "role" attribute of ".block_filtered_course_list.block" "css_element" should contain "navigation"
         And the "role" attribute of ".block_filtered_course_list .tablist" "css_element" should contain "tablist"
         And the "aria-multiselectable" attribute of ".block_filtered_course_list .tablist" "css_element" should contain "true"

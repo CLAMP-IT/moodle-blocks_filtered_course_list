@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the class used to display a Filtered Course List block.
+ * This file contains the class used to display a Filtered course list block.
  *
  * @package    block_filtered_course_list
  * @copyright  2015 CLAMP
@@ -28,7 +28,7 @@ require_once($CFG->dirroot . '/lib/coursecatlib.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 /**
- * The Filtered Course List block class
+ * The Filtered course list block class
  *
  * @package    block_filtered_course_list
  * @copyright  2015 CLAMP
@@ -200,7 +200,7 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
-     * Build a user-specific Filtered Course List block
+     * Build a user-specific Filtered course list block
      */
     private function _process_filtered_list() {
 
@@ -272,7 +272,7 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
-     * Build a generic Filtered Course List block
+     * Build a generic Filtered course list block
      */
     private function _process_generic_list() {
 
@@ -395,14 +395,14 @@ class block_filtered_course_list extends block_base {
      *
      * @param string $coursename The shortname of a course
      * @param string $teststring The string to match against
-     * @return mixed Depending on which evaluation is used may return 1, 0, false or a matched string
+     * @return bool
      */
     private function _satisfies_match($coursename, $teststring) {
         if ($this->fclconfig->useregex == BLOCK_FILTERED_COURSE_LIST_FALSE) {
-            $satisfies = stristr($coursename, $teststring);
+            $satisfies = (core_text::strpos($coursename, $teststring) !== false) ?: false;
         } else {
             $teststring = str_replace('`', '', $teststring);
-            $satisfies = preg_match("`$teststring`", $coursename);
+            $satisfies = (preg_match("`$teststring`", $coursename) == 1) ?: false;
         }
         return $satisfies;
     }

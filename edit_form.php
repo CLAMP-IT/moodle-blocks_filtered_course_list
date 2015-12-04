@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Form for editing Filtered Course List block instances
+ * Form for editing Filtered course list block instances
  *
  * @package    block_filtered_course_list
  * @copyright  2015 CLAMP

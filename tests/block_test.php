@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file defines PHPUnit tests for the Filtered Course List block.
+ * This file defines PHPUnit tests for the Filtered course list block.
  *
  * @package    block_filtered_course_list
  * @copyright  2015 CLAMP
@@ -238,6 +238,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'cc1_2' => 'Other courses',
                 'gc1_1' => 'Other courses',
                 'sc_2'  => 'Other courses',
+                'øthér' => 'Other courses',
             ),
             'user2' => array(
                 'c_1'   => 'Other courses',
@@ -311,6 +312,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'hc_1'  => 'Other courses',
                 'hcc_3' => 'Other courses',
                 'sc_2'  => 'Sibling category',
+                'øthér' => 'Sibling category',
             ),
             'admin' => array(
                 'hc_1' => 'Hidden category'
@@ -400,6 +402,15 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             )
         ));
 
+        // Test on non-ascii shortname match.
+        set_config('currentshortname', 'ø', 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'øthér' => 'Current courses',
+            ),
+        ));
+
     }
 
     /**
@@ -451,6 +462,16 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             ),
         ));
 
+        // Test a non-ascii example.
+        set_config('customlabel4', 'Non-ascii', 'block_filtered_course_list');
+        set_config('customshortname4', 'ø', 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array (
+            'user1' => array(
+                'øthér' => 'Non-ascii',
+            ),
+        ));
+
         // TODO: Validate custom labels.
         // Unfortunately setting a value directly does not submit it to the PARAM validation.
         // So this may be a job for behat testing instead.
@@ -458,7 +479,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         // Use regex for shortname matches.
         set_config('useregex', 1, 'block_filtered_course_list');
         set_config('customlabel4', 'All but default', 'block_filtered_course_list');
-        set_config('customshortname4', '[a-z]{2}', 'block_filtered_course_list');
+        set_config('customshortname4', '^[a-zø]{2}', 'block_filtered_course_list');
 
         // This new rubric should exclude courses with a shortname like 'c_1'.
         // It does not begin with two lowercase letters.
@@ -475,6 +496,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'cc2_1' => 'All but default',
                 'gc1_1' => 'All but default',
                 'sc_1'  => 'All but default',
+                'øthér' => 'All but default',
             ),
         ));
 
@@ -783,6 +805,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
      *   Course 1 in Sibling category, sc_1
      *   ...
      *   Course 3 in Sibling category, sc_3, hidden
+     *   Non-ascii matching, øthér
      */
     private function _create_rich_site() {
 
@@ -839,6 +862,15 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 $this->courses[$shortname] = $this->getDataGenerator()->create_course( $params );
             }
         }
+
+        // Create a course with a non-ascii shortname in the Sibling category.
+        $params = array (
+            'fullname' => 'Non-ascii matching',
+            'shortname' => 'øthér',
+            'idnumber'  => 'øthér',
+            'category'  => $this->categories['sc']->id
+        );
+        $this->courses['øthér'] = $this->getDataGenerator()->create_course( $params );
 
         // Enroll user1 as a student in all courses.
         foreach ($this->courses as $course) {
@@ -960,7 +992,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             $bi->instance = new StdClass;
             $bi->instance->id = 17;
             $html = new DOMDocument;
-            $html->loadHTML( $bi->get_content()->text );
+            $html->loadHTML( mb_convert_encoding( $bi->get_content()->text, 'HTML-ENTITIES', 'UTF-8' ));
             $rubrics = $html->getElementsByTagName('div');
             foreach ($courses as $course => $rubricmatch) {
                 $hits = 0;
