@@ -24,6 +24,6 @@
 
 $plugin->version   = 2015112700;
 $plugin->requires  = 2014111000; // Requires Moodle 2.8.
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v2.8.0';
+$plugin->maturity  = MATURITY_RC;
+$plugin->release   = 'v2.8.1-dev';
 $plugin->component = 'block_filtered_course_list';
