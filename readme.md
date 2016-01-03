@@ -44,6 +44,11 @@ Please report any bugs or feature requests to the public repository page: <https
 
 ## Changelog ##
 
+### [v2.8.1] ###
+* Back end: Confirms functionality for PHP7
+* Bug: Adds support for matching non ascii characters
+* Back end: PHPDoc compliance
+
 ### [v2.8.0] ###
 * Back end: The FCL block now stores preferences in Moodle's plugin config table. Settings from older versions should migrate seamlessly.
 * Back end: Automated testing has been considerably expanded.
