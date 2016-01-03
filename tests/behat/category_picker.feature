@@ -1,4 +1,4 @@
-@block @block_filtered_course_list @settings
+@block @block_filtered_course_list @settings @block_filterd_course_list_category_picker
 Feature: Select category to filter by
     In order to select a category to filter by
     As admin
