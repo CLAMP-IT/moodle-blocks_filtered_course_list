@@ -1,4 +1,4 @@
-@block @block_filtered_course_list
+@block @block_filtered_course_list @block_filtered_course_list_instancename
 Feature: Each instance of the block can have a custom name
     In order to rename a Filtered course list block
     As an admin

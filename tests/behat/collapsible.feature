@@ -1,4 +1,4 @@
-@block @block_filtered_course_list
+@block @block_filtered_course_list @block_filtered_course_list_collapsible
 Feature: Course rubrics are collapsible
     In order to see the courses listed under a rubric
     As a user
