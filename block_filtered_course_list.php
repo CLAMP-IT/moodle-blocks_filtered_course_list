@@ -23,7 +23,6 @@
  */
 
 require_once($CFG->dirroot . '/course/lib.php');
-require_once($CFG->dirroot . '/course/externallib.php');
 require_once($CFG->dirroot . '/lib/coursecatlib.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
@@ -408,18 +407,35 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
-     * Apply filtering based on a shortname match
+     * Fetch a category and all descendants visible to current usertype
+     *
+     * @param int The id number of the category to fetch
+     * @param array An accumulator passed by reference to store the recursive results
+     * @return array of coursecat objects
+     */
+    private function _get_cat_and_descendants($catid=0, &$accumulator=array()) {
+
+        if ($catid != 0) {
+            $accumulator[$catid] = coursecat::get($catid);
+        }
+        $children = coursecat::get($catid)->get_children();
+
+        foreach ($children as $child) {
+            $this->_get_cat_and_descendants($child->id, $accumulator);
+        }
+
+        return $accumulator;
+    }
+
+    /**
+     * Apply filtering based on a category
      *
      * @return array The structured list of courses as organized by the filter
      */
     private function _filter_by_category() {
 
-        if ( $this->fclconfig->categories == BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY ) {
-            $mycats = core_course_external::get_categories();
-        } else {
-            $criteria = array(array('key' => 'id', 'value' => $this->fclconfig->categories));
-            $mycats = core_course_external::get_categories($criteria);
-        }
+        $mycat = (coursecat::get($this->fclconfig->categories, IGNORE_MISSING)) ? $this->fclconfig->categories : 0;
+        $mycats = $this->_get_cat_and_descendants($mycat);
 
         $results = array();
         $other = array();
@@ -429,8 +445,8 @@ class block_filtered_course_list extends block_base {
                 if ($course->id == SITEID) {
                     continue;
                 }
-                if ($course->category == $cat['id']) {
-                    $results[$cat['name']][] = $course;
+                if ($course->category == $cat->id) {
+                    $results[$cat->name][] = $course;
                     unset($this->mycourses[$key]);
                 }
             }
