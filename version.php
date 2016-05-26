@@ -18,12 +18,12 @@
  * This file contains version information for the Filtered course list block.
  *
  * @package    block_filtered_course_list
- * @copyright  2015 CLAMP
+ * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->version   = 2016010301;
+$plugin->version   = 2016052600;
 $plugin->requires  = 2014111000; // Requires Moodle 2.8.
-$plugin->maturity  = MATURITY_RC;
-$plugin->release   = 'v2.8.2-dev';
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->release   = 'v2.8.2';
 $plugin->component = 'block_filtered_course_list';
