@@ -116,11 +116,31 @@ class block_filtered_course_list extends block_base {
         $this->content->footer = '';
         $this->context = context_system::instance();
 
-        $this->mycourses = enrol_get_my_courses(null, 'visible DESC, fullname ASC');
-
         // Obtain values from our config settings.
-
         $this->_calculate_settings();
+
+        $sortsettings = array(
+            array(
+                $this->fclconfig->primarysort,
+                $this->fclconfig->primaryvector,
+            ),
+            array(
+                $this->fclconfig->secondarysort,
+                $this->fclconfig->secondaryvector,
+            ),
+        );
+
+        $sortstring = "visible DESC";
+
+        foreach ($sortsettings as $sortsetting) {
+            if ($sortsetting[0] == 'none') {
+                continue;
+            } else {
+                $sortstring .= ", " . $sortsetting[0] . " " . $sortsetting[1];
+            }
+        }
+
+        $this->mycourses = enrol_get_my_courses(null, "$sortstring");
 
         /* Call accordion YUI module */
         if ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
