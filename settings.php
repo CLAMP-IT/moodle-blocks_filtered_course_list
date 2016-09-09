@@ -70,6 +70,38 @@ if ($ADMIN->fulltree) {
         get_string('filtertype', 'block_filtered_course_list'),
         get_string('configfiltertype', 'block_filtered_course_list'), 'shortname', $filters));
 
+    $sortablefields = array(
+        'fullname'  => 'Full name',
+        'shortname' => 'Short name',
+        'sortorder' => 'Sort order',
+        'idnumber'  => 'ID number',
+        'startdate' => 'Start date',
+        'none'      => 'None',
+    );
+
+    $sortvectors = array(
+        'ASC'  => 'Ascending',
+        'DESC' => 'Descending',
+    );
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/primarysort',
+        get_string('primarysort', 'block_filtered_course_list'),
+        get_string('configprimarysort', 'block_filtered_course_list'),
+        'fullname', $sortablefields));
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/primaryvector',
+        get_string('primaryvector', 'block_filtered_course_list'), '',
+        'ASC', $sortvectors));
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/secondarysort',
+        get_string('secondarysort', 'block_filtered_course_list'),
+        get_string('configsecondarysort', 'block_filtered_course_list'),
+        'none', $sortablefields));
+
+    $settings->add(new admin_setting_configselect('block_filtered_course_list/secondaryvector',
+        get_string('secondaryvector', 'block_filtered_course_list'), '',
+        'ASC', $sortvectors));
+
     $settings->add(new admin_setting_heading('block_filtered_course_list/shortname',
         get_string('shortnamesettings', 'block_filtered_course_list'),
         get_string('shortnamesettingsinfo', 'block_filtered_course_list')));
