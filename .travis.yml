@@ -15,6 +15,7 @@ php:
 env:
  global:
   - IGNORE_NAMES=package.json,gulpfile.js
+  - IGNORE_PATHS=amd/build/accordion.min.js
  matrix:
   - DB=pgsql MOODLE_BRANCH=MOODLE_29_STABLE
   - DB=pgsql MOODLE_BRANCH=MOODLE_30_STABLE

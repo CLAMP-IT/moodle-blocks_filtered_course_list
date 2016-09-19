@@ -144,8 +144,7 @@ class block_filtered_course_list extends block_base {
 
         /* Call accordion YUI module */
         if ($this->fclconfig->collapsible == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->page) {
-            $this->page->requires->yui_module('moodle-block_filtered_course_list-accordion',
-                'M.block_filtered_course_list.accordion.init', array());
+            $this->page->requires->js_call_amd('block_filtered_course_list/accordion', 'init', array());
         }
 
         $this->_calculate_usertype();
