@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 define('BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL', 'all');
 define('BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN', 'own');
 define('BLOCK_FILTERED_COURSE_LIST_DEFAULT_LABELSCOUNT', 2);
