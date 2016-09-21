@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $plugin->version   = 2016080800;
 $plugin->requires  = 2014111000; // Requires Moodle 2.8.
 $plugin->maturity  = MATURITY_STABLE;

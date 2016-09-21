@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $string['filtered_course_list:addinstance'] = 'Add a new Filtered course list block';
 $string['filtered_course_list:myaddinstance'] = 'Add a new Filtered course list block to My home';
 $string['adminview']                = 'Admin view';
