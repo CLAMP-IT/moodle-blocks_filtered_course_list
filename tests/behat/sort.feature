@@ -39,9 +39,11 @@ Feature: Courses within a rubric can be sorted by various fields
       | primaryvector   | <vec1>     | block_filtered_course_list |
       | secondarysort   | <sort2>    | block_filtered_course_list |
       | secondaryvector | <vec2>     | block_filtered_course_list |
-      | filtertype      | categories | block_filtered_course_list |
-      | collapsible     | 0          | block_filtered_course_list |
       | defaulthomepage | Site       |                            |
+    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+      """
+      shortname | expanded | Courses | shortname
+      """
     When I log in as "testuser"
     And I am on site homepage
     Then <first> "text" should appear before <second> "text"
@@ -66,10 +68,13 @@ Feature: Courses within a rubric can be sorted by various fields
       | primaryvector   | ASC        | block_filtered_course_list |
       | secondarysort   | none       | block_filtered_course_list |
       | secondaryvector | ASC        | block_filtered_course_list |
-      | filtertype      | categories | block_filtered_course_list |
-      | collapsible     | 0          | block_filtered_course_list |
       | defaulthomepage | Site       |                            |
+    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+      """
+      shortname | expanded | Courses | shortname
+      """
     And I log in as "admin"
+    And I am on site homepage
     And I navigate to "Manage courses and categories" node in "Site administration>Courses"
     And I wait until the page is ready
     And I click on "Sort courses" "link"

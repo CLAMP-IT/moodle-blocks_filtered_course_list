@@ -17,7 +17,7 @@
  * This file contains an AMD/jQuery module to expand and collapse course rubrics.
  *
  * @package    block_filtered_course_list
- * @copyright  2015 CLAMP
+ * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery'], function($) {

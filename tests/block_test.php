@@ -18,7 +18,7 @@
  * This file defines PHPUnit tests for the Filtered course list block.
  *
  * @package    block_filtered_course_list
- * @copyright  2015 CLAMP
+ * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,7 @@ require_once(dirname(__FILE__) . '/../block_filtered_course_list.php');
  * PHPUnit tests
  *
  * @package    block_filtered_course_list
- * @copyright  2015 CLAMP
+ * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_filtered_course_list_block_testcase extends advanced_testcase {
@@ -72,29 +72,15 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         $configdefaults = array (
             'hideallcourseslink' => 0,
-            'filtertype'         => 'shortname',
             'hidefromguests'     => 0,
             'hideothercourses'   => 0,
+            'maxallcourse'       => 10,
+            'adminview'          => 'all',
             'primarysort'        => 'fullname',
             'primaryvector'      => 'ASC',
             'secondarysort'      => 'none',
             'secondaryvector'    => 'ASC',
-            'useregex'           => 0,
-            'currentshortname'   => '',
-            'futureshortname'    => '',
-            'currentexpanded'    => 0,
-            'futureexpanded'     => 0,
-            'labelscount'        => 2,
-            'categories'         => 0,
-            'adminview'          => 'all',
-            'maxallcourse'       => 10,
-            'collapsible'        => 1,
-            'customlabel1'       => '',
-            'customshortname1'   => '',
-            'labelexpanded1'     => 0,
-            'customlabel2'       => '',
-            'customshortname2'   => '',
-            'labelexpanded2'     => 0,
+            'filters'            => '',
         );
 
         foreach ($configdefaults as $name => $value) {
@@ -136,7 +122,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         // Regular users should not see a block (because there are as yet no enrollments).
         $this->_noblock ( array (
-            'user1' => true
+            'user1' => true,
         ));
 
     }
@@ -170,7 +156,6 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         $this->_courselistexcludes ( array (
             'user1' => array ( 'Course 2' , 'Course 6' )
         ));
-
     }
 
     /**
@@ -209,7 +194,6 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         $this->_courselistexcludes ( array (
             'user1' => array ( 'Course 2' , 'Course 6' )
         ));
-
     }
 
     /**
@@ -276,7 +260,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         $this->_create_rich_site();
 
         // Change setting to filter by categories.
-        set_config('filtertype', 'categories', 'block_filtered_course_list');
+        $filterconfig = <<<EOF
+category | c | 0
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
@@ -342,7 +329,11 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         ));
 
         // Now try switching the root category setting.
-        set_config('categories', $this->categories['cc2']->id, 'block_filtered_course_list');
+        $cc2id = $this->categories['cc2']->id;
+        $filterconfig = <<<EOF
+category | collapsed | $cc2id
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // There should be no rubric for Miscellaneous.
         $this->_courselistexcludes( array (
@@ -359,18 +350,68 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'sc_2'  => 'Other courses',
             )
         ));
+
+        // Test the ability to set recursion depth on top-level category filter.
+        // Confirm also that comments in the category and depth fields will be ignored.
+        $filterconfig = <<<EOF
+category | collapsed | 0 (Top level) | 1 deep
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'c_1'   => 'Miscellaneous',
+                'cc1_2' => 'Other courses',
+                'gc1_1' => 'Other courses',
+                'sc_2'  => 'Sibling category',
+            ),
+        ));
+
+        $this->_sectionexpanded ( array(
+            'Miscellaneous'    => 'collapsed',
+            'Sibling category' => 'collapsed',
+        ));
+
+        // Test the ability to set recursion depth on specific categories.
+        $cc1id = $this->categories['cc1']->id;
+        $scid = $this->categories['sc']->id;
+        $filterconfig = <<<EOF
+category | expanded | $cc1id | 1
+category | collapsed | $scid  | 1
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'c_1'   => 'Other courses',
+                'cc1_2' => 'Child category 1',
+                'gc1_1' => 'Other courses',
+                'sc_2'  => 'Sibling category',
+            ),
+        ));
+
+        $this->_sectionexpanded ( array(
+            'Child category 1' => 'expanded',
+            'Sibling category' => 'collapsed',
+        ));
     }
 
     /**
-     * Test current and future shortname filtering on a rich site
+     * Test shortname filtering
      */
-    public function test_rich_site_current_and_future_shortnames() {
+    public function test_shortnames() {
 
         $this->_create_rich_site();
 
         // Set a current and future shortname.
-        set_config('currentshortname', '_1', 'block_filtered_course_list');
-        set_config('futureshortname', '_2', 'block_filtered_course_list');
+        $filterconfig = <<<EOF
+shortname | expanded | Current courses       | _1
+shortname | expanded | Future courses        | _2
+shortname | expanded | Non-ascii             | ø
+shortname | expanded | Child courses         | cc
+shortname | expanded | Unnumbered categories | c_
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
@@ -395,6 +436,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'cc2_1' => 'Current courses',
                 'gc1_1' => 'Current courses',
                 'sc_1'  => 'Current courses',
+                'øthér' => 'Non-ascii',
+                'cc1_2' => 'Child courses',
+                'cc2_1' => 'Child courses',
+                'sc_2'  => 'Unnumbered categories',
             ),
             'user2' => array(
                 'c_2'   => 'Future courses',
@@ -403,89 +448,27 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'gc1_2' => 'Future courses',
                 'sc_2'  => 'Future courses',
                 'hc_2'  => 'Future courses',
-                'c_3'   => 'Other courses',
+                'hc_3'  => 'Unnumbered categories',
+                'c_3'   => 'Unnumbered categories',
+                'cc2_2' => 'Child courses',
+                'cc2_2' => 'Future courses',
                 'gc1_3' => 'Other courses'
             )
         ));
-
-        // Test on non-ascii shortname match.
-        set_config('currentshortname', 'ø', 'block_filtered_course_list');
-
-        $this->_courseunderrubric( array(
-            'user1' => array(
-                'øthér' => 'Current courses',
-            ),
-        ));
-
     }
 
     /**
-     * Test custom shortnames on a rich site
+     * Test shortnames with regex
      */
-    public function test_rich_site_custom_shortnames() {
+    public function test_regex_shortnames() {
 
         $this->_create_rich_site();
 
-        // Set two custom shortnames and rubric labels.
-        set_config('customlabel1', 'Child courses', 'block_filtered_course_list');
-        set_config('customshortname1', 'cc', 'block_filtered_course_list');
-        set_config('customlabel2', 'Unnumbered categories', 'block_filtered_course_list');
-        set_config('customshortname2', 'c_', 'block_filtered_course_list');
-
-        // Test against expectations.
-        $this->_courseunderrubric ( array (
-            'user1' => array (
-                'cc1_2' => 'Child courses',
-                'cc2_1' => 'Child courses',
-                'sc_2'  => 'Unnumbered categories',
-                'gc1_2' => 'Other courses',
-            ),
-            'user2' => array (
-                'hc_3'  => 'Unnumbered categories',
-            ),
-        ));
-
-        // Set a third custom shortname and label.
-        set_config('customlabel3', 'Threes', 'block_filtered_course_list');
-        set_config('customshortname3', '3', 'block_filtered_course_list');
-
-        // This setting should not apply because labelscount is still set at 2.
-        $this->_courselistexcludes ( array (
-            'user2' => array ( 'Threes' ),
-        ));
-
-        // Increase the number of custom labels.
-        set_config('labelscount', 4, 'block_filtered_course_list');
-
-        // The 'Threes' should appear now.
-        // Courses should appear under all applicable matches.
-        $this->_courseunderrubric ( array (
-            'user2' => array (
-                'c_3'   => 'Unnumbered categories',
-                'c_3'   => 'Threes',
-                'cc2_3' => 'Child courses',
-                'cc2_3' => 'Threes',
-            ),
-        ));
-
-        // Test a non-ascii example.
-        set_config('customlabel4', 'Non-ascii', 'block_filtered_course_list');
-        set_config('customshortname4', 'ø', 'block_filtered_course_list');
-
-        $this->_courseunderrubric( array (
-            'user1' => array(
-                'øthér' => 'Non-ascii',
-            ),
-        ));
-
-        // TODO: Validate custom labels.
-        // Unfortunately setting a value directly does not submit it to the PARAM validation.
-        // So this may be a job for behat testing instead.
-
         // Use regex for shortname matches.
-        set_config('useregex', 1, 'block_filtered_course_list');
-        set_config('customlabel4', 'All but default', 'block_filtered_course_list');
-        set_config('customshortname4', '^[a-zø]{2}', 'block_filtered_course_list');
+        $filterconfig = <<<EOF
+regex | exp | All but default | ^[a-zø]{2}
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // This new rubric should exclude courses with a shortname like 'c_1'.
         // It does not begin with two lowercase letters.
@@ -505,7 +488,39 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'øthér' => 'All but default',
             ),
         ));
+    }
 
+    /**
+     * Test a site with mixed filters
+     */
+    public function test_mixed_filters() {
+
+        $this->_create_rich_site();
+
+        // Set up mixed filters.
+        $cc2id = $this->categories['cc2']->id;
+        $scid = $this->categories['sc']->id;
+        $filterconfig = <<<EOF
+shortname | expanded | Ones   | _1
+category  | expanded | $cc2id | 0
+category  | expanded | $scid  | 0
+shortname | expanded | Twos   | _2
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        // Users should see relevant courses under all rubrics.
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'c_1'   => 'Ones',
+                'sc_1'  => 'Ones',
+                'cc2_1' => 'Ones',
+                'cc2_1' => 'Child category 2',
+                'cc2_2' => 'Child category 2',
+                'sc_1'  => 'Sibling category',
+                'sc_2'  => 'Sibling category',
+                'sc_2'  => 'Twos',
+            ),
+        ));
     }
 
     /**
@@ -514,6 +529,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     public function test_setting_hideallcourseslink() {
 
         $this->_create_rich_site();
+
+        // Set up simple matching.
+        $filterconfig = <<<EOF
+shortname | e | Courses | _
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // Any user who sees the should also see the "All courses" link.
         $this->_allcourseslink ( array (
@@ -534,7 +555,6 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'user1' => false,
             'admin' => true
         ));
-
     }
 
     /**
@@ -543,6 +563,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     public function test_setting_hidefromguests() {
 
         $this->_create_rich_site();
+
+        // Set up simple matching.
+        $filterconfig = <<<EOF
+shortname | expanded | Courses | _
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // All users (except a regular user enrolled in no courses) should see the block.
         $this->_noblock ( array (
@@ -564,7 +590,6 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'admin' => false,
             'user3' => true
         ));
-
     }
 
     /**
@@ -575,8 +600,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         $this->_create_rich_site();
 
-        // Set a shortname match.
-        set_config('currentshortname', 'gc', 'block_filtered_course_list');
+        $filterconfig = <<<EOF
+shortname | e | Current courses | gc
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // Enrollments that do not match appear under 'Other courses'.
         $this->_courseunderrubric ( array (
@@ -596,30 +623,20 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     }
 
     /**
-     * Test whether an admin can choose to have the course rubrics be collapsible
+     * Test that aria attributes are added for collapsible rubrics
      */
-    public function test_setting_collapsible_sections() {
+    public function test_aria_attributes() {
 
         $this->_create_rich_site();
 
+        // Set up simple matching.
+        $filterconfig = <<<EOF
+shortname | exp | Courses | _
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
         // For users enrolled in courses the various rubrics are collapsible.
         $this->_courselistincludes ( array (
-            'user1' => array (
-                'collapsible',
-                'aria-multiselectable',
-                'aria-controls',
-                'aria-expanded',
-                'aria-selected',
-                'aria-labelledby',
-                'aria-hidden',
-            ),
-        ));
-
-        // Change the collapsibility setting.
-        set_config('collapsible', 0, 'block_filtered_course_list');
-
-        // The rubrics are no longer collapsible.
-        $this->_courselistexcludes ( array (
             'user1' => array (
                 'collapsible',
                 'aria-multiselectable',
@@ -639,34 +656,80 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         $this->_create_rich_site();
 
-        // Set up some shortname rubrics.
-        set_config('currentshortname', '_1', 'block_filtered_course_list');
-        set_config('futureshortname', '_2', 'block_filtered_course_list');
-        set_config('customlabel1', 'Child courses', 'block_filtered_course_list');
-        set_config('customshortname1', 'cc', 'block_filtered_course_list');
-        set_config('customlabel2', 'Unnumbered categories', 'block_filtered_course_list');
-        set_config('customshortname2', 'c_', 'block_filtered_course_list');
+        // Set up some rubrics.
+        $filterconfig = <<<EOF
+shortname | collapsed | Current courses       | _1
+shortname | collapsed | Future courses        | _2
+shortname | collapsed | Child courses         | cc
+shortname | collapsed | Unnumbered categories | c_
+category  | collapsed | 0                     | 0
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // All sections should be collapsed.
         $this->_sectionexpanded ( array(
             'Current courses'       => 'collapsed',
             'Future courses'        => 'collapsed',
             'Child courses'         => 'collapsed',
-            'Unnumbered categories' => 'collapsed'
+            'Unnumbered categories' => 'collapsed',
+            'Miscellaneous'         => 'collapsed',
+            'Child category'        => 'collapsed',
         ));
 
         // Now set a couple sections to be expanded by default.
-        set_config('currentexpanded', 1, 'block_filtered_course_list');
-        set_config('labelexpanded2', 1, 'block_filtered_course_list');
+        $filterconfig = <<<EOF
+shortname | expanded  | Current courses       | _1
+shortname | collapsed | Future courses        | _2
+shortname | collapsed | Child courses         | cc
+shortname | expanded  | Unnumbered categories | c_
+category  | expanded  | 0                     | 0
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // The corresponding sections should be expanded.
         $this->_sectionexpanded ( array(
             'Current courses'       => 'expanded',
             'Future courses'        => 'collapsed',
             'Child courses'         => 'collapsed',
-            'Unnumbered categories' => 'expanded'
+            'Unnumbered categories' => 'expanded',
+            'Miscellaneous'         => 'expanded',
+            'Child category'        => 'expanded',
         ));
 
+        // Now test config lines that do not set expansion state or use invalid values.
+        $filterconfig = <<<EOF
+shortname | | Current courses | _1
+shortname | invalid value | Future courses | _2
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        // All sections should be collapsed.
+        $this->_sectionexpanded ( array(
+            'Current courses'       => 'collapsed',
+            'Future courses'        => 'collapsed',
+        ));
+    }
+
+    /**
+     * Test that rubric titles pass through htmlentities()
+     */
+    public function test_rubric_title_htmlentities() {
+
+        $this->_create_rich_site();
+
+        // Set up a shortname rubrics.
+        $filterconfig = <<<EOF
+shortname | col | Current <br />courses | _1
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        // We should see the course under the original text.
+        // This test would fail if the line break were interpreted.
+        $this->_courseunderrubric ( array (
+            'user1' => array (
+                'c_1' => 'Current <br />courses',
+            )
+        ));
     }
 
     /**
@@ -906,7 +969,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     }
 
     /**
-     * Test whether a given users see any block at all
+     * Test whether given users see any block at all
      *
      * @param array $expectations A list of users and whether or not they should see any block
      */

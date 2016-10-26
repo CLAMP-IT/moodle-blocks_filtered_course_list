@@ -34,9 +34,10 @@ Feature: Course rubrics are collapsible
         And I am on site homepage
         And I follow "Turn editing on"
         And I add the "filtered_course_list" block
-        And the following config values are set as admin:
-            | filtertype | categories | block_filtered_course_list |
-            | categories | 0          | block_filtered_course_list |
+        And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+          """
+          category | collapsed | 0
+          """
         And I log out
         When I log in as "testuser"
         And I am on site homepage
@@ -48,16 +49,28 @@ Feature: Course rubrics are collapsible
         Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
         When I log out
         And I log in as "admin"
-        And the following config values are set as admin:
-            | filtertype       | shortname | block_filtered_course_list |
-            | currentshortname | 3         | block_filtered_course_list |
-            | futureshortname  | 2         | block_filtered_course_list |
-            | currentexpanded  | 1         | block_filtered_course_list |
-            | customlabel1     | Ones      | block_filtered_course_list |
-            | customshortname1 | 1         | block_filtered_course_list |
-            | labelexpanded1   | 1         | block_filtered_course_list |
-            | customlabel2     | Twos      | block_filtered_course_list |
-            | customshortname2 | 22        | block_filtered_course_list |
+        And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+          """
+          category | expanded | 0 | 0
+          """
+        And I log out
+        When I log in as "testuser"
+        And I am on site homepage
+        Then I should see "Filtered course list"
+        And "Cat 1" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Cat 2" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
+        When I follow "Cat 1"
+        Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+        When I log out
+        And I log in as "admin"
+        And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+          """
+          shortname | expanded  | Current courses | 3
+          shortname | collapsed | Future courses  | 2
+          shortname | expanded  | Ones            | 1
+          shortname |           | Twos            | 22
+          """
         And I log out
         And I log in as "testuser"
         And I am on site homepage
