@@ -1,6 +1,6 @@
 language: php
 
-sudo: false
+sudo: required
 
 cache:
   directories:
@@ -33,16 +33,14 @@ matrix:
 
 before_install:
   - echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - phpenv config-rm xdebug.ini
   - cd ../..
   - composer selfupdate
-  - composer create-project -n --no-dev moodlerooms/moodle-plugin-ci ci ^1
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
   - moodle-plugin-ci install
-
-before_script:
-  - phpenv config-rm xdebug.ini
 
 script:
   - moodle-plugin-ci phplint
@@ -50,7 +48,6 @@ script:
   - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
   - moodle-plugin-ci csslint
-  - moodle-plugin-ci shifter
   - moodle-plugin-ci jshint
   - moodle-plugin-ci phpunit
   - moodle-plugin-ci behat
