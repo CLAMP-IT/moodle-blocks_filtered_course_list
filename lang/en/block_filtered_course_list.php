@@ -36,6 +36,7 @@ Enter the details for one filter per line. Use pipes ("|") to separate the value
 <li>The first value in each line indicates the filter type: <i>shortname, regex</i> or <i>category</i>. Lines that start with any other expression will be ignored.</li>
 <li>The second element of each line indicates whether the relevant rubric(s) should be <i>expanded</i> or <i>collapsed</i> by default.<br /><li>For shortname and regex filters the third element is the display title for the relevant rubric; for category filteres it is the internal category id. Use zero (0) to match all top-level categories.</li>
 <li>The final element for shortname and regex filters is the string to match shortnames against. For regex filters, you can use regex notation; for shortname filters use simple character matches. For category filters the fourth value indicates a depth for recursion. Here you can use zero (0) to instruct the filter to find all descendants.</li></ul>
+Additional details available at <a href='https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration' target='_blank' title='Additional documentation'>https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration</a>
 EOF;
 $string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect Admin\'s view';
 $string['confighidefromguests']     = 'Hide the block from guests and anonymous visitors.';
