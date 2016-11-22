@@ -19,6 +19,7 @@ Feature: The block includes ARIA support
             | Course 21 | course21  | cat2     |
             | Course 22 | course22  | cat2     |
             | Course 23 | course23  | cat2     |
+            | Test      | test      | test     |
         And the following "users" exist:
             | username |
             | testuser |
@@ -30,9 +31,11 @@ Feature: The block includes ARIA support
             | testuser | course21 | student |
             | testuser | course22 | student |
             | testuser | course23 | student |
+            | testuser | test     | student |
         And I log in as "admin"
         And I am on site homepage
-        And I follow "Turn editing on"
+        And I follow "Test"
+        And I turn editing mode on
         And I add the "filtered_course_list" block
         And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
           """
@@ -42,6 +45,8 @@ Feature: The block includes ARIA support
         And I log out
         When I log in as "testuser"
         And I am on site homepage
+        And I follow "Test"
+        And I wait until ".block_filtered_course_list" "css_element" exists
         Then I should see "Filtered course list"
         And the "role" attribute of ".block_filtered_course_list.block" "css_element" should contain "navigation"
         And the "role" attribute of ".block_filtered_course_list .tablist" "css_element" should contain "tablist"

@@ -12,6 +12,7 @@ Feature: Courses within a rubric can be sorted by various fields
       | C Fullname | d_shortname | e_idnumber | 140800000 |
       | D Fullname | e_shortname | a_idnumber | 140700000 |
       | E Fullname | a_shortname | b_idnumber | 140700000 |
+      | Test       | test        | test       | 141000000 |
     And the following "users" exist:
       | username |
       | testuser |
@@ -22,14 +23,12 @@ Feature: Courses within a rubric can be sorted by various fields
       | c_shortname | testuser | student |
       | d_shortname | testuser | student |
       | e_shortname | testuser | student |
+      | test        | testuser | student |
     And I log in as "admin"
     And I am on site homepage
-    And I follow "Turn editing on"
+    And I follow "Test"
+    And I turn editing mode on
     And I add the "filtered_course_list" block
-    And I follow "Edit settings"
-    And I set the following fields to these values:
-      | s__frontpageloggedin[] | None |
-    And I press "Save changes"
     And I log out
 
   @javascript
@@ -39,13 +38,14 @@ Feature: Courses within a rubric can be sorted by various fields
       | primaryvector   | <vec1>     | block_filtered_course_list |
       | secondarysort   | <sort2>    | block_filtered_course_list |
       | secondaryvector | <vec2>     | block_filtered_course_list |
-      | defaulthomepage | Site       |                            |
     And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
       """
       shortname | expanded | Courses | shortname
       """
     When I log in as "testuser"
     And I am on site homepage
+    And I follow "Test"
+    And I wait until ".block_filtered_course_list" "css_element" exists
     Then <first> "text" should appear before <second> "text"
     And <second> "text" should appear before <third> "text"
     And <third> "text" should appear before <fourth> "text"
@@ -68,7 +68,6 @@ Feature: Courses within a rubric can be sorted by various fields
       | primaryvector   | ASC        | block_filtered_course_list |
       | secondarysort   | none       | block_filtered_course_list |
       | secondaryvector | ASC        | block_filtered_course_list |
-      | defaulthomepage | Site       |                            |
     And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
       """
       shortname | expanded | Courses | shortname
@@ -76,13 +75,15 @@ Feature: Courses within a rubric can be sorted by various fields
     And I log in as "admin"
     And I am on site homepage
     And I navigate to "Manage courses and categories" node in "Site administration>Courses"
-    And I wait until the page is ready
+    And I wait until "<sort>" "link" exists
     And I click on "Sort courses" "link"
     And I wait until the page is ready
     And I click on "<sort>" "link" in the ".course-listing-actions" "css_element"
     And I log out
     When I log in as "testuser"
     And I am on site homepage
+    And I follow "Test"
+    And I wait until ".block_filtered_course_list" "css_element" exists
     Then <first> "text" should appear before <second> "text"
     And <second> "text" should appear before <third> "text"
     And <third> "text" should appear before <fourth> "text"
