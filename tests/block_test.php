@@ -204,6 +204,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         $this->_create_rich_site();
 
         // With no special settings, the behavior should be as for a larger single-category site.
+        set_config('filters', '', 'block_filtered_course_list');
 
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
@@ -738,6 +739,7 @@ EOF;
     public function test_setting_managerview() {
 
         $this->_create_rich_site();
+        set_config('filters', '', 'block_filtered_course_list');
 
         // The block should not display links to categories below the top level.
         $this->_courselistexcludes ( array (
@@ -782,6 +784,7 @@ EOF;
 
         global $CFG;
         $this->_create_rich_site();
+        set_config('filters', '', 'block_filtered_course_list');
 
         $CFG->disablemycourses = 1;
 

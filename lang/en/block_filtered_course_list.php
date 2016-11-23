@@ -29,14 +29,22 @@ $string['filtered_course_list:myaddinstance'] = 'Add a new Filtered course list 
 $string['managerview']              = 'Manager view';
 $string['allcourses']               = 'A manager sees all courses';
 $string['blockname']                = 'Filtered course list';
+$string['completedcourses']         = 'Completed courses';
 $string['configmanagerview']        = 'What should a manager see in the course list block? Note that managers who are not enrolled in any courses will still see the generic list.';
 $string['configfilters']            = <<<EOF
-Enter the details for one filter per line. Use pipes ("|") to separate the values. Whitespace will be stripped.
+Notes:
 <ul>
-<li>The first value in each line indicates the filter type: <i>shortname, regex</i> or <i>category</i>. Lines that start with any other expression will be ignored.</li>
-<li>The second element of each line indicates whether the relevant rubric(s) should be <i>expanded</i> or <i>collapsed</i> by default.<br /><li>For shortname and regex filters the third element is the display title for the relevant rubric; for category filteres it is the internal category id. Use zero (0) to match all top-level categories.</li>
-<li>The final element for shortname and regex filters is the string to match shortnames against. For regex filters, you can use regex notation; for shortname filters use simple character matches. For category filters the fourth value indicates a depth for recursion. Here you can use zero (0) to instruct the filter to find all descendants.</li></ul>
-Additional details available at <a href='https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration' target='_blank' title='Additional documentation'>https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration</a>
+<li>Only lines that begin with a filter type (category, shortname, regex or completion) will be processed. Other lines can contain comments, inactive examples, anything that is useful to you.</li>
+<li>You can use abbreviations for "expanded" and "collapsed". Even "e" and "c" will work.</li>
+<li>Whitespace around values will automatically be trimmed.</li>
+<ul>
+<li>category | exp/col | category id | depth</li>
+<li>shortname | exp/col | Display title | match</li>
+<li>regex | exp/col | Display title | regex match</li>
+<li>completion | exp/col | Display title | (in)complete</li>
+</ul>
+</ul>
+<br />Additional details available at <a href='https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration' target='_blank' title='Additional documentation'>https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration</a>
 EOF;
 $string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect a manager\'s view';
 $string['confighidefromguests']     = 'Hide the block from guests and anonymous visitors.';
@@ -47,12 +55,13 @@ $string['configsecondarysort']      = 'Within a rubric courses will secondarily 
 $string['configtitle']              = 'Block title';
 $string['courses']                  = 'Courses';
 $string['defaultfilters']           = <<<EOF
-Here is an example of how to configure filters.
-All of these lines will be ignored because they do not begin with a filter type.
-EXAMPLE category  | expanded  | 0 (top level)     | 0 (all descendants)
-EXAMPLE category  | collapsed | 1 (a category id) | 2 (recursion depth)
-EXAMPLE shortname | exp       | Current courses   | <string to match current shortnames>
-EXAMPLE regex     | col       | Older courses     | <regex to match older shortnames>
+category | collapsed | 0 (top level) | 0 (all descendants)
+
+EXAMPLE: category | exp | 1 (cat id) | 2 (generations)
+EXAMPLE: shortname | exp | Current courses | S17
+EXAMPLE: regex | col | Upcoming... | (Su|F)17$
+EXAMPLE: completion | exp | (In)complete | (in)complete
+
 EOF;
 $string['filters']                  = 'Filter configuration';
 $string['hideallcourseslink']       = 'Hide "All courses" link';

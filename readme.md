@@ -22,12 +22,14 @@ During the upgrade you will be shown only the "new settings" but it is important
 ## Configuration ##
 To configure the block, go to _Site Administration > Plugins > Blocks > Filtered course list._
 
-Most of the configuration will be done in the _textarea_ at the top of the page. Add one filter per line; use pipes ("|") to separate the different settings for each filter. Whitespace at the beginning or end of a value is removed automatically, so you pad your layout to make it more readable. Here is a sample followed by an explanation:
+Most of the configuration will be done in the _textarea_ at the top of the page. Add one filter per line; use pipes ("|") to separate the different settings for each filter. Whitespace at the beginning or end of a value is removed automatically, so you can pad your layout to make it more readable. Here is a sample followed by an explanation:
 ```
-category  | expanded  | 0 (category id) | 1 (depth)
-shortname | exp       | Current courses | S17
-regex     | collapsed | Upcoming        | (Su17|F17)$
-#category | col       | 1 (Misc)        | 0 (show all children)
+category   | expanded  | 0 (category id) | 1 (depth)
+shortname  | exp       | Current courses | S17
+regex      | collapsed | Upcoming        | (Su|F)17$
+completion | exp       | Incomplete      | incomplete
+completion | col       | Completed       | complete
+#category  | col       | 1 (Misc)        | 0 (show all children)
 The line above will be ignored, as will this comment.
 ```
 
@@ -35,7 +37,7 @@ The line above will be ignored, as will this comment.
 The first two elements of any line are common to all filter types.
 
 #### Filter type
-The first element in any line is the filter type. Currently recognized types are `category`, `shortname` and `regex`. A line that begins with any other value will be ignored by the plugin. You can use this to disable a line that you want to reactivate later or to make notes to yourself. 
+The first element in any line is the filter type. Currently recognized types are `category`, `shortname`, `regex` and `completion`. A line that begins with any other value will be ignored by the plugin. You can use this to disable a line that you want to reactivate later or to make notes to yourself.
 
 #### expanded / collapsed
 The second element of each line indicates the default expansion state of the rubric(s) the filter produces. If the first character of the value is `e` the plugin will interpret it as "expanded." Anything else will be interpreted as "collapsed". You may wish to enter full words for clarity or abbreviations for brevity. When a filter produces more than one rubric -- category filters can do this, for instance -- the expansion setting will apply to all of the rubrics.
@@ -67,8 +69,16 @@ Each regex filter corresponds to one rubric in the final block display. The thir
 #### regex match
 Regular expressions (regex) can add precision and flexibility to your match strings. For instance, you can use `Sp17$` to match shortnames that _end_ in 'Sp17'. A match like this (which is also case-sensitive) helps to limit the chance for false positives. On the other hand, you could also broaden your match to include alternative strings. `(Su17|Fa17)$` would match shortnames that end either in 'Su17' or 'Fa17'. Note that pipes ("|") _are_ allowed but backtics ("`") are not. For documentation on using PHP regular expressions please visit: http://php.net/manual/en/regexp.introduction.php
 
-### Other settings
+### Completion filters
+Completion filters will do nothing in an installation where completion tracking has not been enabled at the site level. Completion filters will additionally apply only to courses that have completion tracking enabled at the course level.
 
+#### title
+Each completion filter corresponds to one rubric in the final block display. The third element of a completion filter determines the title of that rubric. Note that pipe characters ("|") are not allowed here because they could be mistaken for a field seperator.
+
+#### completion state
+The final field in a completion filter indicates whether to show courses that the user has completed (`complete`) or not yet completed (`incomplete`). Empty setings and settings that with the character "c" will be interpreted as "complete".
+
+### Other settings
 
 | Setting | Description |
 |---------|-------------|
@@ -95,6 +105,7 @@ Please report any bugs or feature requests to the public repository page: <https
   * Makes it easier to modify and reorder filters
   * Allows admin to set expansion preference for category filters
   * Allows multiple category filters
+  * Introduces course completion filters
   * Allows recursion depth on category filters
   * Allows admin to intersperse filter types freely
   * Allows unlimited number of filters
@@ -131,8 +142,8 @@ Please report any bugs or feature requests to the public repository page: <https
 * Back end: Continuous integration with Travis CI
 
 ### [v2.6.0]
-Dependency: Requires Moodle 2.8
-Behind the scenes: Updates automated testing for newer Moodles
+* Dependency: Requires Moodle 2.8
+* Behind the scenes: Updates automated testing for newer Moodles
 
 ### [v2.5.1]
 * Feature: Admin can designate "Top" when organizing by categories
