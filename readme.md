@@ -99,6 +99,7 @@ Please report any bugs or feature requests to the public repository page: <https
   * Allows admin to intersperse filter types freely
   * Allows unlimited number of filters
   * Allows course sorting within rubrics
+  * Replaces 'admin' with 'manager' where the latter is more accurate
 * Back end:
   * Makes it easier to add new filter types
   * Refactors YUI module as AMD/jQuery

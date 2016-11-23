@@ -26,10 +26,10 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['filtered_course_list:addinstance'] = 'Add a new Filtered course list block';
 $string['filtered_course_list:myaddinstance'] = 'Add a new Filtered course list block to My home';
-$string['adminview']                = 'Admin view';
-$string['allcourses']               = 'Admin user sees all courses';
+$string['managerview']              = 'Manager view';
+$string['allcourses']               = 'A manager sees all courses';
 $string['blockname']                = 'Filtered course list';
-$string['configadminview']          = 'What should the admin see in the course list block? Note that admins who are not enrolled in any courses will still see the generic list.';
+$string['configmanagerview']        = 'What should a manager see in the course list block? Note that managers who are not enrolled in any courses will still see the generic list.';
 $string['configfilters']            = <<<EOF
 Enter the details for one filter per line. Use pipes ("|") to separate the values. Whitespace will be stripped.
 <ul>
@@ -38,10 +38,10 @@ Enter the details for one filter per line. Use pipes ("|") to separate the value
 <li>The final element for shortname and regex filters is the string to match shortnames against. For regex filters, you can use regex notation; for shortname filters use simple character matches. For category filters the fourth value indicates a depth for recursion. Here you can use zero (0) to instruct the filter to find all descendants.</li></ul>
 Additional details available at <a href='https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration' target='_blank' title='Additional documentation'>https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list#user-content-configuration</a>
 EOF;
-$string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect Admin\'s view';
+$string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect a manager\'s view';
 $string['confighidefromguests']     = 'Hide the block from guests and anonymous visitors.';
 $string['confighideothercourses']   = 'Hide "Other courses" in the block.';
-$string['configmaxallcourse']       = 'On a site with only one category, admins and guests will see all courses, <br />but above this number they will see a category link instead. <br />[Choose an integer between 0 and 999.]';
+$string['configmaxallcourse']       = 'On a site with only one category, managers and guests will see all courses, <br />but above this number they will see a category link instead. <br />[Choose an integer between 0 and 999.]';
 $string['configprimarysort']        = 'Within a rubric courses will be sorted by this field. Choose "Sort order" to display courses in the same order as seen in the course management interface.';
 $string['configsecondarysort']      = 'Within a rubric courses will secondarily be sorted by this field.';
 $string['configtitle']              = 'Block title';
@@ -52,7 +52,7 @@ $string['hideothercourses']         = 'Hide other courses';
 $string['hidefromguests']           = 'Hide from guests';
 $string['maxallcourse']             = 'Max for single category';
 $string['othercourses']             = 'Other courses';
-$string['owncourses']               = 'Admin user sees own courses';
+$string['owncourses']               = 'A manager sees own courses';
 $string['pluginname']               = 'Filtered course list';
 $string['primarysort']              = 'Primary sort';
 $string['primaryvector']            = 'Primary sort vector';

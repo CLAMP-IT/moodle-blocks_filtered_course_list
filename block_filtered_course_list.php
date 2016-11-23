@@ -45,7 +45,7 @@ class block_filtered_course_list extends block_base {
     private $mycourses = array();
     /** @var stdClass This block's context */
     public $context;
-    /** @var string A type of user for purposes of list display, should be 'user', 'admin' or 'guest' */
+    /** @var string A type of user for purposes of list display, should be 'user', 'manager' or 'guest' */
     private $usertype;
     /** @var string The type of list to create, should be 'generic_list', 'filtered_list' or 'empty_block' */
     private $liststyle = 'generic_list';
@@ -136,8 +136,8 @@ class block_filtered_course_list extends block_base {
             $this->liststyle = "filtered_list";
         }
 
-        if ($this->usertype == 'admin' &&
-            $this->fclconfig->adminview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN &&
+        if ($this->usertype == 'manager' &&
+            $this->fclconfig->managerview == BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN &&
             $this->mycourses ) {
             $this->liststyle = "filtered_list";
         }
@@ -167,7 +167,7 @@ class block_filtered_course_list extends block_base {
         if (empty($USER->id) || isguestuser()) {
             $this->usertype = 'guest';
         } else if (has_capability('moodle/course:view', $this->context)) {
-            $this->usertype = 'admin';
+            $this->usertype = 'manager';
         } else {
             $this->usertype = 'user';
         }
@@ -342,13 +342,13 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
-     * Print or do not print a link to all courses, depending on admin settings
+     * Print or do not print a link to all courses, depending on manager settings
      */
     private function _print_allcourseslink() {
         global $CFG;
         // If we can update any course of the view all isn't hidden.
         // Show the view all courses link.
-        if ($this->usertype == 'admin' || $this->fclconfig->hideallcourseslink == BLOCK_FILTERED_COURSE_LIST_FALSE) {
+        if ($this->usertype == 'manager' || $this->fclconfig->hideallcourseslink == BLOCK_FILTERED_COURSE_LIST_FALSE) {
             $this->content->footer .= "<a href=\"$CFG->wwwroot/course/index.php\">" .
                                       get_string('fulllistofcourses') .
                                       '</a> ...<br>';

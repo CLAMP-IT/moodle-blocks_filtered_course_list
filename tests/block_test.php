@@ -75,7 +75,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'hidefromguests'     => 0,
             'hideothercourses'   => 0,
             'maxallcourse'       => 10,
-            'adminview'          => 'all',
+            'managerview'        => 'all',
             'primarysort'        => 'fullname',
             'primaryvector'      => 'ASC',
             'secondarysort'      => 'none',
@@ -285,8 +285,8 @@ EOF;
         // Courses under a hidden category will appear under "Other courses" to those who can't see the category.
         // With admins_sees_own an admin should see hidden courses under hidden categories.
 
-        // Change the adminview setting to 'own'.
-        set_config('adminview', 'own', 'block_filtered_course_list');
+        // Change the managerview setting to 'own'.
+        set_config('managerview', 'own', 'block_filtered_course_list');
 
         // Enroll admin in 'hc_1'.
         $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['hc_1']->id, 3 );
@@ -735,7 +735,7 @@ EOF;
     /**
      * Test whether an admin can choose whether to see all courses or only her own
      */
-    public function test_setting_adminview() {
+    public function test_setting_managerview() {
 
         $this->_create_rich_site();
 
@@ -749,8 +749,8 @@ EOF;
             'admin' => array ( 'Miscellaneous', 'Sibling' )
         ));
 
-        // Change the adminview setting to 'own'.
-        set_config('adminview', 'own', 'block_filtered_course_list');
+        // Change the managerview setting to 'own'.
+        set_config('managerview', 'own', 'block_filtered_course_list');
 
         // An admin enrolled in no courses should still see only the top level.
         $this->_courselistexcludes ( array (
@@ -795,8 +795,8 @@ EOF;
             'user1' => array ( 'Course', 'Child', 'Grandchild' )
         ));
 
-        // On the other hand, adminview = own trumps disablemycourses.
-        set_config('adminview', 'own', 'block_filtered_course_list');
+        // On the other hand, managerview = own trumps disablemycourses.
+        set_config('managerview', 'own', 'block_filtered_course_list');
 
         // Enroll admin in 'hc_1'.
         $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['hc_1']->id, 3 );

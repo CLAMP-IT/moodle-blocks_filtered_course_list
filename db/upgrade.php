@@ -149,6 +149,7 @@ function xmldb_block_filtered_course_list_upgrade($oldversion) {
         }
 
         set_config('filters', $newcnf, 'block_filtered_course_list');
+        set_config('managerview', $fclcnf->adminview, 'block_filtered_course_list');
         upgrade_block_savepoint(true, 2016080801, 'filtered_course_list');
     }
 
