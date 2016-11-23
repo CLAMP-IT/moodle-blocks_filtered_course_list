@@ -31,7 +31,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtextarea('block_filtered_course_list/filters',
         get_string('filters', 'block_filtered_course_list'),
         get_string('configfilters', 'block_filtered_course_list'),
-        '', PARAM_RAW));
+        get_string('defaultfilters', 'block_filtered_course_list'), PARAM_RAW));
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list/hideallcourseslink',
         get_string('hideallcourseslink', 'block_filtered_course_list'),

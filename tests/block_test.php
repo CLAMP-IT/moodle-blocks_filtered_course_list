@@ -66,7 +66,8 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
      */
     public function test_default_settings() {
 
-         // Confirm expected defaults.
+        // Confirm expected defaults.
+        // We omit the multiline default for the 'filters' setting.
 
         $fclconfig = get_config('block_filtered_course_list');
 
@@ -80,7 +81,6 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'primaryvector'      => 'ASC',
             'secondarysort'      => 'none',
             'secondaryvector'    => 'ASC',
-            'filters'            => '',
         );
 
         foreach ($configdefaults as $name => $value) {

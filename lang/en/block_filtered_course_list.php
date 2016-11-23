@@ -46,6 +46,14 @@ $string['configprimarysort']        = 'Within a rubric courses will be sorted by
 $string['configsecondarysort']      = 'Within a rubric courses will secondarily be sorted by this field.';
 $string['configtitle']              = 'Block title';
 $string['courses']                  = 'Courses';
+$string['defaultfilters']           = <<<EOF
+Here is an example of how to configure filters.
+All of these lines will be ignored because they do not begin with a filter type.
+EXAMPLE category  | expanded  | 0 (top level)     | 0 (all descendants)
+EXAMPLE category  | collapsed | 1 (a category id) | 2 (recursion depth)
+EXAMPLE shortname | exp       | Current courses   | <string to match current shortnames>
+EXAMPLE regex     | col       | Older courses     | <regex to match older shortnames>
+EOF;
 $string['filters']                  = 'Filter configuration';
 $string['hideallcourseslink']       = 'Hide "All courses" link';
 $string['hideothercourses']         = 'Hide other courses';
