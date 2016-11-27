@@ -111,6 +111,8 @@ Please report any bugs or feature requests to the public repository page: <https
   * Allows unlimited number of filters
   * Allows course sorting within rubrics
   * Replaces 'admin' with 'manager' where the latter is more accurate
+* Appearance:
+  * Better support for core themes.
 * Back end:
   * Makes it easier to add new filter types
   * Refactors YUI module as AMD/jQuery
