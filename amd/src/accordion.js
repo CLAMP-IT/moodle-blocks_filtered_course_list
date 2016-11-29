@@ -22,8 +22,9 @@
  */
 define(['jquery'], function($) {
     return {
-        init: function () {
-            $('.block_filtered_course_list .course-section').each(function() {
+        init: function (params) {
+            var blockid = params.blockid;
+            $('#' + blockid + '.block_filtered_course_list .course-section').each(function() {
                 if (!($(this).hasClass('expanded'))) {
                     $(this).addClass('collapsed');
                     $(this).attr('aria-expanded', 'false');

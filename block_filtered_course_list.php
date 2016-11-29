@@ -68,10 +68,22 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
-     * Set the instance title just after the instance data is loaded
+     * Set the instance title and merge instance config as soon as nstance data is loaded
      */
     public function specialization() {
         $this->title = isset($this->config->title) ? $this->config->title : get_string('blockname', 'block_filtered_course_list');
+        if (isset($this->config->filters) && $this->config->filters != '') {
+            $this->fclconfig->filters = $this->config->filters;
+        }
+    }
+
+    /**
+     * Allow multiple instances
+     *
+     * @return bool Returns true
+     */
+    public function instance_allow_multiple() {
+        return true;
     }
 
     /**
@@ -124,7 +136,10 @@ class block_filtered_course_list extends block_base {
         $this->mycourses = enrol_get_my_courses(null, "$sortstring");
 
         /* Call accordion AMD module */
-        $PAGE->requires->js_call_amd('block_filtered_course_list/accordion', 'init', array());
+        $params = array(
+            'blockid' => 'inst' . $this->instance->id,
+        );
+        $PAGE->requires->js_call_amd('block_filtered_course_list/accordion', 'init', array($params));
 
         $this->_calculate_usertype();
         $this->liststyle = $this->_set_liststyle();
