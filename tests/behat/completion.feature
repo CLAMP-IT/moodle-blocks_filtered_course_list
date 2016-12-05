@@ -25,7 +25,7 @@ Feature: We can filter courses by completion status
         And I am on site homepage
         And I follow "Test"
         And I turn editing mode on
-        And I add the "filtered_course_list" block
+        And I add the "Filtered course list" block
         And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
           """
           completion | collapsed | Completed courses  | complete
@@ -54,7 +54,7 @@ Feature: We can filter courses by completion status
         And I log in as "teacher"
         And I am on site homepage
         And I follow "Course 1"
-        And I follow "Course completion"
+        And I navigate to "Course completion" node in "Course administration"
         And I expand all fieldsets
         And I set the field "Teacher" to "1"
         And I press "Save changes"

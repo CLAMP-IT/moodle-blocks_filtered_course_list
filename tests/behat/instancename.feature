@@ -13,9 +13,9 @@ Feature: Each instance of the block can have a custom name
         And I am on site homepage
         And I follow "Test"
         And I turn editing mode on
-        And I add the "filtered_course_list" block
+        And I add the "Filtered course list" block
         And I wait until ".block_filtered_course_list" "css_element" exists
-        And I configure the "block_filtered_course_list" block
+        And I configure the "Filtered course list" block
         And I set the following fields to these values:
             | config_title | My custom title |
         When I press "Save changes"

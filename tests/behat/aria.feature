@@ -36,7 +36,7 @@ Feature: The block includes ARIA support
         And I am on site homepage
         And I follow "Test"
         And I turn editing mode on
-        And I add the "filtered_course_list" block
+        And I add the "Filtered course list" block
         And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
           """
           shortname | collapsed | Current courses | 3

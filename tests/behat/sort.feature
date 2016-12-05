@@ -28,7 +28,8 @@ Feature: Courses within a rubric can be sorted by various fields
     And I am on site homepage
     And I follow "Test"
     And I turn editing mode on
-    And I add the "filtered_course_list" block
+    And I add the "Filtered course list" block
+    And I wait "1" seconds
     And I log out
 
   @javascript
