@@ -29,7 +29,7 @@ Feature: Courses within a rubric can be sorted by various fields
     And I follow "Test"
     And I turn editing mode on
     And I add the "Filtered course list" block
-    And I wait "1" seconds
+    And I wait "2" seconds
     And I log out
 
   @javascript
