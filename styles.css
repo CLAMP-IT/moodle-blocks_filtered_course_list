@@ -8,9 +8,20 @@
     padding: 0 0 10px 20px;
 }
 
+.dir-rtl .block_filtered_course_list .list li {
+    background: url([[pix:moodle|i/course]]) no-repeat right 1px transparent;
+    margin-right: 0;
+    padding: 0 20px 10px 0;
+}
+
 .jsenabled .block_filtered_course_list.block .list li {
     background-position: 10px 1px;
     padding: 0 0 10px 31px;
+}
+
+.dir-rtl.jsenabled .block_filtered_course_list.block .list li {
+    background-position: calc(100% - 10px) 1px;
+    padding: 0 31px 10px 0;
 }
 
 .block_filtered_course_list_footer {
@@ -24,9 +35,18 @@
     padding-right: 1em;
 }
 
+.dir-rtl .block_filtered_course_list .course-section {
+    padding-right: 1px;
+    padding-left: 1em;
+}
+
 .jsenabled .block_filtered_course_list .course-section {
     cursor: pointer;
     padding-left: 21px;
+}
+
+.dir-rtl.jsenabled .block_filtered_course_list .course-section {
+    padding-right: 21px;
 }
 
 .jsenabled .block_filtered_course_list .course-section a {
@@ -41,12 +61,20 @@
     background: url([[pix:t/collapsed]]) no-repeat 0 2px transparent;
 }
 
+.dir-rtl .block_filtered_course_list .course-section.collapsed {
+    background: url([[pix:t/collapsed_rtl]]) no-repeat right 2px transparent;
+}
+
 .block_filtered_course_list .course-section.expanded + .collapsible.list {
     display: block;
 }
 
 .block_filtered_course_list .course-section.expanded {
     background: url([[pix:t/expanded]]) no-repeat 0 2px transparent;
+}
+
+.dir-rtl .block_filtered_course_list .course-section.expanded {
+    background: url([[pix:t/expanded]]) no-repeat right 2px transparent;
 }
 
 #page-admin-setting-blocksettingfiltered_course_list #id_s_block_filtered_course_list_filters {
