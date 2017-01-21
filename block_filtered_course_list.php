@@ -273,7 +273,8 @@ class block_filtered_course_list extends block_base {
      */
     private function _process_generic_list() {
 
-        global $CFG;
+        global $CFG, $PAGE;
+        $output = $PAGE->get_renderer('block_filtered_course_list');
 
         // Parent = 0   ie top-level categories only.
         $categories = coursecat::get(0)->get_children();
@@ -286,13 +287,8 @@ class block_filtered_course_list extends block_base {
                 current($categories)->coursecount > $this->fclconfig->maxallcourse)) {
                 $this->content->text .= '<ul class="collapsible list">';
                 foreach ($categories as $category) {
-                    $linkcss = $category->visible ? "" : "dimmed";
-                    $this->content->text .= html_writer::tag('li',
-                        html_writer::tag('a', format_string($category->name),
-                        array(
-                            'href' => $CFG->wwwroot . '/course/index.php?categoryid=' . $category->id,
-                            'class' => $linkcss))
-                        );
+                    $categorylink = new \block_filtered_course_list\output\category_link_list_item($category);
+                    $this->content->text .= $output->render($categorylink);
                 }
                 $this->content->text .= '</ul>';
 
@@ -304,7 +300,8 @@ class block_filtered_course_list extends block_base {
                 if ($courses) {
                     $this->content->text .= '<ul class="collapsible list">';
                     foreach ($courses as $course) {
-                        $this->content->text .= $this->_print_single_course($course);
+                        $courselink = new \block_filtered_course_list\output\course_link_list_item($course);
+                        $this->content->text .= $output->render($courselink);
                     }
                     $this->content->text .= '</ul>';
                 }
@@ -320,6 +317,8 @@ class block_filtered_course_list extends block_base {
      * @return string HTML to display a rubric
      */
     private function _get_rubric_html($rubric, $arraykey) {
+        global $PAGE;
+        $output = $PAGE->get_renderer('block_filtered_course_list');
         $key = $arraykey + 1;
         $initialstate = $rubric->expanded;
         $ariaexpanded = ($initialstate == 'expanded') ? 'true' : 'false';
@@ -333,8 +332,9 @@ class block_filtered_course_list extends block_base {
             'aria-selected' => 'false',
         );
         $title = html_writer::tag('div', htmlentities($rubric->title), $atts);
-        $courselinks = array_map(function($course) {
-            return $this->_print_single_course($course);
+        $courselinks = array_map(function($course) use ($output) {
+            $courselink = new \block_filtered_course_list\output\course_link_list_item($course);
+            return $output->render($courselink);
         }, $rubric->courses);
         $ulatts = array(
             'id'              => "fcl_{$this->instance->id}_tabpanel{$key}",
@@ -345,22 +345,5 @@ class block_filtered_course_list extends block_base {
         );
         $ul = html_writer::tag('ul', implode($courselinks), $ulatts);
         return $title . $ul;
-    }
-
-    /**
-     * Build the HTML to display a single course in a filtered list
-     *
-     * @param object $course The course to display
-     * @return string HTML to display a link to a course
-     */
-    private function _print_single_course($course) {
-        global $CFG;
-        $linkcss = $course->visible ? "fcl-course-link" : "fcl-course-link dimmed";
-        $html = html_writer::tag('li',
-            html_writer::tag('a', format_string($course->fullname),
-            array('href' => $CFG->wwwroot . '/course/view.php?id=' . $course->id,
-                'title' => format_string($course->shortname), 'class' => $linkcss))
-        );
-        return $html;
     }
 }

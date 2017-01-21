@@ -29,6 +29,103 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__) . '/locallib.php');
 
 /**
+ * Helper class for list items.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class list_item implements \renderable, \templatable {
+
+    /** @var string CSS for the list item link */
+    public $classes;
+    /** @var string Display text for the list item link */
+    public $displaytext;
+    /** @var string Text to display when the list item link is hovered */
+    public $title;
+    /** @var string Link to the Course index page */
+    public $url;
+
+    /**
+     * An abstract constructor
+     * Decendant classes should define the class properties.
+     *
+     * @param mixed $object A object from which to derive the class properties
+     */
+    abstract public function __construct($object);
+
+    /**
+     * Export the object data for use by a template
+     *
+     * @param renderer_base $output A renderer_base object
+     * @return array $data Template-ready data
+     */
+    public function export_for_template(\renderer_base $output) {
+        $data = array(
+            'classes'     => $this->classes,
+            'displaytext' => $this->displaytext,
+            'title'       => $this->title,
+            'url'         => $this->url,
+        );
+        return $data;
+    }
+}
+
+/**
+ * Helper class for course link list items.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class course_link_list_item extends list_item implements \templatable, \renderable {
+
+    /**
+     * Constructor
+     * Defines class properties for course link list items.
+     *
+     * @param \stdClass $course A moodle course object
+     */
+    public function __construct($course) {
+        $css[] = 'fcl-course-link';
+        if ($course->visible) {
+            $css[] = 'dimmed';
+        }
+        $this->classes = implode(' ', $css);
+        $this->displaytext = format_string($course->fullname);
+        $this->title = format_string($course->shortname);
+        $this->url = new \moodle_url('/course/view.php?id=' . $course->id);
+    }
+}
+
+/**
+ * Helper class for category link list items.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class category_link_list_item extends list_item implements \templatable, \renderable {
+
+    /**
+     * Constructor
+     * Defines class properties for course link list items.
+     *
+     * @param \coursecat $category A moodle course object
+     */
+    public function __construct($category) {
+        $css[] = 'fcl-category-link';
+        if ($category->visible) {
+            $css[] = 'dimmed';
+        }
+        $this->classes = implode(' ', $css);
+        $this->displaytext = format_string($category->name);
+        $this->title = '';
+        $this->url = new \moodle_url('/course/index.php?categoryid=' . $category->id);
+    }
+}
+
+/**
  * Helper class for the "All courses" link.
  *
  * @package    block_filtered_course_list
@@ -100,5 +197,27 @@ class renderer extends \plugin_renderer_base {
     protected function render_footer (footer $footer) {
         $data = $footer->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/footer', $data);
+    }
+
+    /**
+     * Render HTML for course link list item
+     *
+     * @param course_link_list_item $courselink
+     * @return string The rendered html
+     */
+    protected function render_course_link_list_item (course_link_list_item $courselink) {
+        $data = $courselink->export_for_template($this);
+        return $this->render_from_template('block_filtered_course_list/list_item', $data);
+    }
+
+    /**
+     * Render HTML for category link list item
+     *
+     * @param category_link_list_item $categorylink
+     * @return string The rendered html
+     */
+    protected function render_category_link_list_item (category_link_list_item $categorylink) {
+        $data = $categorylink->export_for_template($this);
+        return $this->render_from_template('block_filtered_course_list/list_item', $data);
     }
 }
