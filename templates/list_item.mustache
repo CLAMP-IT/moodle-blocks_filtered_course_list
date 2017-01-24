@@ -26,19 +26,21 @@
     * none
 
     Context variables required for this template:
-    * classes - string: CSS classes for the list item link.
+    * classes - string: CSS classes for the list item.
     * displaytext - string: Display text for the list item link.
+    * linkclasses - string: CSS classes for the list item link.
     * title - string: Text to display when the list item link is hovered.
     * url - string: URL to a course, category, etc.
 
     Example context (json):
     {
-        "classes": "fcl-course-link",
+        "classes": "block_filtered_course_list_list_item fcl-course-link",
         "displaytext": "Link to a course, category, etc.",
+        "linkclasses": "block_filtered_course_list_list_item_link",
         "title": "Text to display on hover",
         "url": "/course/index.php"
     }
 }}
-<li class='block_filtered_course_list_list_item'>
-    <a href='{{ url }}' title='{{ title }}' class='{{ classes }}'>{{ displaytext }}</a>
+<li class='{{ classes }}'>
+    <a href='{{ url }}' {{#title}} title='{{ title }}' {{/title}} class='{{ linkclasses }}'>{{ displaytext }}</a>
 </li>

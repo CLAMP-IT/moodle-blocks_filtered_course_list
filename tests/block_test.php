@@ -1093,7 +1093,7 @@ EOF;
                     $anchors = $ul->getElementsByTagName('a');
                     foreach ($anchors as $anchor) {
                         $anchorclass = $anchor->attributes->getNamedItem('class')->nodeValue;
-                        if ( strpos( $anchorclass, 'fcl-course-link' ) !== false ) {
+                        if ( strpos( $anchorclass, 'block_filtered_course_list_list_item' ) !== false ) {
                             $anchortitle = $anchor->attributes->getNamedItem('title')->nodeValue;
                             if ( $anchortitle == $course ) {
                                 $hits++;

@@ -37,10 +37,12 @@ require_once(dirname(__FILE__) . '/locallib.php');
  */
 abstract class list_item implements \renderable, \templatable {
 
-    /** @var string CSS for the list item link */
-    public $classes;
+    /** @var array of CSS classes for the list item */
+    public $classes = array('block_filtered_course_list_list_item');
     /** @var string Display text for the list item link */
     public $displaytext;
+    /** @var array of CSS classes for the list item link */
+    public $linkclasses = array('block_filtered_course_list_list_item_link');
     /** @var string Text to display when the list item link is hovered */
     public $title;
     /** @var string Link to the Course index page */
@@ -62,8 +64,9 @@ abstract class list_item implements \renderable, \templatable {
      */
     public function export_for_template(\renderer_base $output) {
         $data = array(
-            'classes'     => $this->classes,
+            'classes'     => implode(' ', $this->classes),
             'displaytext' => $this->displaytext,
+            'linkclasses' => implode(' ', $this->linkclasses),
             'title'       => $this->title,
             'url'         => $this->url,
         );
@@ -87,12 +90,11 @@ class course_link_list_item extends list_item implements \templatable, \renderab
      * @param \stdClass $course A moodle course object
      */
     public function __construct($course) {
-        $css[] = 'fcl-course-link';
-        if ($course->visible) {
-            $css[] = 'dimmed';
-        }
-        $this->classes = implode(' ', $css);
+        $this->classes[] = 'fcl-course-link';
         $this->displaytext = format_string($course->fullname);
+        if (!$course->visible) {
+            $this->linkclasses[] = 'dimmed';
+        }
         $this->title = format_string($course->shortname);
         $this->url = new \moodle_url('/course/view.php?id=' . $course->id);
     }
@@ -114,12 +116,11 @@ class category_link_list_item extends list_item implements \templatable, \render
      * @param \coursecat $category A moodle course object
      */
     public function __construct($category) {
-        $css[] = 'fcl-category-link';
-        if ($category->visible) {
-            $css[] = 'dimmed';
-        }
-        $this->classes = implode(' ', $css);
+        $this->classes[] = 'fcl-category-link';
         $this->displaytext = format_string($category->name);
+        if (!$category->visible) {
+            $this->linkclasses[] = 'dimmed';
+        }
         $this->title = '';
         $this->url = new \moodle_url('/course/index.php?categoryid=' . $category->id);
     }
