@@ -35,18 +35,19 @@ Feature: Each instance of the block can have custom settings
           """
         And the following config values are set as admin:
             | managerview | own | block_filtered_course_list |
-        And I log in as "admin"
+        And the following "blocks" exist:
+            | blockname            | contextlevel | reference |
+            | filtered_course_list | Course       | test      |
+        When I log in as "admin"
         And I am on site homepage
         And I follow "Test"
-        And I turn editing mode on
-        When I add the "Filtered course list" block
-        And I wait until ".block_filtered_course_list" "css_element" exists
         Then I should see "Filtered course list"
         And I should see "Test"
         And I should see "Cat 1"
         And I should see "Cat 2"
         And I should not see "Course 12"
-        When I configure the "Filtered course list" block
+        When I turn editing mode on
+        And I configure the "Filtered course list" block
         And I set the following fields to these values:
             | config_title | My custom title |
         And I set the field "config_filters" to multiline:

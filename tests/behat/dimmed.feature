@@ -23,18 +23,18 @@ Feature: Hidden courses and categories are dimmed for those who can see them
             | admin | hidden1  | student |
             | admin | visible2 | student |
             | admin | hidden2  | student |
-        And I log in as "admin"
+        And the following "blocks" exist:
+            | blockname            | contextlevel | reference |
+            | filtered_course_list | Course       | test      |
         And the following config values are set as admin:
             | maxallcourse | 1 | block_filtered_course_list |
         And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
           """
           category | expanded | 0
           """
+        When I log in as "admin"
         And I am on site homepage
         And I follow "Test"
-        When I turn editing mode on
-        And I add the "Filtered course list" block
-        And I turn editing mode off
         Then the "class" attribute of "Visible category" "link" should not contain "dimmed"
         And the "class" attribute of "Visible category" "list_item" should contain "fcl-category-link"
         And the "class" attribute of "Hidden category" "link" should contain "dimmed"
