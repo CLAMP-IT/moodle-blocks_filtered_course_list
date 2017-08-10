@@ -35,7 +35,7 @@ require_once(dirname(__FILE__) . '/locallib.php');
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class list_item implements \renderable, \templatable {
+class list_item implements \renderable, \templatable {
 
     /** @var array of CSS classes for the list item */
     public $classes = array('block_filtered_course_list_list_item');
@@ -45,16 +45,38 @@ abstract class list_item implements \renderable, \templatable {
     public $linkclasses = array('block_filtered_course_list_list_item_link');
     /** @var string Text to display when the list item link is hovered */
     public $title;
-    /** @var string Link to the Course index page */
+    /** @var moodle_url object The destination for the list item link */
     public $url;
 
     /**
      * An abstract constructor
      * Decendant classes should define the class properties.
      *
-     * @param mixed $object A object from which to derive the class properties
+     * @param mixed $itemobject A object from which to derive the class properties
+     * @param string $type The type of link object that we want to build
      */
-    abstract public function __construct($object);
+    public function __construct($itemobject, $type='course') {
+        switch ($type){
+            case 'course':
+                $this->classes[] = 'fcl-course-link';
+                $this->displaytext = format_string($itemobject->fullname);
+                if (!$itemobject->visible) {
+                    $this->linkclasses[] = 'dimmed';
+                }
+                $this->title = format_string($itemobject->shortname);
+                $this->url = new \moodle_url('/course/view.php?id=' . $itemobject->id);
+                break;
+            case 'category':
+                $this->classes[] = 'fcl-category-link';
+                $this->displaytext = format_string($itemobject->name);
+                if (!$itemobject->visible) {
+                    $this->linkclasses[] = 'dimmed';
+                }
+                $this->title = '';
+                $this->url = new \moodle_url('/course/index.php?categoryid=' . $itemobject->id);
+                break;
+        }
+    }
 
     /**
      * Export the object data for use by a template
@@ -71,58 +93,6 @@ abstract class list_item implements \renderable, \templatable {
             'url'         => $this->url,
         );
         return $data;
-    }
-}
-
-/**
- * Helper class for course link list items.
- *
- * @package    block_filtered_course_list
- * @copyright  2016 CLAMP
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class course_link_list_item extends list_item implements \templatable, \renderable {
-
-    /**
-     * Constructor
-     * Defines class properties for course link list items.
-     *
-     * @param \stdClass $course A moodle course object
-     */
-    public function __construct($course) {
-        $this->classes[] = 'fcl-course-link';
-        $this->displaytext = format_string($course->fullname);
-        if (!$course->visible) {
-            $this->linkclasses[] = 'dimmed';
-        }
-        $this->title = format_string($course->shortname);
-        $this->url = new \moodle_url('/course/view.php?id=' . $course->id);
-    }
-}
-
-/**
- * Helper class for category link list items.
- *
- * @package    block_filtered_course_list
- * @copyright  2016 CLAMP
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class category_link_list_item extends list_item implements \templatable, \renderable {
-
-    /**
-     * Constructor
-     * Defines class properties for course link list items.
-     *
-     * @param \coursecat $category A moodle course object
-     */
-    public function __construct($category) {
-        $this->classes[] = 'fcl-category-link';
-        $this->displaytext = format_string($category->name);
-        if (!$category->visible) {
-            $this->linkclasses[] = 'dimmed';
-        }
-        $this->title = '';
-        $this->url = new \moodle_url('/course/index.php?categoryid=' . $category->id);
     }
 }
 
@@ -201,24 +171,14 @@ class renderer extends \plugin_renderer_base {
     }
 
     /**
-     * Render HTML for course link list item
+     * Render HTML for list item
      *
-     * @param course_link_list_item $courselink
+     * @param list_item $listitem
      * @return string The rendered html
      */
-    protected function render_course_link_list_item (course_link_list_item $courselink) {
-        $data = $courselink->export_for_template($this);
+    protected function render_list_item (list_item $listitem) {
+        $data = $listitem->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/list_item', $data);
     }
 
-    /**
-     * Render HTML for category link list item
-     *
-     * @param category_link_list_item $categorylink
-     * @return string The rendered html
-     */
-    protected function render_category_link_list_item (category_link_list_item $categorylink) {
-        $data = $categorylink->export_for_template($this);
-        return $this->render_from_template('block_filtered_course_list/list_item', $data);
-    }
 }
