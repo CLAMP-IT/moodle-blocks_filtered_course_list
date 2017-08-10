@@ -53,13 +53,14 @@ class list_item implements \renderable, \templatable {
      * Decendant classes should define the class properties.
      *
      * @param mixed $itemobject A object from which to derive the class properties
+     * @param object $config The plugin options object
      * @param string $type The type of link object that we want to build
      */
-    public function __construct($itemobject, $type='course') {
+    public function __construct($itemobject, $config, $type='course') {
         switch ($type){
             case 'course':
                 $this->classes[] = 'fcl-course-link';
-                $this->displaytext = format_string($itemobject->fullname);
+                $this->displaytext = \block_filtered_course_list_lib::coursedisplaytext($itemobject, $config->coursenametpl);
                 if (!$itemobject->visible) {
                     $this->linkclasses[] = 'dimmed';
                 }

@@ -347,3 +347,34 @@ class block_filtered_course_list_rubric {
         $this->expanded = $expanded;
     }
 }
+
+/**
+ * Utility functions
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2017 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class block_filtered_course_list_lib {
+    /**
+     * Display a coursename according to the template
+     *
+     * @param object $course An object with all of the course attributes
+     * @param string $tpl The coursename display template
+     */
+    public static function coursedisplaytext($course, $tpl) {
+        if ($tpl == '') {
+            $tpl = 'FULLNAME';
+        }
+        $cat = coursecat::get($course->category, IGNORE_MISSING);
+        $catname = (is_object($cat)) ? $cat->name : '';
+        $replacements = array(
+            'FULLNAME'  => $course->fullname,
+            'SHORTNAME' => $course->shortname,
+            'IDNUMBER'  => $course->idnumber,
+            'CATEGORY'  => $catname,
+        );
+        $displaytext = str_replace(array_keys($replacements), $replacements, $tpl);
+        return strip_tags($displaytext);
+    }
+}

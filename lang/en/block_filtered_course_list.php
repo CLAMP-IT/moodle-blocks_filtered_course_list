@@ -30,6 +30,15 @@ $string['managerview']              = 'Manager view';
 $string['allcourses']               = 'A manager sees all courses';
 $string['blockname']                = 'Filtered course list';
 $string['completedcourses']         = 'Completed courses';
+$string['configcoursenametpl']      = <<<EOF
+<p>Use this setting to determine a pattern for displaying a course name. The following replacements are available:</p>
+<ul>
+<li>FULLNAME — from the course settings</li>
+<li>SHORTNAME — from the course settings</li>
+<li>IDNUMBER — from the course settings</li>
+<li>CATEGORY — the name of the category the course belongs to</li>
+</ul>
+EOF;
 $string['configmanagerview']        = 'What should a manager see in the course list block? Note that managers who are not enrolled in any courses will still see the generic list.';
 $string['configfilters']            = <<<EOF
 Notes:
@@ -53,6 +62,7 @@ $string['configmaxallcourse']       = 'On a site with only one category, manager
 $string['configprimarysort']        = 'Within a rubric courses will be sorted by this field. Choose "Sort order" to display courses in the same order as seen in the course management interface.';
 $string['configsecondarysort']      = 'Within a rubric courses will secondarily be sorted by this field.';
 $string['configtitle']              = 'Block title';
+$string['coursenametpl']            = 'Course name template';
 $string['courses']                  = 'Courses';
 $string['defaultfilters']           = <<<EOF
 category | collapsed | 0 (top level) | 0 (all descendants)

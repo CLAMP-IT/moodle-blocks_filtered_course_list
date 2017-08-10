@@ -287,7 +287,7 @@ class block_filtered_course_list extends block_base {
                 current($categories)->coursecount > $this->fclconfig->maxallcourse)) {
                 $this->content->text .= '<ul class="collapsible list">';
                 foreach ($categories as $category) {
-                    $categorylink = new \block_filtered_course_list\output\list_item($category, 'category');
+                    $categorylink = new \block_filtered_course_list\output\list_item($category, $this->fclconfig, 'category');
                     $this->content->text .= $output->render($categorylink);
                 }
                 $this->content->text .= '</ul>';
@@ -300,7 +300,7 @@ class block_filtered_course_list extends block_base {
                 if ($courses) {
                     $this->content->text .= '<ul class="collapsible list">';
                     foreach ($courses as $course) {
-                        $courselink = new \block_filtered_course_list\output\list_item($course, 'course');
+                        $courselink = new \block_filtered_course_list\output\list_item($course, $this->fclconfig, 'course');
                         $this->content->text .= $output->render($courselink);
                     }
                     $this->content->text .= '</ul>';
@@ -333,7 +333,7 @@ class block_filtered_course_list extends block_base {
         );
         $title = html_writer::tag('div', htmlentities($rubric->title), $atts);
         $courselinks = array_map(function($course) use ($output) {
-            $courselink = new \block_filtered_course_list\output\list_item($course, 'course');
+            $courselink = new \block_filtered_course_list\output\list_item($course, $this->fclconfig, 'course');
             return $output->render($courselink);
         }, $rubric->courses);
         $ulatts = array(

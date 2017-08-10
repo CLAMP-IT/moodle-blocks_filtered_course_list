@@ -77,6 +77,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'hideothercourses'   => 0,
             'maxallcourse'       => 10,
             'managerview'        => 'all',
+            'coursenametpl'      => 'FULLNAME',
             'primarysort'        => 'fullname',
             'primaryvector'      => 'ASC',
             'secondarysort'      => 'none',
@@ -778,6 +779,19 @@ EOF;
     }
 
     /**
+     * Test the course name template setting
+     */
+    public function test_setting_coursenametpl() {
+        $this->_create_rich_site();
+        set_config('coursenametpl', 'FULLNAME (SHORTNAME) : IDNUMBER < <b>CATEGORY</b>', 'block_filtered_course_list');
+
+        // Any tags should be stripped.
+        $this->_courselistincludes ( array (
+            'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category' ),
+        ));
+    }
+
+    /**
      * Ensure that the block honors a possible 'disablemycourses' setting
      */
     public function test_setting_cfg_disablemycourses() {
@@ -941,7 +955,7 @@ EOF;
                 $params = array (
                     'fullname' => "Course $i in $category->name",
                     'shortname' => $shortname,
-                    'idnumber'  => $shortname,
+                    'idnumber'  => strtoupper($shortname),
                     'category'  => $category->id
                 );
                 if ( $i % 3 == 0 ) {
@@ -955,7 +969,7 @@ EOF;
         $params = array (
             'fullname' => 'Non-ascii matching',
             'shortname' => 'øthér',
-            'idnumber'  => 'øthér',
+            'idnumber'  => 'ØTHÉR',
             'category'  => $this->categories['sc']->id
         );
         $this->courses['øthér'] = $this->getDataGenerator()->create_course( $params );

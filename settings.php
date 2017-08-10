@@ -49,6 +49,10 @@ if ($ADMIN->fulltree) {
         get_string('maxallcourse', 'block_filtered_course_list'),
         get_string('configmaxallcourse', 'block_filtered_course_list'), 10, '/^\d{1,3}$/', 3));
 
+    $settings->add(new admin_setting_configtext('block_filtered_course_list/coursenametpl',
+        get_string('coursenametpl', 'block_filtered_course_list'),
+        get_string('configcoursenametpl', 'block_filtered_course_list'), 'FULLNAME'));
+
     $managerviews = array(
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list')
