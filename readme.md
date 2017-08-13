@@ -102,6 +102,8 @@ Please report any bugs or feature requests to the public repository page: <https
 
 ### [v3.2.0]
 * Feature: Display templates for course names
+* Bug: Style fixes for docked blocks in Clean themes
+* Back end: streamlining the item link template
 
 ### [v3.1.0]
 * Supports multiple instances, each with their own configuration

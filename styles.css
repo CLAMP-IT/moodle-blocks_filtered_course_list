@@ -1,4 +1,5 @@
-.block_filtered_course_list.block .list {
+.block_filtered_course_list.block .list,
+.block_filtered_course_list.block_docked .list {
     padding: 10px 0 0;
 }
 
@@ -22,12 +23,14 @@
     background: url([[pix:moodle|i/folder]]) no-repeat right 1px transparent;
 }
 
-.jsenabled .block_filtered_course_list.block .list li {
+.jsenabled .block_filtered_course_list.block .list li,
+.jsenabled .block_filtered_course_list.block_docked .list li {
     background-position: 10px 1px;
     padding: 0 0 10px 31px;
 }
 
-.dir-rtl.jsenabled .block_filtered_course_list.block .list li {
+.dir-rtl.jsenabled .block_filtered_course_list.block .list li,
+.dir-rtl.jsenabled .block_filtered_course_list.block_docked .list li {
     background-position: calc(100% - 10px) 1px;
     padding: 0 31px 10px 0;
 }
