@@ -1100,10 +1100,13 @@ EOF;
                 $hits = 0;
                 foreach ($rubrics as $rubric) {
                     $rubrictitle = $rubric->nodeValue;
-                    if ( $rubrictitle != $rubricmatch || $rubric->getAttribute('class') == 'tablist') {
+                    if ( trim($rubrictitle) != $rubricmatch || $rubric->getAttribute('class') == 'tablist') {
                         continue;
                     }
                     $ul = $rubric->nextSibling;
+                    while (!($ul instanceof DOMElement)) {
+                        $ul = $ul->nextSibling;
+                    }
                     $anchors = $ul->getElementsByTagName('a');
                     foreach ($anchors as $anchor) {
                         $anchorclass = $anchor->attributes->getNamedItem('class')->nodeValue;

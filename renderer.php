@@ -98,6 +98,69 @@ class list_item implements \renderable, \templatable {
 }
 
 /**
+ * Helper class for rendering rubrics.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class rubric implements \renderable, \templatable {
+
+    /** @var array Parameters for the rubric display */
+    public $params = array(
+        'divid'      => '', /* id for heading div */
+        'divclasses' => '', /* classes for heading div */
+        'exp'        => '', /* value for aria-expanded */
+        'slct'       => '', /* value for aria-selected */
+        'label'      => '', /* heading text */
+        'ulid'       => '', /* id for item list */
+        'ulclasses'  => '', /* classes for item list */
+        'hidden'     => '', /* value for aria-hidden */
+        'items'      => array(), /* courses to display */
+        'fclconfig'  => array(), /* config settings for the FCL */
+    );
+    /** @var array item link data */
+    public $items = array();
+
+    /**
+     * Constructor
+     *
+     * @param array $params A list of settings used to determine the rubric display
+     */
+    public function __construct($params = array()) {
+        $this->params = array_merge($this->params, $params);
+        $this->items = array_map(function($listitem) {
+            return new list_item($listitem, $this->params['fclconfig'], 'course');
+        }, $this->params['items']);
+    }
+
+    /**
+     * Export the object data for use by a template
+     *
+     * @param renderer_base $output A renderer_base object
+     * @return array $data Template-ready data
+     */
+    public function export_for_template(\renderer_base $output) {
+        $itemdata = array_map(function($item) use ($output) {
+            $export = $item->export_for_template($output);
+            return $export;
+        }, $this->items);
+        $data = array(
+            'divid'      => $this->params['divid'],
+            'divclasses' => $this->params['divclasses'],
+            'exp'        => $this->params['exp'],
+            'slct'       => $this->params['slct'],
+            'label'      => $this->params['label'],
+            'ulid'       => $this->params['ulid'],
+            'ulclasses'  => $this->params['ulclasses'],
+            'hidden'     => $this->params['hidden'],
+            'items'      => array_values($itemdata),
+        );
+        return $data;
+    }
+}
+
+/**
  * Helper class for the "All courses" link.
  *
  * @package    block_filtered_course_list
@@ -182,4 +245,14 @@ class renderer extends \plugin_renderer_base {
         return $this->render_from_template('block_filtered_course_list/list_item', $data);
     }
 
+    /**
+     * Render HTML for rubric
+     *
+     * @param rubric $rubric
+     * @return string The rendered html
+     */
+    protected function render_rubric (rubric $rubric) {
+        $data = $rubric->export_for_template($this);
+        return $this->render_from_template('block_filtered_course_list/rubric', $data);
+    }
 }

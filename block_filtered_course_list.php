@@ -320,27 +320,20 @@ class block_filtered_course_list extends block_base {
         $initialstate = $rubric->expanded;
         $ariaexpanded = ($initialstate == 'expanded') ? 'true' : 'false';
         $ariahidden = ($initialstate == 'expanded') ? 'false' : 'true';
-        $atts = array(
-            'id'            => "fcl_{$this->instance->id}_tab{$key}",
-            'class'         => "course-section tab{$key} $initialstate",
-            'role'          => 'tab',
-            'aria-controls' => "fcl_{$this->instance->id}_tabpanel{$key}",
-            'aria-expanded' => "$ariaexpanded",
-            'aria-selected' => 'false',
+        $params = array(
+            'divid'      => "fcl_{$this->instance->id}_tab{$key}",
+            'divclasses' => "course-section tab{$key} $initialstate",
+            'ctls'       => "fcl_{$this->instance->id}_tabpanel{$key}",
+            'exp'        => "$ariaexpanded",
+            'slct'       => 'false',
+            'label'      => $rubric->title,
+            'ulid'       => "fcl_{$this->instance->id}_tabpanel{$key}",
+            'ulclasses'  => "collapsible list tabpanel{$key}",
+            'hidden'     => "$ariahidden",
+            'items'      => $rubric->courses,
+            'fclconfig'  => $this->fclconfig,
         );
-        $title = html_writer::tag('div', htmlentities($rubric->title), $atts);
-        $courselinks = array_map(function($course) use ($output) {
-            $courselink = new \block_filtered_course_list\output\list_item($course, $this->fclconfig, 'course');
-            return $output->render($courselink);
-        }, $rubric->courses);
-        $ulatts = array(
-            'id'              => "fcl_{$this->instance->id}_tabpanel{$key}",
-            'class'           => "collapsible list tabpanel{$key}",
-            'role'            => "tabpanel",
-            'aria-labelledby' => "fcl_{$this->instance->id}_tab{$key}",
-            'aria-hidden'     => "$ariahidden",
-        );
-        $ul = html_writer::tag('ul', implode($courselinks), $ulatts);
-        return $title . $ul;
+        $rubricoutput = new \block_filtered_course_list\output\rubric($params);
+        return $output->render($rubricoutput);
     }
 }
