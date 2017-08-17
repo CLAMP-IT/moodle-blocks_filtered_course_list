@@ -43,8 +43,6 @@ class block_filtered_course_list extends block_base {
     private $rubrics = array();
     /** @var arrray A list of courses for the current user */
     private $mycourses = array();
-    /** @var stdClass This block's context */
-    public $context;
     /** @var string A type of user for purposes of list display, should be 'user', 'manager' or 'guest' */
     private $usertype;
     /** @var string Type of list: 'generic_list', 'filtered_list' or 'empty_block' */
@@ -110,7 +108,6 @@ class block_filtered_course_list extends block_base {
         $this->content         = new stdClass;
         $this->content->text   = '';
         $this->content->footer = '';
-        $this->context = context_system::instance();
 
         $sortsettings = array(
             array(
@@ -175,7 +172,7 @@ class block_filtered_course_list extends block_base {
 
         if (empty($USER->id) || isguestuser()) {
             $this->usertype = 'guest';
-        } else if (has_capability('moodle/course:view', $this->context)) {
+        } else if (has_capability('moodle/course:view', context_system::instance())) {
             $this->usertype = 'manager';
         } else {
             $this->usertype = 'user';
