@@ -1,4 +1,4 @@
-# [Filtered course list v3.1.0]
+# [Filtered course list v3.2.0]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -103,6 +103,7 @@ Please report any bugs or feature requests to the public repository page: <https
 ### [v3.2.0]
 * Feature: Display templates for course names
 * Bug: Style fixes for docked blocks in Clean themes
+* Bug: Allow permission overrides
 * Back end: streamlining the item link template
 
 ### [v3.1.0]
