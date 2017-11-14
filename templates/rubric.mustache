@@ -68,8 +68,10 @@
 <div id="{{ divid }}" class="{{ divclasses }}" role="tab" aria-controls="{{ ulid }}" aria-expanded="{{ exp }}" aria-selected="{{ slct }}">
     {{ label }}
 </div>
-<ul id="{{ ulid }}" class="{{ ulclasses }}" role="tabpanel" aria-labelledby="{{ divid }}" aria-hidden="{{ hidden }}">
-    {{# items }}
-        {{> block_filtered_course_list/list_item }}
-    {{/ items }}
-</ul>
+<div id="{{ ulid }}" class="{{ ulclasses }}" role="tabpanel" aria-labelledby="{{ divid }}" aria-hidden="{{ hidden }}">
+    <ul>
+        {{# items }}
+            {{> block_filtered_course_list/list_item }}
+        {{/ items }}
+    </ul>
+</div>

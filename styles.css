@@ -3,6 +3,12 @@
     padding: 10px 0 0;
 }
 
+.block_filtered_course_list.block ul,
+.block_filtered_course_list.block_docked ul {
+    margin: 0;
+    padding: 0;
+}
+
 .block.block_filtered_course_list .block_filtered_course_list_list_item {
     background: url([[pix:moodle|i/course]]) no-repeat 0 1px transparent;
     margin-left: 0;
