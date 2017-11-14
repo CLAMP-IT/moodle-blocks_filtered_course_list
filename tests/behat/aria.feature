@@ -45,7 +45,7 @@ Feature: The block includes ARIA support
     And I follow "Test"
     And I wait until ".block_filtered_course_list" "css_element" exists
     Then I should see "Filtered course list"
-    And the "role" attribute of ".block_filtered_course_list.block" "css_element" should contain "navigation"
+    And the "role" attribute of ".block_filtered_course_list.block" "css_element" should contain "region"
     And the "role" attribute of ".block_filtered_course_list .tablist" "css_element" should contain "tablist"
     And the "aria-multiselectable" attribute of ".block_filtered_course_list .tablist" "css_element" should contain "true"
     And the "id" attribute of ".block_filtered_course_list .course-section.tab1" "css_element" should contain "tab1"

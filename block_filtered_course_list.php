@@ -85,12 +85,12 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
-     * Returns the role that best describes the block... 'navigation'
+     * Returns the role that best describes the block... 'region'
      *
-     * @return string 'navigation'
+     * @return string 'region'
      */
     public function get_aria_role() {
-        return 'navigation';
+        return 'region';
     }
 
     /**
