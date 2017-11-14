@@ -1,8 +1,8 @@
-# [Filtered course list v3.2.0]
+# [Filtered course list v3.2.1]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
-for Moodle 3.1 or higher
+for Moodle 3.2 or higher
 
 The _Filtered course list_ block displays a configurable list of a user's courses. It is intended as a replacement for the _My courses_ block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
 
@@ -99,6 +99,14 @@ To change the name of a block instance, turn editing on on a screen that display
 Please report any bugs or feature requests to the public repository page: <https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list>.
 
 ## Changelog
+
+### [v3.2.1]
+* Requirement bump: 3.2 and higher
+* Front end: Minor style and HTML tweaks
+* Back end: New mustache template to manage rubrics
+* Automated Testing:
+  * Now using moodlerooms-plugin-ci v2
+  * Covers 3.2 to 3.4
 
 ### [v3.2.0]
 * Feature: Display templates for course names
