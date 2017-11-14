@@ -9,7 +9,8 @@
     padding: 0;
 }
 
-.block.block_filtered_course_list .block_filtered_course_list_list_item {
+.block.block_filtered_course_list .block_filtered_course_list_list_item,
+.block_docked.block_filtered_course_list .block_filtered_course_list_list_item {
     background: url([[pix:moodle|i/course]]) no-repeat 0 1px transparent;
     margin-left: 0;
     padding: 0 0 10px 20px;
@@ -19,7 +20,8 @@
     background: url([[pix:moodle|i/folder]]) no-repeat 0 1px transparent;
 }
 
-.dir-rtl .block.block_filtered_course_list .block_filtered_course_list_list_item {
+.dir-rtl .block.block_filtered_course_list .block_filtered_course_list_list_item,
+.dir-rtl .block_docked.block_filtered_course_list .block_filtered_course_list_list_item {
     background: url([[pix:moodle|i/course]]) no-repeat right 1px transparent;
     margin-right: 0;
     padding: 0 20px 10px 0;
