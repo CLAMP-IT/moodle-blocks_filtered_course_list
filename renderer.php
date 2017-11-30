@@ -66,6 +66,7 @@ class list_item implements \renderable, \templatable {
                 }
                 $this->title = format_string($itemobject->shortname);
                 $this->url = new \moodle_url('/course/view.php?id=' . $itemobject->id);
+                $this->summaryurl = new \moodle_url('/course/info.php?id=' . $itemobject->id);
                 break;
             case 'category':
                 $this->classes[] = 'fcl-category-link';
@@ -75,6 +76,7 @@ class list_item implements \renderable, \templatable {
                 }
                 $this->title = '';
                 $this->url = new \moodle_url('/course/index.php?categoryid=' . $itemobject->id);
+                $this->summaryurl = '';
                 break;
         }
     }
@@ -92,6 +94,7 @@ class list_item implements \renderable, \templatable {
             'linkclasses' => implode(' ', $this->linkclasses),
             'title'       => $this->title,
             'url'         => $this->url,
+            'summaryurl'  => $this->summaryurl,
         );
         return $data;
     }
