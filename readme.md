@@ -100,6 +100,9 @@ Please report any bugs or feature requests to the public repository page: <https
 
 ## Changelog
 
+### [v3.2.2]
+* Makes course summary URLs available to the list_item template
+
 ### [v3.2.1]
 * Requirement bump: 3.2 and higher
 * Front end: Minor style and HTML tweaks
