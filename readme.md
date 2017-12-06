@@ -1,4 +1,4 @@
-# [Filtered course list v3.2.1]
+# [Filtered course list v3.2.2]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
