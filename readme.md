@@ -1,4 +1,4 @@
-# [Filtered course list v3.2.2]
+# [Filtered course list v3.3.0]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -87,6 +87,8 @@ The final field in a completion filter indicates whether to show courses that th
 | Hide other courses | By default an "Other courses" rubric appears at the end of the list and displays any of the user's courses that have not already been mentioned under some other heading. Check the box here to suppress that rubric. |
 | Max for single category | On a site with only one category, admins and guests will see all courses, but above the number specified here they will see a category link instead. [Choose an integer between 0 and 999.] Unless you have a single-category installation there is no need to adjust this setting. |
 | Course name template | Use replacement tokens (FULLNAME, SHORTNAME, IDNUMBER or CATEGORY) to control the way links to courses are displayed. |
+| Category rubric template | Use replacement tokens (NAME, IDNUMBER, PARENT or ANCESTRY) to control the way rubrics display when using a category filter. |
+| Category separator | Customize the separator between ancestor categories when using the ANCESTRY token above. |
 | Manager view | By default administrators and managers will see a list of categories rather than a list of their own courses. This setting allows you to change that, and it can be helpful to do so while configuring the block. Be advised, however, that admins and managers who are not enrolled in any courses will still see the generic list. |
 | Sorting | The next four settings control the way coures are sorted within a rubric. |
 
@@ -99,6 +101,9 @@ To change the name of a block instance, turn editing on on a screen that display
 Please report any bugs or feature requests to the public repository page: <https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list>.
 
 ## Changelog
+
+### [v3.3.0]
+* Feature: Display templates for category rubrics
 
 ### [v3.2.2]
 * Makes course summary URLs available to the list_item template

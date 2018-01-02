@@ -210,13 +210,32 @@ class block_filtered_course_list_category_configline extends block_filtered_cour
 
         $categories = $this->_get_cat_and_descendants($this->line['catid'], $this->line['depth']);
         foreach ($categories as $category) {
+            $rubricname = $category->name;
+            if (isset($this->config->catrubrictpl) && $this->config->catrubrictpl != '') {
+                $parent = coursecat::get($category->parent)->get_formatted_name();
+                $separator = ' / ';
+                if (isset($this->config->catseparator) && $this->config->catseparator != '') {
+                    $separator = strip_tags($this->config->catseparator);
+                }
+                // Starting with 3.4 we can replace next two lines with $ancestry = $category->get_nested_name(false, $separator);.
+                $ancestors = coursecat::make_categories_list('', 0, $separator);
+                $ancestry = $ancestors[$category->id];
+                $replacements = array(
+                    'NAME'     => $category->name,
+                    'IDNUMBER' => $category->idnumber,
+                    'PARENT'   => $parent,
+                    'ANCESTRY' => $ancestry,
+                );
+                $rubricname = str_replace(array_keys($replacements), $replacements, $this->config->catrubrictpl);
+                $rubricname = strip_tags($rubricname);
+            }
             $courselist = array_filter($this->courselist, function($course) use($category) {
                 return ($course->category == $category->id);
             });
             if (empty($courselist)) {
                 continue;
             }
-            $this->rubrics[] = new block_filtered_course_list_rubric($category->name, $courselist, $this->line['expanded']);
+            $this->rubrics[] = new block_filtered_course_list_rubric($rubricname, $courselist, $this->line['expanded']);
         }
 
         return $this->rubrics;

@@ -76,8 +76,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'hidefromguests'     => 0,
             'hideothercourses'   => 0,
             'maxallcourse'       => 10,
-            'managerview'        => 'all',
             'coursenametpl'      => 'FULLNAME',
+            'catrubrictpl'       => 'NAME',
+            'catseparator'       => ' / ',
+            'managerview'        => 'all',
             'primarysort'        => 'fullname',
             'primaryvector'      => 'ASC',
             'secondarysort'      => 'none',
@@ -779,15 +781,20 @@ EOF;
     }
 
     /**
-     * Test the course name template setting
+     * Test some display template settings
      */
-    public function test_setting_coursenametpl() {
+    public function test_setting_tpls() {
         $this->_create_rich_site();
         set_config('coursenametpl', 'FULLNAME (SHORTNAME) : IDNUMBER < <b>CATEGORY</b>', 'block_filtered_course_list');
+        set_config('catrubrictpl', 'NAME - IDNUMBER - <b>PARENT</b> - ANCESTRY', 'block_filtered_course_list');
+        set_config('catseparator', ' :: ', 'block_filtered_course_list');
 
         // Any tags should be stripped.
+        $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Miscellaneous :: Child category 2 :: Grandchild category 1';
         $this->_courselistincludes ( array (
             'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category' ),
+            'user1' => array( $longrubric ),
+            'user1' => array( 'Miscellaneous -  - Top - Miscellaneous' ),
         ));
     }
 

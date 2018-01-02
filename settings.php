@@ -53,6 +53,14 @@ if ($ADMIN->fulltree) {
         get_string('coursenametpl', 'block_filtered_course_list'),
         get_string('configcoursenametpl', 'block_filtered_course_list'), 'FULLNAME'));
 
+    $settings->add(new admin_setting_configtext('block_filtered_course_list/catrubrictpl',
+        get_string('catrubrictpl', 'block_filtered_course_list'),
+        get_string('configcatrubrictpl', 'block_filtered_course_list'), 'NAME'));
+
+    $settings->add(new admin_setting_configtext('block_filtered_course_list/catseparator',
+        get_string('catseparator', 'block_filtered_course_list'),
+        get_string('configcatseparator', 'block_filtered_course_list'), ' / '));
+
     $managerviews = array(
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list')

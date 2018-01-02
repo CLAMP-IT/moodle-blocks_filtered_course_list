@@ -29,7 +29,22 @@ $string['filtered_course_list:myaddinstance'] = 'Add a new Filtered course list 
 $string['managerview']              = 'Manager view';
 $string['allcourses']               = 'A manager sees all courses';
 $string['blockname']                = 'Filtered course list';
+$string['catrubrictpl']             = 'Category rubric template';
+$string['catseparator']             = 'Category separator';
 $string['completedcourses']         = 'Completed courses';
+$string['configcatrubrictpl']       = <<<EOF
+<p>Use this setting to determine a pattern for displaying rubrics when filtering by category.
+The following replacements are available:</p>
+<ul>
+<li>NAME — the human-readable category name</li>
+<li>IDNUMBER — The category's ID number</li>
+<li>PARENT — The category's immediate parent</li>
+<li>ANCESTRY — The category's complete ancestry</li>
+</ul>
+EOF;
+$string['configcatseparator']       = <<<EOF
+<p>Separator string to use between category names when using category ANCESTRY in the category rubric template.</p>
+EOF;
 $string['configcoursenametpl']      = <<<EOF
 <p>Use this setting to determine a pattern for displaying a course name. The following replacements are available:</p>
 <ul>
