@@ -47,16 +47,19 @@ class list_item implements \renderable, \templatable {
     public $title;
     /** @var moodle_url object The destination for the list item link */
     public $url;
+    /** @var mixed Empty string or link to course summary URL */
+    public $summaryurl;
 
     /**
-     * An abstract constructor
-     * Decendant classes should define the class properties.
+     * Class constructor
      *
      * @param mixed $itemobject A object from which to derive the class properties
      * @param object $config The plugin options object
-     * @param string $type The type of link object that we want to build
      */
-    public function __construct($itemobject, $config, $type='course') {
+    public function __construct($itemobject, $config) {
+
+        $type = (get_class($itemobject) == 'coursecat') ? 'category' : 'course';
+
         switch ($type){
             case 'course':
                 $this->classes[] = 'fcl-course-link';
@@ -133,7 +136,7 @@ class rubric implements \renderable, \templatable {
     public function __construct($params = array()) {
         $this->params = array_merge($this->params, $params);
         $this->items = array_map(function($listitem) {
-            return new list_item($listitem, $this->params['fclconfig'], 'course');
+            return new list_item($listitem, $this->params['fclconfig']);
         }, $this->params['items']);
     }
 

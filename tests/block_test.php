@@ -159,6 +159,13 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         $this->_courselistexcludes ( array (
             'user1' => array ( 'Course 2' , 'Course 6' )
         ));
+
+        // We should also check the generic filter while we have this configuration.
+        set_config('filters', 'generic|e', 'block_filtered_course_list');
+        // User1 should now see all courses.
+        $this->_courselistincludes ( array (
+            'user1' => array ( 'Course 1' , 'Course 2', 'Course 3' , 'Course 5', 'Course 6' ),
+        ));
     }
 
     /**
@@ -212,9 +219,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
         $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course', 'Child', 'Grandchild' ),
-            'guest' => array ( 'Course', 'Child', 'Grandchild' ),
-            'admin' => array ( 'Course', 'Child', 'Grandchild' )
+            'none'  => array ( 'Course 1', 'Child', 'Grandchild' ),
+            'guest' => array ( 'Course 1', 'Child', 'Grandchild' ),
+            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
         // The block should offer top-level category links to anonymous, guest, and admin.
@@ -272,9 +279,9 @@ EOF;
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
         $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course', 'Child', 'Grandchild' ),
-            'guest' => array ( 'Course', 'Child', 'Grandchild' ),
-            'admin' => array ( 'Course', 'Child', 'Grandchild' )
+            'none'  => array ( 'Course 1', 'Child', 'Grandchild' ),
+            'guest' => array ( 'Course 1', 'Child', 'Grandchild' ),
+            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
         // The block should offer top-level category links to anonymous, guest, and admin.
@@ -420,9 +427,9 @@ EOF;
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
         $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course', 'Child', 'Grandchild' ),
-            'guest' => array ( 'Course', 'Child', 'Grandchild' ),
-            'admin' => array ( 'Course', 'Child', 'Grandchild' )
+            'none'  => array ( 'Course 1', 'Child', 'Grandchild' ),
+            'guest' => array ( 'Course 1', 'Child', 'Grandchild' ),
+            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
         // The block should offer top-level category links to anonymous, guest, and admin.
@@ -491,6 +498,36 @@ EOF;
                 'sc_1'  => 'All but default',
                 'øthér' => 'All but default',
             ),
+        ));
+    }
+
+    /**
+     * Test generic filters
+     */
+    public function test_generic_filters() {
+
+        $this->_create_rich_site();
+
+        // Set up the generic filter.
+        set_config('filters', 'generic | exp | Courses | Course categories', 'block_filtered_course_list');
+
+        // Change the managerview setting to 'own'.
+        set_config('managerview', 'own', 'block_filtered_course_list');
+
+        // Hide the catch-all 'Other courses' rubric.
+        set_config('hideothercourses', 1, 'block_filtered_course_list');
+
+        // The block should offer top-level category links to all users except logged-in user enrolled in no courses.
+        $this->_courselistincludes ( array (
+            'admin' => array ( 'Course categories' ),
+            'user1' => array ( 'Course categories' ),
+            'user2' => array ( 'Course categories' ),
+            'none'  => array ( 'Course categories' ),
+            'guest' => array ( 'Course categories' ),
+        ));
+
+        $this->_courselistexcludes ( array (
+            'user3' => array ( 'Course categories' ),
         ));
     }
 
@@ -746,7 +783,7 @@ EOF;
 
         // The block should not display links to categories below the top level.
         $this->_courselistexcludes ( array (
-            'admin' => array ( 'Course', 'Child', 'Grandchild' )
+            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
         // The block should offer top-level category links to anonymous, guest, and admin.
@@ -759,7 +796,7 @@ EOF;
 
         // An admin enrolled in no courses should still see only the top level.
         $this->_courselistexcludes ( array (
-            'admin' => array ( 'Course', 'Child', 'Grandchild' )
+            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
         $this->_courselistincludes ( array (
@@ -816,7 +853,7 @@ EOF;
 
         // Enrolled users, like guests, should not see subcategories or specific courses.
         $this->_courselistexcludes ( array (
-            'user1' => array ( 'Course', 'Child', 'Grandchild' )
+            'user1' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
         // On the other hand, managerview = own trumps disablemycourses.

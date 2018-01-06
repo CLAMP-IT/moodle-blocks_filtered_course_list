@@ -29,6 +29,7 @@ shortname  | exp       | Current courses | S17
 regex      | collapsed | Upcoming        | (Su|F)17$
 completion | exp       | Incomplete      | incomplete
 completion | col       | Completed       | complete
+generic    | exp       | Categories      | Courses
 #category  | col       | 1 (Misc)        | 0 (show all children)
 The line above will be ignored, as will this comment.
 ```
@@ -78,6 +79,9 @@ Each completion filter corresponds to one rubric in the final block display. The
 #### completion state
 The final field in a completion filter indicates whether to show courses that the user has completed (`complete`) or not yet completed (`incomplete`). Empty setings and settings that with the character "c" will be interpreted as "complete".
 
+### Generic filters
+In most cases a generic filter will simply display a list of top-level categories. On sites with only one category and a small number of courses, a generic filter will display a list of all the courses on the site. Because it is independent of the user's enrollments, we automatically use a generic filter for anonymous users, guests, and — depending on other settings — for administrators and managers. 
+
 ### Other settings
 
 | Setting | Description |
@@ -103,7 +107,8 @@ Please report any bugs or feature requests to the public repository page: <https
 ## Changelog
 
 ### [v3.3.0]
-* Feature: Display templates for category rubrics
+* New filter: Generic filters
+* New setting: Display templates for category rubrics
 
 ### [v3.2.2]
 * Makes course summary URLs available to the list_item template
