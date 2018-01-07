@@ -110,34 +110,26 @@ class list_item implements \renderable, \templatable {
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class rubric implements \renderable, \templatable {
+class renderable_rubric implements \renderable, \templatable {
 
-    /** @var array Parameters for the rubric display */
-    public $params = array(
-        'divid'      => '', /* id for heading div */
-        'divclasses' => '', /* classes for heading div */
-        'exp'        => '', /* value for aria-expanded */
-        'slct'       => '', /* value for aria-selected */
-        'label'      => '', /* heading text */
-        'ulid'       => '', /* id for item list */
-        'ulclasses'  => '', /* classes for item list */
-        'hidden'     => '', /* value for aria-hidden */
-        'items'      => array(), /* courses to display */
-        'fclconfig'  => array(), /* config settings for the FCL */
-    );
-    /** @var array item link data */
-    public $items = array();
+    /** @var object Rubric */
+    public $rubric;
+    /** @var string Block instance id */
+    public $instid;
+    /** @var string Rubric key */
+    public $key;
 
     /**
      * Constructor
      *
-     * @param array $params A list of settings used to determine the rubric display
+     * @param array $rubric An original rubric object
+     * @param string $instid The instance id of the calling block
+     * @param string $key The array index of the rubric
      */
-    public function __construct($params = array()) {
-        $this->params = array_merge($this->params, $params);
-        $this->items = array_map(function($listitem) {
-            return new list_item($listitem, $this->params['fclconfig']);
-        }, $this->params['items']);
+    public function __construct($rubric, $instid, $key) {
+        $this->rubric = $rubric;
+        $this->instid = $instid;
+        $this->key = $key;
     }
 
     /**
@@ -148,19 +140,64 @@ class rubric implements \renderable, \templatable {
      */
     public function export_for_template(\renderer_base $output) {
         $itemdata = array_map(function($item) use ($output) {
-            $export = $item->export_for_template($output);
+            $renderable = new list_item($item, $this->rubric->config);
+            $export = $renderable->export_for_template($output);
             return $export;
-        }, $this->items);
+        }, $this->rubric->courses);
+        $exp = ($this->rubric->expanded == 'expanded') ? 'true' : 'false';
+        $hidden = ($this->rubric->expanded != 'expanded') ? 'true' : 'false';
         $data = array(
-            'divid'      => $this->params['divid'],
-            'divclasses' => $this->params['divclasses'],
-            'exp'        => $this->params['exp'],
-            'slct'       => $this->params['slct'],
-            'label'      => $this->params['label'],
-            'ulid'       => $this->params['ulid'],
-            'ulclasses'  => $this->params['ulclasses'],
-            'hidden'     => $this->params['hidden'],
-            'items'      => array_values($itemdata),
+            'state'  => $this->rubric->expanded,
+            'exp'    => $exp,
+            'label'  => $this->rubric->title,
+            'hidden' => $hidden,
+            'instid' => $this->instid,
+            'key'    => $this->key + 1,
+            'items'  => array_values($itemdata),
+        );
+        return $data;
+    }
+}
+
+/**
+ * Helper class for the main block content
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class content implements \renderable, \templatable {
+
+    /** @var array Rubrics to display */
+    public $rubrics = array();
+    /** @var string Block instance id */
+    public $instid;
+
+    /**
+     * Constructor
+     *
+     * @param array $rubrics The list of rubrics to display
+     * @param string $instid The instance id of the calling block
+     */
+    public function __construct($rubrics = array(), $instid) {
+        $this->rubrics = $rubrics;
+        $this->instid = $instid;
+    }
+
+    /**
+     * Export the object data for use by a template
+     *
+     * @param renderer_base $output A renderer_base object
+     * @return array $data Template-ready data
+     */
+    public function export_for_template(\renderer_base $output) {
+        $rubricdata = array_map(function($rubric, $key) use ($output) {
+            $rubrichelper = new renderable_rubric($rubric, $this->instid, $key);
+            $export = $rubrichelper->export_for_template($output);
+            return $export;
+        }, $this->rubrics, array_keys($this->rubrics));
+        $data = array(
+            'rubrics' => $rubricdata,
         );
         return $data;
     }
@@ -260,5 +297,16 @@ class renderer extends \plugin_renderer_base {
     protected function render_rubric (rubric $rubric) {
         $data = $rubric->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/rubric', $data);
+    }
+
+    /**
+     * Render HTML for content
+     *
+     * @param content $content
+     * @return string The rendered html
+     */
+    protected function render_content (content $content) {
+        $data = $content->export_for_template($this);
+        return $this->render_from_template('block_filtered_course_list/content', $data);
     }
 }

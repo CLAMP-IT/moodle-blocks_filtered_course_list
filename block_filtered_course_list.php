@@ -215,6 +215,8 @@ class block_filtered_course_list extends block_base {
      * Build a user-specific Filtered course list block
      */
     private function _process_filtered_list() {
+        global $PAGE;
+        $output = $PAGE->get_renderer('block_filtered_course_list');
 
         // Parse the textarea settings into an array of arrays.
         $filterconfigs = array_map(function($line) {
@@ -252,46 +254,14 @@ class block_filtered_course_list extends block_base {
 
             if (!empty($othercourses)) {
                 $otherrubric = new block_filtered_course_list_rubric(get_string('othercourses',
-                    'block_filtered_course_list'), $othercourses);
+                    'block_filtered_course_list'), $othercourses, $this->fclconfig);
                 $this->rubrics[] = $otherrubric;
             }
         }
 
-        $htmls = array_map(function($key, $rubric) {
-            return $this->_get_rubric_html($rubric, $key);
-        }, array_keys($this->rubrics), $this->rubrics);
-
-        $this->content->text = implode($htmls);
-    }
-
-    /**
-     * Build the HTML to print out a single rubric and its contents.
-     *
-     * @param object $rubric The rubric object to be rendered
-     * @param int $arraykey The numeric key of the rubric object
-     * @return string HTML to display a rubric
-     */
-    private function _get_rubric_html($rubric, $arraykey) {
-        global $PAGE;
-        $output = $PAGE->get_renderer('block_filtered_course_list');
-        $key = $arraykey + 1;
-        $initialstate = $rubric->expanded;
-        $ariaexpanded = ($initialstate == 'expanded') ? 'true' : 'false';
-        $ariahidden = ($initialstate == 'expanded') ? 'false' : 'true';
-        $params = array(
-            'divid'      => "fcl_{$this->instance->id}_tab{$key}",
-            'divclasses' => "course-section tab{$key} $initialstate",
-            'ctls'       => "fcl_{$this->instance->id}_tabpanel{$key}",
-            'exp'        => "$ariaexpanded",
-            'slct'       => 'false',
-            'label'      => $rubric->title,
-            'ulid'       => "fcl_{$this->instance->id}_tabpanel{$key}",
-            'ulclasses'  => "collapsible list tabpanel{$key}",
-            'hidden'     => "$ariahidden",
-            'items'      => $rubric->courses,
-            'fclconfig'  => $this->fclconfig,
-        );
-        $rubricoutput = new \block_filtered_course_list\output\rubric($params);
-        return $output->render($rubricoutput);
+        if (count($this->rubrics) > 0) {
+            $content = new \block_filtered_course_list\output\content($this->rubrics, $this->instance->id);
+            $this->content->text = $output->render($content);
+        }
     }
 }

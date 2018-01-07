@@ -1043,7 +1043,8 @@ EOF;
             if ( $result === true ) {
                 if ( isset ( $bi->get_content()->text ) ) {
                     // In some cases the text exists but is empty.
-                    $this->assertEmpty ( $bi->get_content()->text , "$user should not see a block." );
+                    $this->assertEmpty ( $bi->get_content()->text ,
+                                    "$user should not see a block, but ... " . $bi->get_content()->text);
                 } else {
                     // In other cases the text will not have been set at all.
                     $this->assertFalse ( isset ( $bi->get_content()->text ) );

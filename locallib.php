@@ -136,7 +136,8 @@ class block_filtered_course_list_shortname_configline extends block_filtered_cou
         if (empty($courselist)) {
             return null;
         }
-        $this->rubrics[] = new block_filtered_course_list_rubric($this->line['label'], $courselist, $this->line['expanded']);
+        $this->rubrics[] = new block_filtered_course_list_rubric($this->line['label'],
+                                        $courselist, $this->config, $this->line['expanded']);
         return $this->rubrics;
     }
 }
@@ -163,7 +164,8 @@ class block_filtered_course_list_regex_configline extends block_filtered_course_
         if (empty($courselist)) {
             return null;
         }
-        $this->rubrics[] = new block_filtered_course_list_rubric($this->line['label'], $courselist, $this->line['expanded']);
+        $this->rubrics[] = new block_filtered_course_list_rubric($this->line['label'],
+                                        $courselist, $this->config, $this->line['expanded']);
         return $this->rubrics;
     }
 }
@@ -235,7 +237,8 @@ class block_filtered_course_list_category_configline extends block_filtered_cour
             if (empty($courselist)) {
                 continue;
             }
-            $this->rubrics[] = new block_filtered_course_list_rubric($rubricname, $courselist, $this->line['expanded']);
+            $this->rubrics[] = new block_filtered_course_list_rubric($rubricname, $courselist,
+                                                                $this->config, $this->line['expanded']);
         }
 
         return $this->rubrics;
@@ -333,7 +336,8 @@ class block_filtered_course_list_completion_configline extends block_filtered_co
             return null;
         }
 
-        $this->rubrics[] = new block_filtered_course_list_rubric($this->line['label'], $courselist, $this->line['expanded']);
+        $this->rubrics[] = new block_filtered_course_list_rubric($this->line['label'], $courselist,
+                                                                    $this->config, $this->line['expanded']);
         return $this->rubrics;
     }
 }
@@ -387,7 +391,7 @@ class block_filtered_course_list_generic_configline extends block_filtered_cours
                     current($categories)->coursecount > $this->config->maxallcourse)) {
                 $label = $this->line['catlistheading'];
                 $list = $categories;
-                $this->rubrics[] = new block_filtered_course_list_rubric($label, $list, $this->line['expanded']);
+                $this->rubrics[] = new block_filtered_course_list_rubric($label, $list, $this->config, $this->line['expanded']);
             } else {
                 // Just print course names of single category.
                 $category = array_shift($categories);
@@ -395,7 +399,7 @@ class block_filtered_course_list_generic_configline extends block_filtered_cours
                 if ($courses) {
                     $label = $this->line['courselistheading'];
                     $list = $courses;
-                    $this->rubrics[] = new block_filtered_course_list_rubric($label, $list, $this->line['expanded']);
+                    $this->rubrics[] = new block_filtered_course_list_rubric($label, $list, $this->config, $this->line['expanded']);
                 }
             }
         }
@@ -418,17 +422,21 @@ class block_filtered_course_list_rubric {
     public $courses = array();
     /** @var string Indicates whether the rubric is expanded or collapsed by default */
     public $expanded;
+    /** @var array Config settings */
+    public $config;
 
     /**
      * Constructor
      *
      * @param string $title The display title of the rubric
      * @param array $courses Courses the user is enrolled in that match the Filtered
+     * @param array $config Block configuration
      * @param string $expanded Indicates the rubrics initial state: expanded or collapsed
      */
-    public function __construct($title, $courses, $expanded = false) {
+    public function __construct($title, $courses, $config, $expanded = false) {
         $this->title = $title;
         $this->courses = $courses;
+        $this->config = $config;
         $this->expanded = $expanded;
     }
 }
