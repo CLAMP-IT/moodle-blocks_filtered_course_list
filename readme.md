@@ -109,6 +109,7 @@ Please report any bugs or feature requests to the public repository page: <https
 ### [v3.3.0]
 * New filter: Generic filters
 * New setting: Display templates for category rubrics
+* Back end: HTML now powered entirely by mustache templates
 
 ### [v3.2.2]
 * Makes course summary URLs available to the list_item template
