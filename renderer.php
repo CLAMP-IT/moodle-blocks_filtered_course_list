@@ -38,11 +38,11 @@ require_once(dirname(__FILE__) . '/locallib.php');
 class list_item implements \renderable, \templatable {
 
     /** @var array of CSS classes for the list item */
-    public $classes = array('block_filtered_course_list_list_item');
+    public $classes = array('block-fcl__list__item');
     /** @var string Display text for the list item link */
     public $displaytext;
     /** @var array of CSS classes for the list item link */
-    public $linkclasses = array('block_filtered_course_list_list_item_link');
+    public $linkclasses = array('block-fcl__list__link');
     /** @var string Text to display when the list item link is hovered */
     public $title;
     /** @var moodle_url object The destination for the list item link */
@@ -62,7 +62,7 @@ class list_item implements \renderable, \templatable {
 
         switch ($type){
             case 'course':
-                $this->classes[] = 'fcl-course-link';
+                $this->classes[] = 'block-fcl__list__item--course';
                 $this->displaytext = \block_filtered_course_list_lib::coursedisplaytext($itemobject, $config->coursenametpl);
                 if (!$itemobject->visible) {
                     $this->linkclasses[] = 'dimmed';
@@ -72,7 +72,7 @@ class list_item implements \renderable, \templatable {
                 $this->summaryurl = new \moodle_url('/course/info.php?id=' . $itemobject->id);
                 break;
             case 'category':
-                $this->classes[] = 'fcl-category-link';
+                $this->classes[] = 'block-fcl__list__item--category';
                 $this->displaytext = format_string($itemobject->name);
                 if (!$itemobject->visible) {
                     $this->linkclasses[] = 'dimmed';

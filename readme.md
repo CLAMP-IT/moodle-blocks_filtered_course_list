@@ -104,12 +104,17 @@ To change the name of a block instance, turn editing on on a screen that display
 
 Please report any bugs or feature requests to the public repository page: <https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list>.
 
+## Developers
+
+Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
+
 ## Changelog
 
 ### [v3.3.0]
-* New filter: Generic filters
-* New setting: Display templates for category rubrics
-* Back end: HTML now powered entirely by mustache templates
+* New filter: adds a generic filters
+* New setting: accepts display templates for category rubrics
+* Back end: generates HTML solely via mustache templates
+* Back end: uses LESS to manage CSS
 
 ### [v3.2.2]
 * Makes course summary URLs available to the list_item template

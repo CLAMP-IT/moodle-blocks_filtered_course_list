@@ -37,7 +37,7 @@
 
     Example context (json):
     {
-        "state": "course-section expanded",
+        "state": "expanded",
         "exp": "true",
         "label": "Current courses",
         "hidden": "false",
@@ -45,26 +45,26 @@
         "key": "1",
         "items": [
             {
-                "classes": "block_filtered_course_list_list_item fcl-course-link",
+                "classes": "block-fcl__list__item block-fcl__list__item--course",
                 "displaytext": "Link to a course, category, etc.",
-                "linkclasses": "block_filtered_course_list_list_item_link",
+                "linkclasses": "block-fcl__list__link",
                 "title": "Text to display on hover",
                 "url": "/course/index.php"
             },
             {
-                "classes": "block_filtered_course_list_list_item fcl-course-link",
+                "classes": "block-fcl__list__item block-fcl__list__item--course",
                 "displaytext": "Another link to a course, category, etc.",
-                "linkclasses": "block_filtered_course_list_list_item_link",
+                "linkclasses": "block-fcl__list__link",
                 "title": "Text to display on hover",
                 "url": "/course/index.php"
             }
         ]
     }
 }}
-<div id="fcl_{{ instid }}_tab{{ key }}" class="course-section {{ state }} tab{{ key }}" role="tab" aria-controls="fcl_{{ instid }}_tabpanel{{ key }}" aria-expanded="{{ exp }}" aria-selected="false">
+<div id="fcl_{{ instid }}_tab{{ key }}" class="block-fcl__rubric block-fcl__rubric--{{ state }} tab{{ key }}" role="tab" aria-controls="fcl_{{ instid }}_tabpanel{{ key }}" aria-expanded="{{ exp }}" aria-selected="false">
     {{ label }}
 </div>
-<div id="fcl_{{ instid }}_tabpanel{{ key }}" class="collapsible list tabpanel{{ key }}" role="tabpanel" aria-labelledby="fcl_{{ instid }}_tab{{ key }}" aria-hidden="{{ hidden }}">
+<div id="fcl_{{ instid }}_tabpanel{{ key }}" class="block-fcl__list collapsible tabpanel{{ key }}" role="tabpanel" aria-labelledby="fcl_{{ instid }}_tab{{ key }}" aria-hidden="{{ hidden }}">
     <ul>
         {{# items }}
             {{> block_filtered_course_list/list_item }}

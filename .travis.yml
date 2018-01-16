@@ -54,7 +54,8 @@ script:
   - moodle-plugin-ci codechecker
   - moodle-plugin-ci validate
   - moodle-plugin-ci savepoints
+    # We have to let the mustache test pass because it falsely complains about an <li> template independent of a <ul>.
   - moodle-plugin-ci mustache || true
-  - moodle-plugin-ci grunt
+  - moodle-plugin-ci grunt -t less -t eslint:amd -t uglify:amd
   - moodle-plugin-ci phpunit
   - moodle-plugin-ci behat
