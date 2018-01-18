@@ -197,6 +197,7 @@ class content implements \renderable, \templatable {
             return $export;
         }, $this->rubrics, array_keys($this->rubrics));
         $data = array(
+            'instid'  => $this->instid,
             'rubrics' => $rubricdata,
         );
         return $data;

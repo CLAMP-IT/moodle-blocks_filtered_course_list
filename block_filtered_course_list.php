@@ -132,12 +132,6 @@ class block_filtered_course_list extends block_base {
 
         $this->mycourses = enrol_get_my_courses(null, "$sortstring");
 
-        /* Call accordion AMD module */
-        $params = array(
-            'blockid' => 'inst' . $this->instance->id,
-        );
-        $PAGE->requires->js_call_amd('block_filtered_course_list/accordion', 'init', array($params));
-
         $this->_calculate_usertype();
         $this->liststyle = $this->_set_liststyle();
 
