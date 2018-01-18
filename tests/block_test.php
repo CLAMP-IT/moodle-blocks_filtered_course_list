@@ -828,10 +828,16 @@ EOF;
 
         // Any tags should be stripped.
         $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Miscellaneous :: Child category 2 :: Grandchild category 1';
+        $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;idnumber < Sibling category';
         $this->_courselistincludes ( array (
-            'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category' ),
-            'user1' => array( $longrubric ),
-            'user1' => array( 'Miscellaneous -  - Top - Miscellaneous' ),
+            'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR < Sibling category',
+                'Miscellaneous -  - Top - Miscellaneous',
+                $longrubric,
+                $htmlentities,
+             ),
+        ));
+        $this->_courselistexcludes ( array (
+            'user1' => array( '&amp;uuml;', '&amp;amp;' )
         ));
     }
 
@@ -997,7 +1003,7 @@ EOF;
             for ($i = 1; $i <= 3; $i++) {
                 $shortname = "${id}_$i";
                 $params = array (
-                    'fullname' => "Course $i in $category->name",
+                    'fullname'  => "Course $i in $category->name",
                     'shortname' => $shortname,
                     'idnumber'  => strtoupper($shortname),
                     'category'  => $category->id
@@ -1011,12 +1017,21 @@ EOF;
 
         // Create a course with a non-ascii shortname in the Sibling category.
         $params = array (
-            'fullname' => 'Non-ascii matching',
+            'fullname'  => 'Non-ascii matching',
             'shortname' => 'øthér',
             'idnumber'  => 'ØTHÉR',
             'category'  => $this->categories['sc']->id
         );
         $this->courses['øthér'] = $this->getDataGenerator()->create_course( $params );
+
+        // Create a course with HTML entities in the fullname and shortname.
+        $params = array(
+            'fullname'  => '&uuml;&amp;: HTML Entities',
+            'shortname' => '&uuml;&amp;shortname',
+            'idnumber'  => '&uuml;&amp;idnumber',
+            'category'  => $this->categories['sc']->id
+        );
+        $this->courses['&uuml;&amp;shortname'] = $this->getDataGenerator()->create_course( $params );
 
         // Enroll user1 as a student in all courses.
         foreach ($this->courses as $course) {
