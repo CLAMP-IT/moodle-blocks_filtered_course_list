@@ -1,5 +1,4 @@
 .block-fcl__content ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
 }
@@ -19,6 +18,7 @@
   padding: 10px 0 0;
 }
 .block-fcl__list__item {
+  list-style-type: none;
   margin-left: 0;
   padding: 0 0 10px 20px;
 }
