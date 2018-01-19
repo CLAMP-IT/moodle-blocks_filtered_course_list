@@ -19,6 +19,7 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
 
 env:
  matrix:
@@ -30,11 +31,32 @@ env:
   - DB=mysqli MOODLE_BRANCH=MOODLE_34_STABLE
 
 matrix:
+  # Just run the highest and lowest for each branch
   exclude:
     - php: 5.6
       env: DB=pgsql MOODLE_BRANCH=MOODLE_34_STABLE
     - php: 5.6
       env: DB=mysqli MOODLE_BRANCH=MOODLE_34_STABLE
+    - php: 7.0
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_32_STABLE
+    - php: 7.0
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_32_STABLE
+    - php: 7.0
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_33_STABLE
+    - php: 7.0
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_33_STABLE
+    - php: 7.1
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_34_STABLE
+    - php: 7.1
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_34_STABLE
+    - php: 7.2
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_32_STABLE
+    - php: 7.2
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_32_STABLE
+    - php: 7.2
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_33_STABLE
+    - php: 7.2
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_33_STABLE
 
 before_install:
   - phpenv config-rm xdebug.ini
