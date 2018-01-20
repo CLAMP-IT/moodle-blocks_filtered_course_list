@@ -111,8 +111,9 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 ## Changelog
 
 ### [v3.3.0]
-* New filter: adds a generic filters
-* New setting: accepts display templates for category rubrics
+* New: adds a generic filters
+* New: accepts display templates for category rubrics
+* Bug fix: now handles HTML entities correctly in display text
 * Back end: generates HTML solely via mustache templates
 * Back end: uses LESS to manage CSS
 
