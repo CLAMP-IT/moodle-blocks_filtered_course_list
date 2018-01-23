@@ -1,4 +1,4 @@
-# [Filtered course list v3.3.0]
+# [Filtered course list v3.3.1]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -64,6 +64,10 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v3.1.1]
+* Bug: Simplifies strings for AMOS Compatibility
+* Bug: Complies with Moodles CSS styles
 
 ### [v3.3.0]
 * New: adds a generic filters
