@@ -1,92 +1,92 @@
 .block-fcl__content ul {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 .block-fcl__rubric {
-  font-weight: bold;
-  margin-top: 3px;
-  padding-left: 1px;
-  padding-right: 1em;
+    font-weight: bold;
+    margin-top: 3px;
+    padding-left: 1px;
+    padding-right: 1em;
 }
 .block-fcl__rubric--expanded {
-  background: url([[pix:t/expanded]]) no-repeat 0 2px transparent;
+    background: url([[pix:t/expanded]]) no-repeat 0 2px transparent;
 }
 .block-fcl__rubric--expanded + .block-fcl__list {
-  display: block;
+    display: block;
 }
 .block-fcl__list {
-  padding: 10px 0 0;
+    padding: 10px 0 0;
 }
 .block-fcl__list__item {
-  list-style-type: none;
-  margin-left: 0;
-  padding: 0 0 10px 20px;
+    list-style-type: none;
+    margin-left: 0;
+    padding: 0 0 10px 20px;
 }
 .block-fcl__list__item--course {
-  background: url([[pix:moodle|i/course]]) no-repeat 0 1px transparent;
+    background: url([[pix:moodle|i/course]]) no-repeat 0 1px transparent;
 }
 .block-fcl__list__item--category {
-  background: url([[pix:moodle|i/folder]]) no-repeat 0 1px transparent;
+    background: url([[pix:moodle|i/folder]]) no-repeat 0 1px transparent;
 }
 .block-fcl__footer {
-  padding-top: 1rem;
+    padding-top: 1rem;
 }
 /*
- * JS Enabled
- */
+* JS Enabled
+*/
 .jsenabled .block-fcl__rubric {
-  cursor: pointer;
-  padding-left: 21px;
+    cursor: pointer;
+    padding-left: 21px;
 }
 .jsenabled .block-fcl__rubric a,
 .jsenabled .block-fcl__rubric a:hover,
 .jsenabled .block-fcl__rubric a:active,
 .jsenabled .block-fcl__rubric a:visited {
-  text-decoration: none;
+    text-decoration: none;
 }
 .jsenabled .block-fcl__rubric--collapsed {
-  background: url([[pix:t/collapsed]]) no-repeat 0 2px transparent;
+    background: url([[pix:t/collapsed]]) no-repeat 0 2px transparent;
 }
 .jsenabled .block-fcl__rubric--collapsed + .block-fcl__list {
-  display: none;
+    display: none;
 }
 .jsenabled .block-fcl__list__item {
-  background-position: 10px 1px;
-  padding: 0 0 10px 31px;
+    background-position: 10px 1px;
+    padding: 0 0 10px 31px;
 }
 /*
- * Right-to-left
- */
+* Right-to-left
+*/
 .dir-rtl .block-fcl__rubric {
-  padding-right: 1px;
-  padding-left: 1em;
+    padding-right: 1px;
+    padding-left: 1em;
 }
 .dir-rtl .block-fcl__rubric--expanded {
-  background: url([[pix:t/expanded]]) no-repeat right 2px transparent;
+    background: url([[pix:t/expanded]]) no-repeat right 2px transparent;
 }
 .dir-rtl .block-fcl__list__item {
-  margin-right: 0;
-  padding: 0 20px 10px 0;
+    margin-right: 0;
+    padding: 0 20px 10px 0;
 }
 .dir-rtl .block-fcl__list__item--course {
-  background: url([[pix:moodle|i/course]]) no-repeat right 1px transparent;
+    background: url([[pix:moodle|i/course]]) no-repeat right 1px transparent;
 }
 .dir-rtl .block-fcl__list__item--category {
-  background: url([[pix:moodle|i/folder]]) no-repeat right 1px transparent;
+    background: url([[pix:moodle|i/folder]]) no-repeat right 1px transparent;
 }
 /*
- * JS Enabled and right-to-left
- */
+* JS Enabled and right-to-left
+*/
 .dir-rtl.jsenabled .block-fcl__rubric {
-  padding-right: 21px;
+    padding-right: 21px;
 }
 .dir-rtl.jsenabled .block-fcl__rubric--collapsed {
-  background: url([[pix:t/collapsed_rtl]]) no-repeat right 2px transparent;
+    background: url([[pix:t/collapsed_rtl]]) no-repeat right 2px transparent;
 }
 .dir-rtl.jsenabled .block-fcl__list__item {
-  background-position: calc(100% - 10px) 1px;
-  padding: 0 31px 10px 0;
+    background-position: calc(100% - 10px) 1px;
+    padding: 0 31px 10px 0;
 }
 #page-admin-setting-blocksettingfiltered_course_list #id_s_block_filtered_course_list_filters {
-  font-family: monospace;
+    font-family: monospace;
 }

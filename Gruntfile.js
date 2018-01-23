@@ -10,6 +10,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-fixindent");
 
     grunt.initConfig({
         watch: {
@@ -17,6 +18,10 @@ module.exports = function (grunt) {
             less: {
                 files: "less/*.less",
                 tasks: ["less"]
+            },
+            fixindent: {
+                files: "less/*.less",
+                tasks: ["fixindent"]
             },
             amd: {
                 files: "amd/src/*.js",
@@ -37,6 +42,18 @@ module.exports = function (grunt) {
                 }
             },
         },
+        fixindent: {
+            stylesheets: {
+                src: [
+                    'styles.css'
+                ],
+                dest: 'styles.css',
+                options: {
+                    style: 'space',
+                    size: 4
+                }
+            }
+        },
         eslint: {
             amd: {src: "amd/src"}
         },
@@ -50,6 +67,6 @@ module.exports = function (grunt) {
         }
     });
     // The default task (running "grunt" in console).
-    grunt.registerTask("default", ["less", "eslint", "uglify"]);
+    grunt.registerTask("default", ["less", "fixindent", "eslint", "uglify"]);
 
 };
