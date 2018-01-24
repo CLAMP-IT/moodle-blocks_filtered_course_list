@@ -72,17 +72,17 @@ if ($ADMIN->fulltree) {
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL, $managerviews));
 
     $sortablefields = array(
-        'fullname'  => 'Full name',
-        'shortname' => 'Short name',
-        'sortorder' => 'Sort order',
-        'idnumber'  => 'ID number',
-        'startdate' => 'Start date',
-        'none'      => 'None',
+        'fullname'  => get_string('fullname'),
+        'shortname' => get_string('shortname'),
+        'sortorder' => get_string('sort_sortorder', 'core_admin'),
+        'idnumber'  => get_string('idnumber'),
+        'startdate' => get_string('startdate'),
+        'none'      => get_string('none'),
     );
 
     $sortvectors = array(
-        'ASC'  => 'Ascending',
-        'DESC' => 'Descending',
+        'ASC'  => get_string('asc'),
+        'DESC' => get_string('desc'),
     );
 
     $settings->add(new admin_setting_configselect('block_filtered_course_list/primarysort',
