@@ -142,11 +142,6 @@ class block_filtered_course_list extends block_base {
             $this->_process_filtered_list();
         }
 
-        if (is_object($this->content) && $this->content->text != '') {
-            $atts = array('role' => 'tablist', 'aria-multiselectable' => 'true');
-            $this->content->text = html_writer::div($this->content->text, 'tablist', $atts);
-        }
-
         $output = $PAGE->get_renderer('block_filtered_course_list');
         $params = array(
             'usertype'           => $this->usertype,
