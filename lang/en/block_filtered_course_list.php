@@ -58,6 +58,7 @@ $string['owncourses']               = 'A manager sees own courses';
 $string['pluginname']               = 'Filtered course list';
 $string['primarysort']              = 'Primary sort';
 $string['primaryvector']            = 'Primary sort vector';
+$string['privacy:null_reason']      = 'The filtered course list block displays information about course enrolments, but does not effect or store any data itself. All enrolments are managed by other Moodle systems.';
 $string['secondarysort']            = 'Secondary sort';
 $string['secondaryvector']          = 'Secondary sort vector';
 $string['top']                      = 'Top';
