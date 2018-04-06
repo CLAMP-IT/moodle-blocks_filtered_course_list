@@ -210,6 +210,10 @@ class block_filtered_course_list_category_configline extends block_filtered_cour
      */
     public function get_rubrics() {
 
+        // We only need this for Moodle < 3.4.
+        global $CFG;
+        $moodleversion = $CFG->version;
+
         $categories = $this->_get_cat_and_descendants($this->line['catid'], $this->line['depth']);
         foreach ($categories as $category) {
             $rubricname = $category->name;
@@ -219,9 +223,13 @@ class block_filtered_course_list_category_configline extends block_filtered_cour
                 if (isset($this->config->catseparator) && $this->config->catseparator != '') {
                     $separator = strip_tags($this->config->catseparator);
                 }
-                // Starting with 3.4 we can replace next two lines with $ancestry = $category->get_nested_name(false, $separator);.
-                $ancestors = coursecat::make_categories_list('', 0, $separator);
-                $ancestry = $ancestors[$category->id];
+                // Simplify the logic below when we drop support for Moodle 3.3.
+                if ($moodleversion >= 2017111300) { // For Moodle >= 3.4.
+                    $ancestry = $category->get_nested_name(false, $separator);
+                } else { // For Moodle < 3.4.
+                    $ancestors = coursecat::make_categories_list('', 0, $separator);
+                    $ancestry = $ancestors[$category->id];
+                }
                 $replacements = array(
                     'NAME'     => $category->name,
                     'IDNUMBER' => $category->idnumber,
