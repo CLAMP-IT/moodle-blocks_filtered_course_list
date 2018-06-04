@@ -22,46 +22,39 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_filtered_course_list\filter_shortname;
+namespace block_filtered_course_list\local;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * A class to construct rubrics based on shortname matches
+ * A class to structure rubrics regardless of their config type
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter extends filter_base {
+class rubric {
+    /** @var string The rubric's title */
+    public $title;
+    /** @var array The subset of enrolled courses that match the filter criteria */
+    public $courses = array();
+    /** @var string Indicates whether the rubric is expanded or collapsed by default */
+    public $expanded;
+    /** @var array Config settings */
+    public $config;
 
     /**
-     * Validate the line
+     * Constructor
      *
-     * @param array $line The array of line elements that has been passed to the constructor
-     * @return array A fixed-up line array
+     * @param string $title The display title of the rubric
+     * @param array $courses Courses the user is enrolled in that match the Filtered
+     * @param array $config Block configuration
+     * @param string $expanded Indicates the rubrics initial state: expanded or collapsed
      */
-    public function validate_line($line) {
-    }
-
-    public function get_accepted_config() {
-        return array('label', 'match');
-    }
-
-    /**
-     * Populate the array of rubrics for this filter type
-     *
-     * @return array The list of rubric objects corresponding to the filter
-     */
-    public function get_rubrics() {
-        $courselist = array_filter($this->courselist, function($course) {
-            return (\core_text::strpos($course->shortname, $this->line['match']) !== false);
-        });
-        if (empty($courselist)) {
-            return null;
-        }
-        $this->rubrics[] = new \block_filtered_course_list\rubric($this->line['label'],
-                                        $courselist, $this->config, $this->line['expanded']);
-        return $this->rubrics;
+    public function __construct($title, $courses, $config, $expanded = false) {
+        $this->title = $title;
+        $this->courses = $courses;
+        $this->config = $config;
+        $this->expanded = $expanded;
     }
 }

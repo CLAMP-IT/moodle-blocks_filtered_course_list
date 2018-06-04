@@ -15,41 +15,45 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file defines constants and classes used by the Filtered course list block.
+ * A class to handle lines of filter config
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_filtered_course_list;
+namespace block_filtered_course_list\local\filter_shortname;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * A class to construct rubrics based on shortname regex matches
+ * Class to validate config for shortname filter
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter_regex extends filter_base {
+class config_validator extends \block_filtered_course_list\local\config_validator{
+    /** @var array Names to identify each config value, in order */
+    public $names = array('expanded', 'label', 'match');
 
     /**
-     * Populate the array of rubrics for this filter type
+     * Validate 'label' value
      *
-     * @return array The list of rubric objects corresponding to the filter
+     * @param string $value the value to validate
+     * @return string|boolean the validated value, or false if the value is not valid
      */
-    public function get_rubrics() {
-        $courselist = array_filter($this->courselist, function($course) {
-            $teststring = str_replace('`', '', $this->line['match']);
-            return (preg_match("`$teststring`", $course->shortname) == 1);
-        });
-        if (empty($courselist)) {
-            return null;
-        }
-        $this->rubrics[] = new \block_filtered_course_list\rubric($this->line['label'],
-                                        $courselist, $this->config, $this->line['expanded']);
-        return $this->rubrics;
+    public function validate_label($value) {
+        return $value ? $value : get_string('courses', 'block_filtered_course_list');
+    }
+
+    /**
+     * Validate 'match' value
+     *
+     * @param string $value the value to validate
+     * @return string|boolean the validated value, or false if the value is not valid
+     */
+    public function validate_match($value) {
+        return $value ? $value : '';
     }
 }

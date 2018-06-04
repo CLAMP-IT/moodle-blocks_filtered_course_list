@@ -15,18 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A class to handle lines of filter config
+ * A class to turn filter config text into data
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_filtered_course_list;
+namespace block_filtered_course_list\local;
 
 defined('MOODLE_INTERNAL') || die();
 
 class config_parser {
+    /** @var array Array of arrays representing lines of config */
+    public $lines;
+
+    /**
+     * Constructor
+     *
+     * @param array $text raw text from the filter config textarea
+     */
     public function __construct($text) {
         $this->lines = $this->parse_textarea($text);
         foreach ($this->lines as &$line) {
@@ -34,13 +42,25 @@ class config_parser {
         }
     }
 
-    public static function parse_line($line) {
+    /**
+     * Parse a line of config text into a data array
+     *
+     * @param array $line raw text from one line of the filter config
+     * @param return parsed array of config values
+     */
+    public function parse_line($line) {
         return array_map(function($item) {
             return trim($item);
-        }, explode('|', $line, count($acceptedconfig)));
+        }, explode('|', $line));
     }
 
-    public static function parse_textarea($text) {
+    /**
+     * Parse the text from the filter config textarea into lines of text
+     *
+     * @param array $line raw text from the filter config textarea
+     * @return array parsed array config lines
+     */
+    public function parse_textarea($text) {
         return array_map(function($item) {
             return trim($item);
         }, explode("\n", $text));
