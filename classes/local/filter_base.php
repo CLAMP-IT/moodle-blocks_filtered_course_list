@@ -54,13 +54,34 @@ abstract class filter_base {
     }
 
     /**
-     * Run config validation on given config data, using $this->configvalidator
+     * Run config validation on given config data, using the config validator
+     * for this subclass, if it exists, or the nearest defined config validator
+     * going up the class tree.
+     * This method is static so that we can run it up through parent classes
+     * without instantiating.
+     *
+     * @return string \block_filtered_course_list\local\filter_{filtername}\config_validator
+     */
+    public static function get_config_validator() {
+        $classname = get_called_class();
+        $namespace = preg_replace('/\\w+$/', '', $classname);
+        $validator = "$namespace" . "config_validator";
+        if (class_exists($validator)) {
+            return $validator;
+        } elseif ($pclass = get_parent_class(get_called_class())) {
+            return $pclass::get_config_validator();
+        }
+    }
+
+    /**
+     * Run config validation on given config data
      *
      * @param array $config Array of config elements parsed from line
      * @return array array of config name => validated value
      */
     public function validate_config($config) {
-        $validator = new $this->configvalidator($config);
+        $classname = $this->get_config_validator();
+        $validator = new $classname($config);
         return $validator->validate();
     }
 

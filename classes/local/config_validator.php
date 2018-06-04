@@ -30,7 +30,7 @@ namespace block_filtered_course_list\local;
 
 defined('MOODLE_INTERNAL') || die();
 
-abstract class config_validator {
+class config_validator {
     /** @var string The very first config element, indicating the type of filter */
     public $filtertype;
     /** @var array Elements parsed from the rubric config line */
@@ -59,7 +59,8 @@ abstract class config_validator {
     public function validate() {
         foreach ($this->names as $index => $name) {
             $f = "validate_$name";
-            $this->config[$name] = $this->$f($this->values[$index]);
+            $v = array_key_exists($index, $this->values) ? $this->values[$index] : false;
+            $this->config[$name] = $this->$f($v);
         }
         return $this->config;
     }

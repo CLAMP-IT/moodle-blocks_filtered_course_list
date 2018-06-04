@@ -14,19 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace block_filtered_course_list\local\filter_shortname;
+namespace block_filtered_course_list\local\filter_regex;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * A class to construct rubrics based on shortname matches
+ * A class to construct rubrics based on shortname regex matches
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter extends \block_filtered_course_list\local\filter_base {
-    public $configvalidator = "\\block_filtered_course_list\\local\\filter_shortname\\config_validator";
+class filter extends \block_filtered_course_list\local\filter_shortname\filter {
 
     /**
      * Populate the array of rubrics for this filter type
@@ -35,16 +34,14 @@ class filter extends \block_filtered_course_list\local\filter_base {
      */
     public function get_rubrics() {
         $courselist = array_filter($this->courselist, function($course) {
-            return (\core_text::strpos($course->shortname, $this->config['match']) !== false);
+            $teststring = str_replace('`', '', $this->config['match']);
+            return (preg_match("`$teststring`", $course->shortname) == 1);
         });
         if (empty($courselist)) {
             return null;
         }
-        $this->rubrics[] = new \block_filtered_course_list\local\rubric(
-            $this->config['label'],
-            $courselist,
-            $this->blockconfig,
-            $this->config['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list\local\rubric($this->config['label'],
+                                        $courselist, $this->blockconfig, $this->config['expanded']);
         return $this->rubrics;
     }
 }

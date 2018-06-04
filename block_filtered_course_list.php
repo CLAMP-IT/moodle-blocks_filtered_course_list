@@ -208,21 +208,19 @@ class block_filtered_course_list extends block_base {
         $output = $PAGE->get_renderer('block_filtered_course_list');
 
         // Parse the textarea settings into an array of lines.
-        $filterconfig = new \block_filtered_course_list\config_parser($this->fclconfig->filters);
+        $filterconfig = new \block_filtered_course_list\local\config_parser($this->fclconfig->filters);
         // Get the arrays of rubrics based on the config lines, filter out failures, and merge them into one array.
         $this->rubrics = array_reduce(
             array_filter(
-
                 array_map(
                     function($config) {
-                        $classname = "\\block_filtered_course_list\\filter_{$config[0]}\\filter";
+                        $classname = "\\block_filtered_course_list\\local\\filter_{$config[0]}\\filter";
                         if (class_exists($classname)) {
                             $item = new $classname($config, $this->mycourses, $this->fclconfig);
                             return $item->get_rubrics();
                         }
                         return null;
                     }, $filterconfig->lines),
-
                 function($item) {
                     return is_array($item);
                 }
@@ -241,7 +239,7 @@ class block_filtered_course_list extends block_base {
             });
 
             if (!empty($othercourses)) {
-                $otherrubric = new \block_filtered_course_list\rubric(get_string('othercourses',
+                $otherrubric = new \block_filtered_course_list\local\rubric(get_string('othercourses',
                     'block_filtered_course_list'), $othercourses, $this->fclconfig);
                 $this->rubrics[] = $otherrubric;
             }
