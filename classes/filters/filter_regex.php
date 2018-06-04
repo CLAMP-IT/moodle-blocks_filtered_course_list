@@ -22,39 +22,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_filtered_course_list\filters;
+namespace block_filtered_course_list;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * A class to construct rubrics based on shortname matches
+ * A class to construct rubrics based on shortname regex matches
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter_shortname extends filter_base {
-
-    /**
-     * Validate the line
-     *
-     * @param array $line The array of line elements that has been passed to the constructor
-     * @return array A fixed-up line array
-     */
-    public function validate_line($line) {
-        $keys = array('expanded', 'label', 'match');
-        $values = array_map(function($item) {
-            return trim($item);
-        }, explode('|', $line[1], 3));
-        $this->validate_expanded(0, $values);
-        if (!array_key_exists(1, $values)) {
-            $values[1] = get_string('courses', 'block_filtered_course_list');
-        }
-        if (!array_key_exists(2, $values)) {
-            $values[2] = '';
-        }
-        return array_combine($keys, $values);
-    }
+class filter_regex extends filter_base {
 
     /**
      * Populate the array of rubrics for this filter type
@@ -63,7 +42,8 @@ class filter_shortname extends filter_base {
      */
     public function get_rubrics() {
         $courselist = array_filter($this->courselist, function($course) {
-            return (core_text::strpos($course->shortname, $this->line['match']) !== false);
+            $teststring = str_replace('`', '', $this->line['match']);
+            return (preg_match("`$teststring`", $course->shortname) == 1);
         });
         if (empty($courselist)) {
             return null;

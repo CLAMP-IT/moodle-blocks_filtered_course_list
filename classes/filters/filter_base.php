@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_filtered_course_list\filters;
+namespace block_filtered_course_list;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -72,18 +72,4 @@ abstract class filter_base {
      * Each subclass must define how to get the right rubrics
      */
     abstract public function get_rubrics();
-
-    /**
-     * Validate expanded value
-     * This should be similar for all subclasses.
-     *
-     * @param int $index The index of the $line array that should contain the expanded value
-     * @param array $arr The line array
-     */
-    public function validate_expanded($index, &$arr) {
-        if (!array_key_exists($index, $arr)) {
-            $arr[$index] = 'collapsed';
-        }
-        $arr[$index] = (core_text::strpos($arr[$index], 'e') === 0) ? 'expanded' : 'collapsed';
-    }
 }
