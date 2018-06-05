@@ -34,7 +34,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filter extends \block_filtered_course_list\local\filter_base {
-    public $configvalidator = "\\block_filtered_course_list\\local\\filter_generic\\config_validator";
 
     /**
      * Populate the array of rubrics for this filter type

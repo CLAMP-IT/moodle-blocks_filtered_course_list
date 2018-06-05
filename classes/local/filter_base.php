@@ -29,8 +29,6 @@ namespace block_filtered_course_list\local;
 defined('MOODLE_INTERNAL') || die();
 
 abstract class filter_base {
-    /** @var array Class name to use when validating config */
-    public $configvalidator = "\\block_filtered_course_list\\local\\config_validator";
     /** @var array Elements of the rubric config line */
     public $config;
     /** @var array A list of courses the current user is enrolled in */
