@@ -65,6 +65,9 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
+### [v3.3.6]
+* Bug: Fixes fatal error with Privacy API
+
 ### [v3.3.5]
 * Backend: Better compliance with GDPR for multiple PHP versions
 * Testting: Covers Moodle 3.5
