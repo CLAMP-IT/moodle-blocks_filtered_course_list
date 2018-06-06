@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright  2018 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\metadata\null_provider {
+class provider implements \core_privacy\local\metadata\null_provider {
 
     // Support PHP back to 5.6 (for Moodle 3.3 and lower)
     use \core_privacy\local\legacy_polyfill;
