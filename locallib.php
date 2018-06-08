@@ -236,7 +236,9 @@ class block_filtered_course_list_category_configline extends block_filtered_cour
                     'PARENT'   => $parent,
                     'ANCESTRY' => $ancestry,
                 );
-                $rubricname = str_replace(array_keys($replacements), $replacements, $this->config->catrubrictpl);
+                $tpl = $this->config->catrubrictpl;
+                \block_filtered_course_list_lib::apply_template_limits($replacements, $tpl);
+                $rubricname = str_replace(array_keys($replacements), $replacements, $tpl);
                 $rubricname = strip_tags($rubricname);
             }
             $courselist = array_filter($this->courselist, function($course) use($category) {
@@ -475,7 +477,44 @@ class block_filtered_course_list_lib {
             'IDNUMBER'  => $course->idnumber,
             'CATEGORY'  => $catname,
         );
+        // If we have limits defined, apply them.
+        static::apply_template_limits($replacements, $tpl);
         $displaytext = str_replace(array_keys($replacements), $replacements, $tpl);
         return strip_tags($displaytext);
+    }
+
+    /**
+     * Apply length limits to a template string. TOKEN{#} in the template string
+     * is replaced by TOKEN, and the replacement value for TOKEN is truncated to
+     * # characters.
+     *
+     * @param object $replacements an array of pattern => replacement
+     * @param string $tpl the template string (coursename or category)
+     */
+    public static function apply_template_limits(&$replacements, &$tpl) {
+        $limitpattern = "{(\d+)}";
+        foreach ($replacements as $pattern => $replace) {
+            $limit = array();
+            if (preg_match("/$pattern$limitpattern/", $tpl, $limit)) {
+                $replacements[$pattern] = static::truncate($replace, (int) $limit[1]);
+            }
+        }
+        $tpl = preg_replace("/$limitpattern/", "", $tpl);
+    }
+
+    /**
+     * Ellipsis truncate the given string to $length characters.
+     *
+     * @param string $string the string to be truncated
+     * @param int $length the number of characters to truncate to
+     * @return $string the truncated string
+     */
+    public static function truncate($string, $length) {
+        if ($length > 0 && \core_text::strlen($string) > $length) {
+            $string = \core_text::substr($string, 0, $length);
+            $string = trim($string);
+            $string .= "…";
+        }
+        return $string;
     }
 }
