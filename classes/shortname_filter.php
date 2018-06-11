@@ -1,4 +1,4 @@
-<?php
+$this->fclconfig<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -63,13 +63,13 @@ class shortname_filter extends \block_filtered_course_list\filter {
      */
     public function get_rubrics() {
         $courselist = array_filter($this->courselist, function($course) {
-            return (\core_text::strpos($course->shortname, $this->line['match']) !== false);
+            return (\core_text::strpos($course->shortname, $this->config['match']) !== false);
         });
         if (empty($courselist)) {
             return null;
         }
-        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'],
-                                        $courselist, $this->config, $this->line['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list_rubric($this->config['label'],
+                                        $courselist, $this->fclconfig, $this->config['expanded']);
         return $this->rubrics;
     }
 }

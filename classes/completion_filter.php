@@ -74,14 +74,14 @@ class completion_filter extends \block_filtered_course_list\filter {
             if (!$completioninfo->is_enabled()) {
                 return false;
             }
-            return ($completioninfo->is_course_complete($USER->id) == $this->line['completionstate']);
+            return ($completioninfo->is_course_complete($USER->id) == $this->config['completionstate']);
         });
         if (empty($courselist)) {
             return null;
         }
 
-        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'], $courselist,
-                                                                    $this->config, $this->line['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list_rubric($this->config['label'], $courselist,
+                                                                    $this->fclconfig, $this->config['expanded']);
         return $this->rubrics;
     }
 }

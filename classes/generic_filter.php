@@ -68,24 +68,24 @@ class generic_filter extends \block_filtered_course_list\filter {
         // Parent = 0   ie top-level categories only.
         $categories = \coursecat::get(0)->get_children();
 
-        $expanded = $this->line['expanded'];
+        $expanded = $this->config['expanded'];
 
         if ($categories) {
             // Just print top level category links.
             if (count($categories) > 1 ||
                     (count($categories) == 1 &&
-                    current($categories)->coursecount > $this->config->maxallcourse)) {
-                $label = $this->line['catlistheading'];
+                    current($categories)->coursecount > $this->fclconfig->maxallcourse)) {
+                $label = $this->config['catlistheading'];
                 $list = $categories;
-                $this->rubrics[] = new \block_filtered_course_list_rubric($label, $list, $this->config, $expanded);
+                $this->rubrics[] = new \block_filtered_course_list_rubric($label, $list, $this->fclconfig, $expanded);
             } else {
                 // Just print course names of single category.
                 $category = array_shift($categories);
                 $courses = get_courses($category->id);
                 if ($courses) {
-                    $label = $this->line['courselistheading'];
+                    $label = $this->config['courselistheading'];
                     $list = $courses;
-                    $this->rubrics[] = new \block_filtered_course_list_rubric($label, $list, $this->config, $expanded);
+                    $this->rubrics[] = new \block_filtered_course_list_rubric($label, $list, $this->fclconfig, $expanded);
                 }
             }
         }

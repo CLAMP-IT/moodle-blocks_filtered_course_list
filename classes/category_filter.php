@@ -70,14 +70,14 @@ class category_filter extends \block_filtered_course_list\filter {
         global $CFG;
         $moodleversion = $CFG->version;
 
-        $categories = $this->_get_cat_and_descendants($this->line['catid'], $this->line['depth']);
+        $categories = $this->_get_cat_and_descendants($this->config['catid'], $this->config['depth']);
         foreach ($categories as $category) {
             $rubricname = $category->name;
-            if (isset($this->config->catrubrictpl) && $this->config->catrubrictpl != '') {
+            if (isset($this->fclconfig->catrubrictpl) && $this->fclconfig->catrubrictpl != '') {
                 $parent = \coursecat::get($category->parent)->get_formatted_name();
                 $separator = ' / ';
-                if (isset($this->config->catseparator) && $this->config->catseparator != '') {
-                    $separator = strip_tags($this->config->catseparator);
+                if (isset($this->fclconfig->catseparator) && $this->fclconfig->catseparator != '') {
+                    $separator = strip_tags($this->fclconfig->catseparator);
                 }
                 // Simplify the logic below when we drop support for Moodle 3.3.
                 if ($moodleversion >= 2017111300) { // For Moodle >= 3.4.
@@ -92,7 +92,7 @@ class category_filter extends \block_filtered_course_list\filter {
                     'PARENT'   => $parent,
                     'ANCESTRY' => $ancestry,
                 );
-                $tpl = $this->config->catrubrictpl;
+                $tpl = $this->fclconfig->catrubrictpl;
                 \block_filtered_course_list_lib::apply_template_limits($replacements, $tpl);
                 $rubricname = str_replace(array_keys($replacements), $replacements, $tpl);
                 $rubricname = strip_tags($rubricname);
@@ -104,7 +104,7 @@ class category_filter extends \block_filtered_course_list\filter {
                 continue;
             }
             $this->rubrics[] = new \block_filtered_course_list_rubric($rubricname, $courselist,
-                                                                $this->config, $this->line['expanded']);
+                                                                $this->fclconfig, $this->config['expanded']);
         }
 
         return $this->rubrics;

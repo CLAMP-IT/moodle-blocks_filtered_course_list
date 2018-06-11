@@ -42,14 +42,14 @@ class regex_filter extends \block_filtered_course_list\shortname_filter {
      */
     public function get_rubrics() {
         $courselist = array_filter($this->courselist, function($course) {
-            $teststring = str_replace('`', '', $this->line['match']);
+            $teststring = str_replace('`', '', $this->config['match']);
             return (preg_match("`$teststring`", $course->shortname) == 1);
         });
         if (empty($courselist)) {
             return null;
         }
-        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'],
-                                        $courselist, $this->config, $this->line['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list_rubric($this->config['label'],
+                                        $courselist, $this->fclconfig, $this->config['expanded']);
         return $this->rubrics;
     }
 }
