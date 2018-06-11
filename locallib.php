@@ -136,6 +136,7 @@ class block_filtered_course_list_lib {
         $lines = array_map(function($line) {
             return static::parse_line($line);
         }, explode("\n", $text));
+        return $lines;
     }
 
     public static function parse_line($linestring) {
