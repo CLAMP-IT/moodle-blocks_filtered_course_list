@@ -43,9 +43,7 @@ class generic_filter extends \block_filtered_course_list\filter {
      */
     public function validate_line($line) {
         $keys = array('expanded', 'courselistheading', 'catlistheading');
-        $values = array_map(function($item) {
-            return trim($item);
-        }, explode('|', $line[1]));
+        $values = array_slice($line, 1);
         $this->validate_expanded(0, $values);
         if (!array_key_exists(1, $values)) {
             $values[1] = get_string('courses');

@@ -43,9 +43,7 @@ class category_filter extends \block_filtered_course_list\filter {
      */
     public function validate_line($line) {
         $keys = array('expanded', 'catid', 'depth');
-        $values = array_map(function($item) {
-            return trim($item);
-        }, explode('|', $line[1]));
+        $values = array_slice($line, 1);
         $this->validate_expanded(0, $values);
         foreach (array(1, 2) as $key) {
             if (!array_key_exists($key, $values)) {
