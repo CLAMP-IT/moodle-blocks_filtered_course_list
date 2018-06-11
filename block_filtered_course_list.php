@@ -208,7 +208,7 @@ class block_filtered_course_list extends block_base {
         $output = $PAGE->get_renderer('block_filtered_course_list');
 
         // Parse the textarea settings into an array of arrays.
-        $filterconfigs = \block_filtered_course_list_lib::parse_textarea($this->fclconfig->filters);
+        $filterconfigs = \block_filtered_course_list_lib::parse_config_textarea($this->fclconfig->filters);
 
         // Get the arrays of rubrics based on the config lines, filter out failures, and merge them into one array.
         $this->rubrics = array_reduce(
