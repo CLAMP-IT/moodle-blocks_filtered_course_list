@@ -132,6 +132,12 @@ class block_filtered_course_list_lib {
         return $string;
     }
 
+    public static function parse_textarea($text) {
+        $lines = array_map(function($line) {
+            return static::parse_line($line);
+        }, explode("\n", $text));
+    }
+
     public static function parse_line($linestring) {
         $items = array_map(function($item) {
             return trim($item);
