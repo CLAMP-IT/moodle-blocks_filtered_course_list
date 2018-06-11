@@ -131,4 +131,11 @@ class block_filtered_course_list_lib {
         }
         return $string;
     }
+
+    public static function parse_line($linestring) {
+        $items = array_map(function($item) {
+            return trim($item);
+        }, explode('|', $linestring));
+        return $items;
+    }
 }
