@@ -131,4 +131,30 @@ class block_filtered_course_list_lib {
         }
         return $string;
     }
+
+    /**
+     * Parse the given config text into an array of arrays
+     *
+     * @param string $text the raw textarea value
+     * @return array an array of arrays representing lines of config values
+     */
+    public static function parse_config_textarea($text) {
+        $lines = array_map(function($line) {
+            return static::parse_config_line($line);
+        }, explode("\n", $text));
+        return $lines;
+    }
+
+    /**
+     * Parse the given config line string into an array of config values.
+     *
+     * @param string $linestring the config line string
+     * @return array the parsed config values
+     */
+    public static function parse_config_line($linestring) {
+        $items = array_map(function($item) {
+            return trim($item);
+        }, explode('|', $linestring));
+        return $items;
+    }
 }

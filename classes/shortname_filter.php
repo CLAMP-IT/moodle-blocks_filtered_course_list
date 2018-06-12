@@ -43,9 +43,7 @@ class shortname_filter extends \block_filtered_course_list\filter {
      */
     public function validate_line($line) {
         $keys = array('expanded', 'label', 'match');
-        $values = array_map(function($item) {
-            return trim($item);
-        }, explode('|', $line[1], 3));
+        $values = array_slice($line, 1);
         $this->validate_expanded(0, $values);
         if (!array_key_exists(1, $values)) {
             $values[1] = get_string('courses', 'block_filtered_course_list');
@@ -63,13 +61,13 @@ class shortname_filter extends \block_filtered_course_list\filter {
      */
     public function get_rubrics() {
         $courselist = array_filter($this->courselist, function($course) {
-            return (\core_text::strpos($course->shortname, $this->line['match']) !== false);
+            return (\core_text::strpos($course->shortname, $this->config['match']) !== false);
         });
         if (empty($courselist)) {
             return null;
         }
-        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'],
-                                        $courselist, $this->config, $this->line['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list_rubric($this->config['label'],
+                                        $courselist, $this->fclconfig, $this->config['expanded']);
         return $this->rubrics;
     }
 }

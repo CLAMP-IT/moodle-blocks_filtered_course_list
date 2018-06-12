@@ -43,9 +43,7 @@ class completion_filter extends \block_filtered_course_list\filter {
      */
     public function validate_line($line) {
         $keys = array('expanded', 'label', 'completionstate');
-        $values = array_map(function($item) {
-            return trim($item);
-        }, explode('|', $line[1]));
+        $values = array_slice($line, 1);
         $this->validate_expanded(0, $values);
         if (!array_key_exists(1, $values)) {
             $values[1] = get_string('completedcourses', 'block_filtered_course_list');
@@ -74,14 +72,14 @@ class completion_filter extends \block_filtered_course_list\filter {
             if (!$completioninfo->is_enabled()) {
                 return false;
             }
-            return ($completioninfo->is_course_complete($USER->id) == $this->line['completionstate']);
+            return ($completioninfo->is_course_complete($USER->id) == $this->config['completionstate']);
         });
         if (empty($courselist)) {
             return null;
         }
 
-        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'], $courselist,
-                                                                    $this->config, $this->line['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list_rubric($this->config['label'], $courselist,
+                                                                    $this->fclconfig, $this->config['expanded']);
         return $this->rubrics;
     }
 }
