@@ -48,7 +48,7 @@ class starred_filter extends \block_filtered_course_list\filter {
         }, explode('|', $line[1], count($keys)));
         $this->validate_expanded(0, $values);
         if (!array_key_exists(1, $values)) {
-            $values[1] = get_string('starred_courses', 'block_filtered_course_list');
+            $values[1] = get_string('starreddefaultlabel', 'block_filtered_course_list');
         }
         return array_combine($keys, $values);
     }
