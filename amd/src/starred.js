@@ -27,6 +27,18 @@ define(['jquery'], function($) {
                 'mouseenter mouseleave': function() {
                     $(this).children('i').toggleClass('fa-star fa-star-o')
                 },
+                'click': function(e) {
+                    require(['core/ajax'], function(ajax) {
+                        ajax.call([{
+                            methodname: 'block_filtered_course_list_toggle_starred',
+                            args: {},
+                            done: function(result) {
+                                $('.block-fcl__starlink i').toggleClass('fa-star fa-star-o');
+                            },
+                        }]);
+                    });
+                    e.stopPropagation();
+                }
             });
         }
     };
