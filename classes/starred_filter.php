@@ -61,7 +61,7 @@ class starred_filter extends \block_filtered_course_list\filter {
     public function get_rubrics() {
         global $USER;
 
-        $courselist = $this->get_starred_courses($USER->id);
+        $courselist = self::get_starred_courses($USER->id);
 
         if (empty($courselist)) {
             return null;
@@ -80,17 +80,23 @@ class starred_filter extends \block_filtered_course_list\filter {
         return $this->rubrics;
     }
 
+
+    public static function course_is_starred($userid, $courseid) {
+        $starred = self::get_starred_course_ids($userid);
+        return in_array($courseid, $starred);
+    }
+
     /**
      * Get a list of all courses starred by a user.
      *
      * @param int $userid The id of the user
      * @return array The list of course records
      */
-    public function get_starred_courses($userid) {
+    public static function get_starred_courses($userid) {
         global $DB;
 
         $starred_courses = array();
-        if ($starred_ids = $this->get_starred_course_ids($userid)) {
+        if ($starred_ids = self::get_starred_course_ids($userid)) {
             foreach ($starred_ids as $courseid) {
                 $course = $DB->get_record('course', array('id' => $courseid));
                 $starred_courses[] = $course;
@@ -105,8 +111,8 @@ class starred_filter extends \block_filtered_course_list\filter {
      * @param int $userid The id of the user
      * @return array The list of course ids
      */
-    public function get_starred_course_ids($userid) {
-        $starred = get_user_preferences('starred_courses', false, $userid);
+    public static function get_starred_course_ids($userid) {
+        $starred = get_user_preferences('starred_courses', '', $userid);
         if (!empty($starred) && $stararr = explode(',', $starred)) {
             return $stararr;
         }
@@ -129,22 +135,15 @@ class starred_filter extends \block_filtered_course_list\filter {
      * @return array HTML describing the star link.
      */
     public function get_starlink() {
-        global $COURSE;
+        global $COURSE, $USER;
 
         $aclass = "block-fcl__starlink";
         $iclass = "fa fa-star"; // Filled star.
-        if ($this->course_is_starred($COURSE->id)) {
+        if ($this->course_is_starred($USER->id, $COURSE->id)) {
             $aclass .= " starred"; // Mark as starred.
         } else {
             $iclass .= "-o"; // Make it outline.
         }
         return '<a class="' . $aclass . '"><i class="' . $iclass . '"></i></a>';
-    }
-
-    public function course_is_starred($courseid) {
-        global $USER;
-
-        $starred = $this->get_starred_course_ids($USER->id);
-        return in_array($courseid, $starred);
     }
 }

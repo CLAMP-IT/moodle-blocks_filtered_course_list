@@ -31,21 +31,33 @@ class block_filtered_course_list_external extends external_api {
      * @return external_function_parameters
      */
     public static function toggle_starred_parameters() {
+        global $COURSE, $USER;
+
         return new external_function_parameters(
             array(
-                // 'assignmentid' => new external_value(PARAM_INT, 'The assignment id to operate on'),
-                // 'userid' => new external_value(PARAM_INT, 'The user id the submission belongs to'),
-                // 'jsonformdata' => new external_value(PARAM_RAW, 'The data from the grading form, encoded as a json array')
+                'userid' => new external_value(PARAM_INT, 'The user id we are starring for', VALUE_DEFAULT, $USER->id),
+                'courseid' => new external_value(PARAM_INT, 'The course we are starring or unstarring', VALUE_DEFAULT, $COURSE->id),
             )
         );
     }
 
     /**
-     * The function itself
-     * @return string welcome message
+     * Star or unstar a course.
+     * @return bool Did the course get starred/unstarred?
      */
-    public static function toggle_starred() {
-        return true;
+    public static function toggle_starred($userid, $courseid) {
+        $filterclass = "\\block_filtered_course_list\\starred_filter";
+        $isstarred = $filterclass::course_is_starred($userid, $courseid);
+        $starred = $filterclass::get_starred_course_ids($userid);
+
+        if ($isstarred) {
+            unset($starred[$courseid]);
+        } else {
+            $starred[] = $courseid;
+        }
+
+        $starred = implode(',', array_filter($starred));
+        return set_user_preference('starred_courses', $starred, $userid);
     }
 
     /**
