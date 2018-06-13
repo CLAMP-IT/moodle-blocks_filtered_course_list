@@ -131,11 +131,14 @@ class starred_filter extends \block_filtered_course_list\filter {
     public function get_starlink() {
         global $COURSE;
 
-        $class = "fa fa-star"; // Filled star.
-        if (!$this->course_is_starred($COURSE->id)) {
-            $class .= "-o"; // Make it outline.
+        $aclass = "block-fcl__starlink";
+        $iclass = "fa fa-star"; // Filled star.
+        if ($this->course_is_starred($COURSE->id)) {
+            $aclass .= " starred"; // Mark as starred.
+        } else {
+            $iclass .= "-o"; // Make it outline.
         }
-        return '<a class="block-fcl__starlink"><i class="' . $class . '"></i></a>';
+        return '<a class="' . $aclass . '"><i class="' . $iclass . '"></i></a>';
     }
 
     public function course_is_starred($courseid) {
