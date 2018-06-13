@@ -80,7 +80,13 @@ class starred_filter extends \block_filtered_course_list\filter {
         return $this->rubrics;
     }
 
-
+    /**
+     * Determine whether the given course is starred by the given user.
+     *
+     * @param int $userid The id of the user
+     * @param int $courseid The id of the course
+     * @return bool Whether or not the course is starred for the user
+     */
     public static function course_is_starred($userid, $courseid) {
         $starred = self::get_starred_course_ids($userid);
         return in_array($courseid, $starred);

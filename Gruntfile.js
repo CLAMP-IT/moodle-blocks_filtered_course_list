@@ -60,7 +60,8 @@ module.exports = function (grunt) {
         uglify: {
             amd: {
                 files: {
-                    "amd/build/accordion.min.js": ["amd/src/accordion.js"]
+                    "amd/build/accordion.min.js": ["amd/src/accordion.js"],
+                    "amd/build/starred.min.js": ["amd/src/starred.js"]
                 },
                 options: {report: 'none'}
             }

@@ -27,7 +27,7 @@ require_once($CFG->libdir . "/externallib.php");
 class block_filtered_course_list_external extends external_api {
 
     /**
-     * Returns description of method parameters
+     * Returns description of toggle_starred parameters.
      * @return external_function_parameters
      */
     public static function toggle_starred_parameters() {
@@ -61,7 +61,7 @@ class block_filtered_course_list_external extends external_api {
     }
 
     /**
-     * Returns description of method result value
+     * Returns description of toggle_starred return value.
      * @return external_description
      */
     public static function toggle_starred_returns() {
