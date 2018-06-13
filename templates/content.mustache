@@ -92,7 +92,12 @@
     {{/ rubrics }}
 </div>
 {{#js}}
-require(['jquery', 'block_filtered_course_list/accordion'], function($, accordion) {
+require([
+    'jquery',
+    'block_filtered_course_list/accordion',
+    'block_filtered_course_list/starred'],
+function($, accordion, starred) {
     accordion.init({"blockid": "fcl_{{ instid }}_content"});
+    starred.init();
 });
 {{/js}}
