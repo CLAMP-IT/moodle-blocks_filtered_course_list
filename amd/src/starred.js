@@ -23,7 +23,7 @@
 define(['jquery'], function($) {
     return {
         init: function() {
-            var currentcourse = $('body').attr('class').match(/\scourse-(\d+)\s/)[1];
+            var currentcourse = $('body').attr('class').match(/(^|\s)course-(\d+)($|\s)/)[2];
 
             $('.block-fcl__starlink').on({
                 'mouseenter mouseleave': function() {
