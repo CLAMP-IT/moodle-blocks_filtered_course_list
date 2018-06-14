@@ -20,7 +20,7 @@
  * @copyright  2018 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery'], function($) {
+define(['jquery', 'core/ajax'], function($, ajax) {
     return {
         init: function() {
             var currentcourse = $('body').attr('class').match(/(^|\s)course-(\d+)($|\s)/)[2];
@@ -30,15 +30,13 @@ define(['jquery'], function($) {
                     $(this).children('i').toggleClass('fa-star fa-star-o');
                 },
                 'click': function(e) {
-                    require(['core/ajax'], function(ajax) {
-                        ajax.call([{
-                            methodname: 'block_filtered_course_list_toggle_starred',
-                            args: {courseid: currentcourse},
-                            done: function() {
-                                $('.block-fcl__starlink i').toggleClass('fa-star fa-star-o');
-                            },
-                        }]);
-                    });
+                    ajax.call([{
+                        methodname: 'block_filtered_course_list_toggle_starred',
+                        args: {courseid: currentcourse},
+                        done: function() {
+                            $('.block-fcl__starlink i').toggleClass('fa-star fa-star-o');
+                        },
+                    }]);
                     e.stopPropagation();
                 }
             });

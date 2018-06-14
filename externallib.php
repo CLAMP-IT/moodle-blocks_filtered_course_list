@@ -67,6 +67,6 @@ class block_filtered_course_list_external extends external_api {
      * @return external_description
      */
     public static function toggle_starred_returns() {
-        return new external_value(PARAM_BOOL, PARAM_REQUIRED);
+        return new external_value(PARAM_BOOL, 'Did the star/unstar task succeed?');
     }
 }
