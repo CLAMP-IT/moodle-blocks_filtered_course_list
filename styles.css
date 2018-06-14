@@ -34,6 +34,10 @@
 /*
 * JS Enabled
 */
+.jsenabled .block-fcl__starlink {
+    margin-left: 0.5em;
+    position: absolute;
+}
 .jsenabled .block-fcl__rubric {
     cursor: pointer;
     padding-left: 21px;
