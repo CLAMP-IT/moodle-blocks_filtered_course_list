@@ -36,7 +36,7 @@ class block_filtered_course_list_external extends external_api {
         return new external_function_parameters(
             array(
                 'userid' => new external_value(PARAM_INT, 'The user id we are starring for', VALUE_DEFAULT, $USER->id),
-                'courseid' => new external_value(PARAM_INT, 'The course we are starring or unstarring', VALUE_DEFAULT, $COURSE->id),
+                'courseid' => new external_value(PARAM_INT, 'The course we are starring or unstarring', VALUE_REQUIRED),
             )
         );
     }
@@ -51,7 +51,9 @@ class block_filtered_course_list_external extends external_api {
         $starred = $filterclass::get_starred_course_ids($userid);
 
         if ($isstarred) {
-            unset($starred[$courseid]);
+            if (($key = array_search($courseid, $starred)) !== false) {
+                unset($starred[$key]);
+            }
         } else {
             $starred[] = $courseid;
         }

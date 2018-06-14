@@ -63,10 +63,6 @@ class starred_filter extends \block_filtered_course_list\filter {
 
         $courselist = self::get_starred_courses($USER->id);
 
-        if (empty($courselist)) {
-            return null;
-        }
-
         if ($this->in_course()) {
             $this->line['label'] .= '&nbsp;' . $this->get_starlink();
         }

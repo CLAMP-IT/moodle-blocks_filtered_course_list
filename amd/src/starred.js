@@ -23,6 +23,8 @@
 define(['jquery'], function($) {
     return {
         init: function() {
+            var currentcourse = $('body').attr('class').match(/\scourse-(\d+)\s/)[1];
+
             $('.block-fcl__starlink').on({
                 'mouseenter mouseleave': function() {
                     $(this).children('i').toggleClass('fa-star fa-star-o');
@@ -31,7 +33,7 @@ define(['jquery'], function($) {
                     require(['core/ajax'], function(ajax) {
                         ajax.call([{
                             methodname: 'block_filtered_course_list_toggle_starred',
-                            args: {},
+                            args: {courseid: currentcourse},
                             done: function() {
                                 $('.block-fcl__starlink i').toggleClass('fa-star fa-star-o');
                             },
