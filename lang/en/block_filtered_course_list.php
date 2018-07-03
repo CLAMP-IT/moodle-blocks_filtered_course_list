@@ -61,4 +61,5 @@ $string['primaryvector']            = 'Primary sort vector';
 $string['privacy:metadata']         = 'The Filtered course list block displays information about course enrolments, but does not effect or store any data itself. All enrolments are managed by other Moodle systems.';
 $string['secondarysort']            = 'Secondary sort';
 $string['secondaryvector']          = 'Secondary sort vector';
+$string['starred_default_label']    = 'Starred Courses';
 $string['top']                      = 'Top';
