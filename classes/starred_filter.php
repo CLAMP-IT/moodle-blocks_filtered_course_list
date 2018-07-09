@@ -66,7 +66,7 @@ class starred_filter extends \block_filtered_course_list\filter {
         $keys = array('expanded', 'enrolledonly', 'label');
         $values = array_map(function($item) {
             return trim($item);
-        }, explode('|', $line[1], 1));
+        }, explode('|', $line[1], 3));
         $this->validate_expanded(0, $values);
         $this->validate_enrolledonly(1, $values);
         if (!array_key_exists(2, $values)) {
@@ -84,7 +84,7 @@ class starred_filter extends \block_filtered_course_list\filter {
         global $USER;
         $courselist = get_starred_courses($USER->id);
 
-        if ($this->line['enrolledonly'] && !empty($courselist)) {
+        if ($this->line['enrolledonly'] === 'yes' && !empty($courselist)) {
             $courselist = array_uintersect($courselist, $this->courselist, function($a, $b) {
                 return $a->id === $b->id;
             });
