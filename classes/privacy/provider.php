@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die;
  */
 class provider implements \core_privacy\local\metadata\null_provider {
 
-    // Support PHP back to 5.6 (for Moodle 3.3 and lower)
+    // Support PHP back to 5.6 (for Moodle 3.3 and lower).
     use \core_privacy\local\legacy_polyfill;
 
     /**
