@@ -876,6 +876,52 @@ EOF;
     }
 
     /**
+     * Test that we are applying the correct CSS completion classes
+     */
+    public function test_css_completion_classes() {
+        global $CFG, $DB;
+
+        // Create a course.
+        $this->_create_misc_courses( 1, 1 );
+
+        // Enroll user1 as a student in course 1.
+        $this->getDataGenerator()->enrol_user( $this->user1->id , $this->courses['c_1']->id );
+
+        // While completion is not enabled site-wide.
+        $this->_courselistexcludes ( array (
+            'user1' => array ( 'complete' ),
+        ));
+
+        // While completion is enabled site-wide, but not on the course.
+        $CFG->enablecompletion = true;
+        $this->_courselistexcludes ( array (
+            'user1' => array ( 'complete' ),
+        ));
+
+        // Enable completion on the course.
+        $record = new stdClass();
+        $record->id = $this->courses['c_1']->id;
+        $record->enablecompletion = 1;
+        $DB->update_record('course', $record);
+        $this->_courselistincludes ( array (
+            'user1' => array ( 'incomplete' ),
+        ));
+
+        // Finally, mark the completion.
+        $completion = new completion_completion(array(
+            'course' => $this->courses['c_1']->id,
+            'userid' => $this->user1->id
+        ));
+        $completion->mark_complete();
+        $this->_courselistincludes ( array (
+            'user1' => array ( 'complete' ),
+        ));
+        $this->_courselistexcludes ( array (
+            'user1' => array ( 'incomplete' ),
+        ));
+    }
+
+    /**
      * Generate some users to test against
      */
     private function _setupusers() {

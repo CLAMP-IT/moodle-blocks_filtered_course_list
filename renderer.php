@@ -57,12 +57,17 @@ class list_item implements \renderable, \templatable {
      * @param object $config The plugin options object
      */
     public function __construct($itemobject, $config) {
+        global $USER;
 
         $type = (get_class($itemobject) == 'coursecat') ? 'category' : 'course';
 
         switch ($type){
             case 'course':
                 $this->classes[] = 'block-fcl__list__item--course';
+                $completionclass = $this->completion_class($itemobject, $USER->id);
+                if (!empty($completionclass)) {
+                    $this->classes[] = $completionclass;
+                }
                 $this->displaytext = \block_filtered_course_list_lib::coursedisplaytext($itemobject, $config->coursenametpl);
                 if (!$itemobject->visible) {
                     $this->linkclasses[] = 'dimmed';
@@ -100,6 +105,27 @@ class list_item implements \renderable, \templatable {
             'summaryurl'  => $this->summaryurl,
         );
         return $data;
+    }
+
+    /**
+     * Return a completion class for a user in a courses
+     *
+     * @param stdClass $course object
+     * @param string $userid
+     * @return string $completionclass
+     */
+    private function completion_class($course, $userid) {
+        if (\completion_info::is_enabled_for_site()) {
+            $completioninfo = new \completion_info($course);
+            if ($completioninfo->is_enabled()) {
+                if ($completioninfo->is_course_complete($userid)) {
+                    return 'block-fcl__list__item--complete';
+                }
+                return '.block-fcl__list__item--incomplete';
+            }
+            return;
+        }
+        return;
     }
 }
 
