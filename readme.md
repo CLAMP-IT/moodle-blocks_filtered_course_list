@@ -1,8 +1,8 @@
-# [Filtered course list v3.3.5]
+# [Filtered course list v3.3.7]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
-for Moodle 3.2 or higher
+For Moodle 3.3 or higher
 
 The _Filtered course list_ block displays a configurable list of a user's courses. It is intended as a replacement for the _My courses_ block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
 
@@ -45,11 +45,11 @@ Please see the usage guide for fuller details: https://github.com/CLAMP-IT/moodl
 | Hide from guests | Check this box to hide the block from guests and anonymous visitors. |
 | Hide other courses | By default an "Other courses" rubric appears at the end of the list and displays any of the user's courses that have not already been mentioned under some other heading. Check the box here to suppress that rubric. |
 | Max for single category | On a site with only one category, admins and guests will see all courses, but above the number specified here they will see a category link instead. [Choose an integer between 0 and 999.] Unless you have a single-category installation there is no need to adjust this setting. |
-| Course name template | Use replacement tokens (FULLNAME, SHORTNAME, IDNUMBER or CATEGORY) to control the way links to courses are displayed. |
-| Category rubric template | Use replacement tokens (NAME, IDNUMBER, PARENT or ANCESTRY) to control the way rubrics display when using a category filter. |
+| Course name template | Use replacement tokens (FULLNAME, SHORTNAME, IDNUMBER or CATEGORY) to control the way links to courses are displayed. Add a character limit to any token by suffixing it in curly braces to the token. For instance: FULLNAME{20} |
+| Category rubric template | Use replacement tokens (NAME, IDNUMBER, PARENT or ANCESTRY) to control the way rubrics display when using a category filter. Add a character limit to any token by suffixing it in curly braces to the token. For instance: NAME{20} |
 | Category separator | Customize the separator between ancestor categories when using the ANCESTRY token above. |
 | Manager view | By default administrators and managers will see a list of categories rather than a list of their own courses. This setting allows you to change that, and it can be helpful to do so while configuring the block. Be advised, however, that admins and managers who are not enrolled in any courses will still see the generic list. |
-| Sorting | The next four settings control the way coures are sorted within a rubric. |
+| Sorting | The next four settings control the way courses are sorted within a rubric. |
 
 ## Changing the display name
 
@@ -64,6 +64,12 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v3.3.7]
+* Requirements: Requires Moodle 3.3 or higher
+* Feature: Option to truncate template values after a certain length
+* Feature: CSS classes corresponding to course completion status
+* Backend: Reorganizes filter classes
 
 ### [v3.3.6]
 * Bug: Fixes fatal error with Privacy API
@@ -85,7 +91,7 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ### [v3.3.1]
 * Bug: Simplifies strings for AMOS Compatibility
-* Bug: Complies with Moodles CSS styles
+* Bug: Complies with Moodle's CSS styles
 
 ### [v3.3.0]
 * New: adds a generic filters
