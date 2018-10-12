@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the class used to handle shortname filters.
+ * This file contains the class used to handle starred courses filters.
  *
  * @package    block_filtered_course_list
  * @copyright  2018 CLAMP
@@ -35,10 +35,10 @@ if (file_exists($starred_courses_lib_path)) {
 }
 
 /**
- * A class to construct rubrics based on shortname matches
+ * A class to construct rubrics based on starred courses from local_starred_courses
  *
  * @package    block_filtered_course_list
- * @copyright  2016 CLAMP
+ * @copyright  2018 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class starred_filter extends \block_filtered_course_list\filter {
