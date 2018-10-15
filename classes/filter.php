@@ -27,13 +27,54 @@ namespace block_filtered_course_list;
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * This interface allows us to define the following static functions in a way
+ * that mimics a "public abstract static function()" in the filter class itself.
+ * This is a workaround for limitations in PHP 5 -- see the below link for more details.
+ *
+ * https://stackoverflow.com/questions/999066/why-does-php-5-2-disallow-abstract-static-class-methods/6386309#6386309
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface filter_interface {
+    /**
+     * Retrieve filter short name.
+     *
+     * @return string This filter's shortname.
+     */
+    public static function getshortname();
+
+    /**
+     * Retrieve filter full name.
+     *
+     * @return string This filter's shortname.
+     */
+    public static function getfullname();
+
+    /**
+     * Retrieve filter component.
+     *
+     * @return string This filter's component.
+     */
+    public static function getcomponent();
+
+    /**
+     * Retrieve filter version sync number.
+     *
+     * @return string This filter's version sync number.
+     */
+    public static function getversionsyncnum();
+}
+
+/**
  * An abstract class to generate rubrics based on a line of rubric config
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class filter {
+abstract class filter implements filter_interface {
     /** @var array Elements of the rubric config line */
     public $line;
     /** @var array A list of courses the current user is enrolled in */

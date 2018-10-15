@@ -31,6 +31,43 @@ define('BLOCK_FILTERED_COURSE_LIST_DEFAULT_CATEGORY', 0);
 define('BLOCK_FILTERED_COURSE_LIST_EMPTY', '');
 define('BLOCK_FILTERED_COURSE_LIST_FALSE', 0);
 define('BLOCK_FILTERED_COURSE_LIST_TRUE', 1);
+define('BLOCK_FILTERED_COURSE_LIST_FILTER_VERSION_SYNC_NUMBER', '1.0.0');
+
+function get_filter($name, $exfilters) {
+    global $CFG;
+
+    if (empty($name)) {
+        return null;
+    }
+    // Assume base filter.
+    $classname = "\\block_filtered_course_list\\{$name}_filter";
+    // If not base filter, look for external filter.
+    if (!class_exists($classname)) {
+        // Find the filter we're looking for.
+        $exfilters = array_filter(explode(',', $exfilters), function($info) use($name) {
+            return strpos($info, "$name|") === 0;
+        });
+        // Abort if filter not found.
+        if (empty($exfilters)) {
+            return null;
+        }
+        // Split out filter info.
+        $filterinfo = explode('|', $exfilters[0]);
+        $path = $CFG->dirroot . $filterinfo[2];
+
+        // Check that path exists.
+        if (file_exists($path)) {
+            // Set class name.
+            $classname = "{$name}_fcl_filter";
+            // Require path.
+            require_once($path);
+        } else {
+            $classname = false;
+        }
+    }
+    print($classname);
+    return $classname;
+}
 
 /**
  * A class to structure rubrics regardless of their config type

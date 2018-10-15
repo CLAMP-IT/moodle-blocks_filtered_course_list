@@ -26,6 +26,8 @@ namespace block_filtered_course_list;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/blocks/filtered_course_list/locallib.php');
+
 /**
  * A class to construct rubrics based on shortname regex matches
  *
@@ -34,6 +36,41 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class regex_filter extends \block_filtered_course_list\shortname_filter {
+    /**
+     * Retrieve filter short name.
+     *
+     * @return string This filter's shortname.
+     */
+    public static function getshortname() {
+        return 'regex';
+    }
+
+    /**
+     * Retrieve filter full name.
+     *
+     * @return string This filter's shortname.
+     */
+    public static function getfullname() {
+        return 'Regex';
+    }
+
+    /**
+     * Retrieve filter component.
+     *
+     * @return string This filter's component.
+     */
+    public static function getcomponent() {
+        return 'block_filtered_course_list';
+    }
+
+    /**
+     * Retrieve filter version sync number.
+     *
+     * @return string This filter's version sync number.
+     */
+    public static function getversionsyncnum() {
+        return BLOCK_FILTERED_COURSE_LIST_FILTER_VERSION_SYNC_NUMBER;
+    }
 
     /**
      * Populate the array of rubrics for this filter type
