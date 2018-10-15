@@ -28,6 +28,54 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 if ($ADMIN->fulltree) {
 
+    $dir = new RecursiveDirectoryIterator($CFG->dirroot);
+    $itr = new RecursiveIteratorIterator($dir);
+    foreach ($itr as $file) {
+        if (preg_match('/.*fcl_filter\.php$/', $file)) {
+            require_once($file);
+        }
+    }
+
+    $exfilters = array_filter(get_declared_classes(), function($class) {
+        return preg_match('/.*fcl_filter/', $class);
+    });
+
+    $options = array();
+
+    foreach ($exfilters as $classname) {
+        $shortname = $classname::getshortname();
+        $fullname = $classname::getfullname();
+        $component = $classname::getcomponent();
+        $versionsyncnum = $classname::getversionsyncnum();
+        $path = (new ReflectionClass($classname))->getFileName();
+        $dirroot = preg_quote($CFG->dirroot, '/');
+        $relpath = preg_replace("/^$dirroot/", '', $path);
+
+        // Check that path exists, that plugin is installed, that this filter is from the plugin's code, and that versions sync.
+        $pluginmanager = \core_plugin_manager::instance();
+        $plugininfo = $pluginmanager->get_plugin_info($component);
+
+        if (file_exists($path)
+        && $plugininfo
+        && strpos($path, $plugininfo->rootdir) === 0
+        && $versionsyncnum === BLOCK_FILTERED_COURSE_LIST_FILTER_VERSION_SYNC_NUMBER) {
+            $val = "$shortname|$component|$relpath";
+            $label = "$fullname ($shortname) from $component";
+            $options[$val] = $label;
+        }
+    }
+
+    if (empty($options)) {
+        set_config('externalfilters', '', 'block_filtered_course_list');
+    } else {
+        $settings->add(new admin_setting_configmulticheckbox('block_filtered_course_list/externalfilters',
+            get_string('externalfilters', 'block_filtered_course_list'),
+            get_string('configexternalfilters', 'block_filtered_course_list'),
+            array(),
+            $options
+        ));
+    }
+
     $settings->add(new admin_setting_configtextarea('block_filtered_course_list/filters',
         get_string('filters', 'block_filtered_course_list'),
         get_string('configfilters', 'block_filtered_course_list'),
