@@ -111,7 +111,7 @@ class category_filter extends \block_filtered_course_list\filter {
         foreach ($categories as $category) {
             $rubricname = $category->name;
             if (isset($this->config->catrubrictpl) && $this->config->catrubrictpl != '') {
-                $parent = \coursecat::get($category->parent)->get_formatted_name();
+                $parent = \core_course_category::get($category->parent)->get_formatted_name();
                 $separator = ' / ';
                 if (isset($this->config->catseparator) && $this->config->catseparator != '') {
                     $separator = strip_tags($this->config->catseparator);
@@ -120,7 +120,7 @@ class category_filter extends \block_filtered_course_list\filter {
                 if ($moodleversion >= 2017111300) { // For Moodle >= 3.4.
                     $ancestry = $category->get_nested_name(false, $separator);
                 } else { // For Moodle < 3.4.
-                    $ancestors = \coursecat::make_categories_list('', 0, $separator);
+                    $ancestors = \core_course_category::make_categories_list('', 0, $separator);
                     $ancestry = $ancestors[$category->id];
                 }
                 $replacements = array(
@@ -153,18 +153,18 @@ class category_filter extends \block_filtered_course_list\filter {
      * @param int $catid The id number of the category to fetch
      * @param int $depth How many generations of categories to show
      * @param array $accumulator An accumulator passed by reference to store the recursive results
-     * @return array of \coursecat objects
+     * @return array of \core_course_category objects
      */
     protected function _get_cat_and_descendants($catid=0, $depth=0, &$accumulator=array()) {
 
-        if (!\coursecat::get($catid, IGNORE_MISSING)) {
+        if (!\core_course_category::get($catid, IGNORE_MISSING)) {
             return array();
         }
 
         // If $catid is 0, we have a special case. We will need to get all the top-level categories.
         // In the meantime, we don't start adding anything.
         if ($catid != 0) {
-            $accumulator[$catid] = \coursecat::get($catid);
+            $accumulator[$catid] = \core_course_category::get($catid);
         }
 
         // We do, however, need to pad any non-zero depth, since the first iteration is just prep.
@@ -175,7 +175,7 @@ class category_filter extends \block_filtered_course_list\filter {
         // If depth was zero then we will keep iterating until there are no more children..
         // Otherwise we bottom out when depth is 1.
         if ($depth != 1) {
-            $children = \coursecat::get($catid)->get_children();
+            $children = \core_course_category::get($catid)->get_children();
             foreach ($children as $child) {
                 $this->_get_cat_and_descendants($child->id, $depth - 1, $accumulator);
             }

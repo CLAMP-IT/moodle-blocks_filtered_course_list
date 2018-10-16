@@ -59,7 +59,7 @@ class list_item implements \renderable, \templatable {
     public function __construct($itemobject, $config) {
         global $USER;
 
-        $type = (get_class($itemobject) == 'coursecat') ? 'category' : 'course';
+        $type = (get_class($itemobject) == 'core_course_category') ? 'category' : 'course';
 
         switch ($type){
             case 'course':

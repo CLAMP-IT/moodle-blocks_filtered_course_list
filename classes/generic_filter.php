@@ -103,7 +103,7 @@ class generic_filter extends \block_filtered_course_list\filter {
     public function get_rubrics() {
 
         // Parent = 0   ie top-level categories only.
-        $categories = \coursecat::get(0)->get_children();
+        $categories = \core_course_category::get(0)->get_children();
 
         $expanded = $this->line['expanded'];
 

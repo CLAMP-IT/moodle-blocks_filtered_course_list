@@ -126,7 +126,7 @@ class block_filtered_course_list_lib {
         if ($tpl == '') {
             $tpl = 'FULLNAME';
         }
-        $cat = coursecat::get($course->category, IGNORE_MISSING);
+        $cat = core_course_category::get($course->category, IGNORE_MISSING);
         $catname = (is_object($cat)) ? $cat->name : '';
         $replacements = array(
             'FULLNAME'  => $course->fullname,

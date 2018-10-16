@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/lib.php');
-require_once($CFG->dirroot . '/lib/coursecatlib.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 /**
