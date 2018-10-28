@@ -58,7 +58,6 @@ Feature: Courses within a rubric can be sorted by various fields
     | startdate | ASC  | idnumber | DESC | "E Full" | "D Full" | "C Full" | "B Full" | "A Full" |
     | none      | ASC  | fullname | ASC  | "A Full" | "B Full" | "C Full" | "D Full" | "E Full" |
 
-  @javascript
   Scenario Outline:
     Given the following config values are set as admin:
       | primarysort     | sortorder  | block_filtered_course_list |
@@ -70,11 +69,7 @@ Feature: Courses within a rubric can be sorted by various fields
       shortname | expanded | Courses | shortname
       """
     And I log in as "admin"
-    And I am on site homepage
-    And I navigate to "Manage courses and categories" node in "Site administration>Courses"
-    And I wait until "<sort>" "link" exists
-    And I click on "Sort courses" "link"
-    And I wait until the page is ready
+    And I go to the courses management page
     And I click on "<sort>" "link" in the ".course-listing-actions" "css_element"
     And I log out
     When I log in as "testuser"
