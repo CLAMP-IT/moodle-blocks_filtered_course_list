@@ -33,6 +33,13 @@ define('BLOCK_FILTERED_COURSE_LIST_FALSE', 0);
 define('BLOCK_FILTERED_COURSE_LIST_TRUE', 1);
 define('BLOCK_FILTERED_COURSE_LIST_FILTER_VERSION_SYNC_NUMBER', '1.0.0');
 
+/**
+ * Get the name of the filter corresponding to a configuration line.
+ *
+ * @param string $name Putative filter name
+ * @param array $exfilters List of external filters designated in config
+ * @return string Filtername or null
+ */
 function get_filter($name, $exfilters) {
     global $CFG;
 
