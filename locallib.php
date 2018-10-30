@@ -65,7 +65,6 @@ function get_filter($name, $exfilters) {
             $classname = false;
         }
     }
-    print($classname);
     return $classname;
 }
 
