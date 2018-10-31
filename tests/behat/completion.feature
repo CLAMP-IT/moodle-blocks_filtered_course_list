@@ -51,7 +51,7 @@ Feature: We can filter courses by completion status
     And I log in as "teacher"
     And I am on site homepage
     And I follow "Course 1"
-    And I navigate to "Course completion" node in "Course administration"
+    And I navigate to "Course completion" in current page administration
     And I expand all fieldsets
     And I set the field "Teacher" to "1"
     And I press "Save changes"
