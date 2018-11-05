@@ -116,16 +116,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         // Create 8 courses in the default category: Miscellaneous.
         $this->_create_misc_courses( 1, 8 );
 
-        // Anonymous, Guest and Admin should see all courses.
+        // Everyone should see all courses.
         $this->_courselistincludes ( array (
             'none'  => array ( 'Course 1' , 'Course 8' ),
             'guest' => array ( 'Course 1' , 'Course 8' ),
-            'admin' => array ( 'Course 1' , 'Course 8' )
-        ));
-
-        // Regular users should not see a block (because there are as yet no enrollments).
-        $this->_noblock ( array (
-            'user1' => true,
+            'admin' => array ( 'Course 1' , 'Course 8' ),
+            'user1' => array ( 'Course 1' , 'Course 8' ),
         ));
 
     }
@@ -224,11 +220,12 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
         ));
 
-        // The block should offer top-level category links to anonymous, guest, and admin.
+        // The block should offer top-level category links to anonymous, guest, admin or an unenrolled user.
         $this->_courselistincludes ( array (
             'none'  => array ( 'Miscellaneous', 'Sibling' ),
             'guest' => array ( 'Miscellaneous', 'Sibling' ),
-            'admin' => array ( 'Miscellaneous', 'Sibling' )
+            'admin' => array ( 'Miscellaneous', 'Sibling' ),
+            'user3' => array ( 'Miscellaneous', 'Sibling' ),
         ));
 
         // Regular users should see links to visible courses in visible categories under 'Other courses'.
@@ -256,11 +253,6 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
             'user1' => array( 'cc1_3', 'gc1_3', 'hc_1', 'hcc_2' )
         ));
 
-        // The block should not appear for a user who is not enrolled in any visible courses.
-        $this->_noblock( array(
-            'user3' => true
-        ));
-
     }
 
     /**
@@ -285,10 +277,12 @@ EOF;
         ));
 
         // The block should offer top-level category links to anonymous, guest, and admin.
+        // A user not enrolled in any visible courses should see the same.
         $this->_courselistincludes ( array (
             'none'  => array ( 'Miscellaneous', 'Sibling' ),
             'guest' => array ( 'Miscellaneous', 'Sibling' ),
-            'admin' => array ( 'Miscellaneous', 'Sibling' )
+            'admin' => array ( 'Miscellaneous', 'Sibling' ),
+            'user3' => array ( 'Miscellaneous', 'Sibling' ),
         ));
 
         // Regular users should see links to visible courses under corresponding visible categories.
@@ -332,11 +326,6 @@ EOF;
         // Students should not see links to hidden courses or visible courses under hidden categories.
         $this->_courselistexcludes( array(
             'user1' => array( 'cc1_3', 'gc1_3', 'hc_1', 'hcc_2' )
-        ));
-
-        // The block should not appear for a user who is not enrolled in any visible courses.
-        $this->_noblock( array(
-            'user3' => true
         ));
 
         // Now try switching the root category setting.
@@ -517,16 +506,13 @@ EOF;
         // Hide the catch-all 'Other courses' rubric.
         set_config('hideothercourses', 1, 'block_filtered_course_list');
 
-        // The block should offer top-level category links to all users except logged-in user enrolled in no courses.
+        // The block should offer top-level category links to all users including logged-in user enrolled in no courses.
         $this->_courselistincludes ( array (
             'admin' => array ( 'Course categories' ),
             'user1' => array ( 'Course categories' ),
             'user2' => array ( 'Course categories' ),
             'none'  => array ( 'Course categories' ),
             'guest' => array ( 'Course categories' ),
-        ));
-
-        $this->_courselistexcludes ( array (
             'user3' => array ( 'Course categories' ),
         ));
     }
@@ -577,7 +563,7 @@ shortname | e | Courses | _
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        // Any user who sees the should also see the "All courses" link.
+        // Any user who sees the block should also see the "All courses" link.
         $this->_allcourseslink ( array (
             'none'  => 'Search courses',
             'guest' => 'Search courses',
@@ -611,25 +597,25 @@ shortname | expanded | Courses | _
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        // All users (except a regular user enrolled in no courses) should see the block.
+        // All users should see the block.
         $this->_noblock ( array (
             'none'  => false,
             'guest' => false,
             'user1' => false,
             'admin' => false,
-            'user3' => true
+            'user3' => false,
         ));
 
         // Change the setting to hide the block from guests and anonymous visitors.
         set_config('hidefromguests', 1, 'block_filtered_course_list');
 
-        // Now only admins and regular enrolled users should see the block.
+        // Now only admins and logged-in users should see the block.
         $this->_noblock ( array (
             'none'  => true,
             'guest' => true,
             'user1' => false,
             'admin' => false,
-            'user3' => true
+            'user3' => false,
         ));
     }
 
@@ -922,6 +908,61 @@ EOF;
     }
 
     /**
+     * Test enrolment filter.
+     */
+    public function test_enrolment_filter() {
+        $this->_create_rich_site();
+
+        // Include courses with guest access enabled.
+        $filterconfig = <<<EOF
+enrolment | c | guest | Open to guests
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courselistincludes(array(
+            'user1' => array('Open to guests', 'Guest enrolment'),
+            'user3' => array('Open to guests', 'Guest enrolment'),
+            'none'  => array('Open to guests', 'Guest enrolment'),
+        ));
+
+        $this->_courselistexcludes(array(
+            'user3' => array('Self enrolment'),
+        ));
+
+        // Include courses with self enrolment enabled.
+        $filterconfig = <<<EOF
+enrolment | c | self | Allowing self enrolment
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courselistincludes(array(
+            'user1' => array('Allowing self enrolment', 'Self enrolment'),
+            'user3' => array('Allowing self enrolment', 'Self enrolment'),
+            'none'  => array('Allowing self enrolment', 'Self enrolment'),
+        ));
+
+        $this->_courselistexcludes(array(
+            'user3' => array('Guest enrolment'),
+        ));
+
+        // Include courses with either self or guest enrolment enabled.
+        $filterconfig = <<<EOF
+enrolment | c | self, guest | Self-serve
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courselistincludes(array(
+            'user1' => array('Self-serve', 'Self enrolment'),
+            'user2' => array('Self-serve', 'Guest enrolment'),
+            'user3' => array('Self-serve', 'Self enrolment'),
+            'user3' => array('Self-serve', 'Guest enrolment'),
+            'none'  => array('Self-serve', 'Self enrolment'),
+            'none'  => array('Self-serve', 'Guest enrolment'),
+        ));
+    }
+
+
+    /**
      * Generate some users to test against
      */
     private function _setupusers() {
@@ -1006,6 +1047,7 @@ EOF;
      *   Non-ascii matching, øthér
      */
     private function _create_rich_site() {
+        global $DB;
 
         // Add some courses under Miscellaneous.
         $this->_create_misc_courses ( 1, 3 );
@@ -1078,6 +1120,35 @@ EOF;
             'category'  => $this->categories['sc']->id
         );
         $this->courses['&uuml;&amp;shortname'] = $this->getDataGenerator()->create_course( $params );
+
+        // Create a course with guest enrolment enabled in the Sibling category.
+        $params = array(
+            'fullname'  => 'Guest enrolment enabled',
+            'shortname' => 'guestenrolment',
+            'idnumber'  => 'guestenrolment',
+            'category'  => $this->categories['sc']->id
+        );
+        $this->courses['guestenrolment'] = $this->getDataGenerator()->create_course($params);
+        $guestplugin = enrol_get_plugin('guest');
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $instance = $guestplugin->add_instance($this->courses['guestenrolment'], array('status' => ENROL_INSTANCE_ENABLED,
+                                                                'name' => 'Test instance',
+                                                                'customint6' => 1,
+                                                                'roleid' => $studentrole->id));
+
+        // Create a course with self enrolment enabled in the Sibling category.
+        $params = array(
+            'fullname'  => 'Self enrolment enabled',
+            'shortname' => 'selfenrolment',
+            'idnumber'  => 'selfenrolment',
+            'category'  => $this->categories['sc']->id
+        );
+        $this->courses['selfenrolment'] = $this->getDataGenerator()->create_course($params);
+        $selfplugin = enrol_get_plugin('self');
+        $instanceid1 = $selfplugin->add_instance($this->courses['selfenrolment'], array('status' => ENROL_INSTANCE_ENABLED,
+                                                                'name' => 'Test instance',
+                                                                'customint6' => 1,
+                                                                'roleid' => $studentrole->id));
 
         // Enroll user1 as a student in all courses.
         foreach ($this->courses as $course) {

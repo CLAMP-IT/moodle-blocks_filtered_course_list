@@ -36,7 +36,7 @@ $string['configcatrubrictpl']       = 'Use this setting to determine a pattern f
 $string['configcatseparator']       = 'Separator string to use between category names when using category ANCESTRY in the category rubric template.';
 $string['configcoursenametpl']      = 'Use this setting to determine a pattern for displaying a course name. The following replacement tokens are available: FULLNAME, SHORTNAME, IDNUMBER and CATEGORY. You can truncate the output of any token by appending a character length in curly braces. (e.g. NAME{20}). An ellipsis will be added. <br /><br />Full details at <a href="https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki">https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki</a>.';
 $string['configmanagerview']        = 'What should a manager see in the course list block? Note that managers who are not enrolled in any courses will still see the generic list.';
-$string['configfilters']            = 'Enter one filter per line using vertical bars to separate filter elements. Filter types are: <i>category</i>, <i>shortname</i>, <i>regex</i>, <i>completion</i> and <i>generic</i>. <br /><br />Full details at <a href="https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax">https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax</a>.';
+$string['configfilters']            = 'Enter one filter per line using vertical bars to separate filter elements. Filter types are: <i>category</i>, <i>shortname</i>, <i>regex</i>, <i>completion</i>, <i>enrolment</i> and <i>generic</i>. <br /><br />Full details at <a href="https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax">https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax</a>.';
 $string['confighideallcourseslink'] = 'Hide "All courses" link at the bottom of the block. <br>Link hiding does not affect a manager\'s view';
 $string['confighidefromguests']     = 'Hide the block from guests and anonymous visitors.';
 $string['confighideothercourses']   = 'Hide the "Other courses" catch-all rubric in the block.';
@@ -50,7 +50,8 @@ $string['defaultfilters']           = 'category | collapsed | 0 (top level) | 0 
 $string['externalfilters']          = 'External Filters';
 $string['configexternalfilters']    = 'Use the identifier in parenthesis to reference the filter within the filter config textarea. For infromation on the configuration available for an external filter, see the plugin providing it.';
 $string['filters']                  = 'Filter configuration';
-$string['filters_help']             = 'Enter one filter per line using vertical bars to separate filter elements. Filter types are: <i>category</i>, <i>shortname</i>, <i>regex</i>, <i>completion</i> and <i>generic</i>. <br /><br />Full details at <a href="https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax">https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax</a>.';
+$string['filters_help']             = 'Enter one filter per line using vertical bars to separate filter elements. Filter types are: <i>category</i>, <i>shortname</i>, <i>regex</i>, <i>completion</i>, <i>enrolment</i> and <i>generic</i>. <br /><br />Full details at <a href="https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax">https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/wiki/Filter-syntax</a>.';
+$string['courseswithxenrolment']    = 'Courses with {$a} enrolments';
 $string['hideallcourseslink']       = 'Hide "All courses" link';
 $string['hideothercourses']         = 'Hide other courses';
 $string['hidefromguests']           = 'Hide from guests';
