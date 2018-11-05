@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the class used to handle a starred courses filter.
+ * This file contains the class used to filter courses by enrolment methods.
  *
  * @package    block_filtered_course_list
  * @copyright  2018 CLAMP
@@ -29,29 +29,29 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/blocks/filtered_course_list/locallib.php');
 
 /**
- * A class to construct a rubric based on a starred courses filter.
+ * A class to construct rubric showing courses filtered by enrolment methods.
  *
  * @package    block_filtered_course_list
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class starred_filter extends \block_filtered_course_list\filter {
+class enrolment_filter extends \block_filtered_course_list\filter {
     /**
      * Retrieve filter short name.
      *
      * @return string This filter's shortname.
      */
     public static function getshortname() {
-        return 'starred';
+        return 'enrolment';
     }
 
     /**
      * Retrieve filter full name.
      *
-     * @return string This filter's full name.
+     * @return string This filter's shortname.
      */
     public static function getfullname() {
-        return 'Starred courses';
+        return 'Enrolment filter';
     }
 
     /**
@@ -79,13 +79,25 @@ class starred_filter extends \block_filtered_course_list\filter {
      * @return array A fixed-up line array
      */
     public function validate_line($line) {
-        $keys = array('expanded', 'label');
+        $keys = array('expanded', 'enrol', 'label');
         $values = array_map(function($item) {
             return trim($item);
-        }, explode('|', $line[1]));
+        }, explode('|', $line[1], 3));
         $this->validate_expanded(0, $values);
         if (!array_key_exists(1, $values)) {
-            $values[1] = get_string('starredcourses', 'block_filtered_course_list');
+            $values[1] = array('guest');
+        } else {
+            $values[1] = array_map(function($item) {
+                return trim($item);
+            }, explode(',', $values[1]));
+            $values[1] = array_intersect(
+                $values[1],
+                array_keys(\core_component::get_plugin_list('enrol'))
+            );
+        }
+        if (!array_key_exists(2, $values)) {
+            $methods = implode('/', $values[1]);
+            $values[2] = get_string('courseswithxenrolment', 'block_filtered_course_list', $methods);
         }
         return array_combine($keys, $values);
     }
@@ -96,30 +108,24 @@ class starred_filter extends \block_filtered_course_list\filter {
      * @return array The list of rubric objects corresponding to the filter
      */
     public function get_rubrics() {
-        global $USER;
+        global $DB;
 
-        if (!isloggedin()) {
-            return null;
-        }
+        $where = implode(' OR ', array_map(function($enrol) {
+            return "enrol = '$enrol'";
+        }, $this->line['enrol']));
+        $where = "($where) AND status = 0";
 
-        $usercontext = \context_user::instance($USER->id);
-        $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
-        $systemcontext = \context_system::instance();
+        $candidates = $DB->get_fieldset_select('enrol', 'courseid', $where);
 
-        $courselist = array_filter($this->courselist, function($course) use($userservice, $systemcontext) {
-            return $userservice->favourite_exists(
-                'core_course', // Component.
-                'courses', // Itemtype.
-                $course->id, // Itemid.
-                $systemcontext // Context.
-            );
-        });
+        $courselist = array_map(function($courseid) use($DB) {
+            return $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+        }, array_unique($candidates));
+
         if (empty($courselist)) {
             return null;
         }
-
-        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'], $courselist,
-                                                                    $this->config, $this->line['expanded']);
+        $this->rubrics[] = new \block_filtered_course_list_rubric($this->line['label'],
+                                        $courselist, $this->config, $this->line['expanded']);
         return $this->rubrics;
     }
 }
