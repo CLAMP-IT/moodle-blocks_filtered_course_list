@@ -1,4 +1,4 @@
-# [Filtered course list v3.4.0]
+# [Filtered course list v3.4.1]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=MOODLE_35)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -71,6 +71,9 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v3.4.1]
+* Feature: Adds enrolment filter
 
 ### [v3.4.0]
 * Requirements: Requires Moodle 3.3, 3.4, or 3.5
