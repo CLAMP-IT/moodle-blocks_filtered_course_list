@@ -49,6 +49,8 @@ class list_item implements \renderable, \templatable {
     public $url;
     /** @var mixed Empty string or link to course summary URL */
     public $summaryurl;
+    /** @var icon object The icon to display */
+    public $icon;
 
     /**
      * Class constructor
@@ -75,6 +77,21 @@ class list_item implements \renderable, \templatable {
                 $this->title = format_string($itemobject->shortname);
                 $this->url = new \moodle_url('/course/view.php?id=' . $itemobject->id);
                 $this->summaryurl = new \moodle_url('/course/info.php?id=' . $itemobject->id);
+
+                if (isloggedin($USER)) {
+                    $usercontext = \context_user::instance($USER->id);
+                    $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
+                    $isfave = $userservice->favourite_exists(
+                        'core_course',
+                        'courses',
+                        $itemobject->id,
+                        \context_course::instance($itemobject->id));
+                    $fastring = ($isfave) ? 'fa-star' : 'fa-graduation-cap';
+                    $srtitle = ($isfave) ? get_string('favourite', 'core_course') : get_string('course', 'core');
+                    $this->icon = new icon($itemobject->id, $isfave, $fastring, $srtitle);
+                } else {
+                    $this->icon = new icon($itemobject->id, false, 'fa-graduation-cap', get_string('course', 'core'));
+                }
                 break;
             case 'category':
                 $this->classes[] = 'block-fcl__list__item--category';
@@ -85,6 +102,7 @@ class list_item implements \renderable, \templatable {
                 $this->title = '';
                 $this->url = new \moodle_url('/course/index.php?categoryid=' . $itemobject->id);
                 $this->summaryurl = '';
+                $this->icon = new icon($itemobject->id, false, 'fa-folder', get_string('category', 'core'));
                 break;
         }
     }
@@ -103,6 +121,7 @@ class list_item implements \renderable, \templatable {
             'title'       => $this->title,
             'url'         => $this->url,
             'summaryurl'  => $this->summaryurl,
+            'icon'        => $this->icon,
         );
         return $data;
     }
@@ -126,6 +145,55 @@ class list_item implements \renderable, \templatable {
             return;
         }
         return;
+    }
+}
+
+/**
+ * Helper class for rendering icons
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class icon implements \renderable, \templatable {
+
+    /** @var int course id */
+    public $id;
+    /** @var bool is favourite */
+    public $isfavourite;
+    /** @var str Font awesome class to use for item icon */
+    public $icon;
+    /** @var str Title for screen reader */
+    public $title;
+
+    /**
+     * Constructor
+     *
+     * @param int $id course id
+     * @param bool $isfavourite is favourite
+     * @param str $icon Font-awesome class to use for icon
+     */
+    public function __construct($id, $isfavourite, $icon, $title) {
+        $this->id = $id;
+        $this->isfavourite = $isfavourite;
+        $this->icon = $icon;
+        $this->title = $title;
+    }
+
+    /**
+     * Export the object data for use by a template
+     *
+     * @param renderer_base $output A renderer_base object
+     * @return array $data Template-ready data
+     */
+    public function export_for_template(\renderer_base $output) {
+        $data = array(
+            'id' => $this->id,
+            'isfavourite' => $this->isfavourite,
+            'icon' => $this->icon,
+            'title' => $this->title,
+        );
+        return $data;
     }
 }
 
@@ -172,7 +240,9 @@ class renderable_rubric implements \renderable, \templatable {
         }, $this->rubric->courses);
         $key = $this->key + 1;
         $cookiename = "block_fcl_{$this->instid}_tab{$key}";
-        if (array_key_exists($cookiename, $_COOKIE) && $this->rubric->config->persistentexpansion) {
+        if (array_key_exists($cookiename, $_COOKIE)
+                && property_exists($this->rubric->config, 'persistentexpansion')
+                && $this->rubric->config->persistentexpansion) {
             $this->rubric->expanded = ($_COOKIE[$cookiename] == 'expanded') ? 'expanded' : 'collapsed';
         }
         $exp = ($this->rubric->expanded == 'expanded') ? 'true' : 'false';
@@ -319,6 +389,17 @@ class renderer extends \plugin_renderer_base {
     protected function render_list_item (list_item $listitem) {
         $data = $listitem->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/list_item', $data);
+    }
+
+    /**
+     * Render HTML for icon
+     *
+     * @param icon $icon
+     * @return string The rendered html
+     */
+    protected function render_icon (icon $icon) {
+        $data = $icon->export_for_template($this);
+        return $this->render_from_template('block_filtered_course_list/icon', $data);
     }
 
     /**

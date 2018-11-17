@@ -11,7 +11,6 @@ Feature: The starred courses filter displays a user's starred courses
       | Course 1 | course1   |
       | Course 2 | course2   |
       | Course 3 | course3   |
-      | Test     | test      |
     And the following "users" exist:
       | username |
       | student1 |
@@ -20,11 +19,10 @@ Feature: The starred courses filter displays a user's starred courses
       | user     | course   | role    |
       | student1 | course1  | student |
       | student1 | course2  | student |
-      | student1 | test     | student |
       | student2 | course2  | student |
     And the following "blocks" exist:
-      | blockname            | contextlevel | reference |
-      | filtered_course_list | Course       | test      |
+      | blockname            | contextlevel | reference            | pagetypepattern | defaultregion |
+      | filtered_course_list | Course       | Acceptance test site | site-index      | site-pre      |
     And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
     """
     starred | expanded | My starred courses
@@ -36,9 +34,26 @@ Feature: The starred courses filter displays a user's starred courses
     And I log in as "student1"
     And I click on ".coursemenubtn" "css_element" in the "//div[@class='card dashboard-card' and contains(.,'Course 1')]" "xpath_element"
     And I click on "Star this course" "link" in the "//div[@class='card dashboard-card' and contains(.,'Course 1')]" "xpath_element"
-    And I follow "Test"
+    And I am on site homepage
     Then I should see "Filtered course list"
-    And I should see "My starred courses"
-    And I should see "Course 1"
-    And I should not see "Course 2"
-    And I should not see "Course 3"
+    And I should see "My starred courses" in the ".block_filtered_course_list" "css_element"
+    And I should see "Course 1" in the ".block_filtered_course_list" "css_element"
+    And I should not see "Course 2" in the ".block_filtered_course_list" "css_element"
+    And I should not see "Course 3" in the ".block_filtered_course_list" "css_element"
+    And the "class" attribute of ".tabpanel1 .fcl-icon" "css_element" should contain "fa-star"
+    And I should see "Starred course" in the ".tabpanel1 .fcl-sr-text" "css_element"
+    And the "class" attribute of ".tabpanel2 .fcl-icon" "css_element" should contain "fa-graduation-cap"
+    When I follow "Other courses"
+    Then I should see "Course" in the ".tabpanel2 .fcl-sr-text" "css_element"
+    And I should not see "Starred" in the ".tabpanel2 .fcl-sr-text" "css_element"
+    When I log out
+    And I am on site homepage
+    Then I should see "Filtered course list"
+    And the "class" attribute of ".tabpanel1 .fcl-icon" "css_element" should contain "fa-graduation-cap"
+    And I should see "Course" in the ".tabpanel1 .fcl-sr-text" "css_element"
+    And I should not see "Starred" in the ".tabpanel1 .fcl-sr-text" "css_element"
+    When the following config values are set as admin:
+      | maxallcourse | 1 | block_filtered_course_list |
+    And I am on site homepage
+    Then the "class" attribute of ".tabpanel1 .fcl-icon" "css_element" should contain "fa-folder"
+    And I should see "Category" in the ".tabpanel1 .fcl-sr-text" "css_element"

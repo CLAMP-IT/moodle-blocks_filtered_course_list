@@ -95,7 +95,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox('block_filtered_course_list/persistentexpansion',
         get_string('persistentexpansion', 'block_filtered_course_list'),
-        get_string('configpersistentexpanstion', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_TRUE));
+        get_string('configpersistentexpansion', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_TRUE));
 
     $settings->add(new admin_setting_configtext('block_filtered_course_list/maxallcourse',
         get_string('maxallcourse', 'block_filtered_course_list'),

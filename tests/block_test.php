@@ -72,18 +72,19 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         $fclconfig = get_config('block_filtered_course_list');
 
         $configdefaults = array (
-            'hideallcourseslink' => 0,
-            'hidefromguests'     => 0,
-            'hideothercourses'   => 0,
-            'maxallcourse'       => 10,
-            'coursenametpl'      => 'FULLNAME',
-            'catrubrictpl'       => 'NAME',
-            'catseparator'       => ' / ',
-            'managerview'        => 'all',
-            'primarysort'        => 'fullname',
-            'primaryvector'      => 'ASC',
-            'secondarysort'      => 'none',
-            'secondaryvector'    => 'ASC',
+            'hideallcourseslink'  => 0,
+            'hidefromguests'      => 0,
+            'hideothercourses'    => 0,
+            'maxallcourse'        => 10,
+            'coursenametpl'       => 'FULLNAME',
+            'catrubrictpl'        => 'NAME',
+            'catseparator'        => ' / ',
+            'managerview'         => 'all',
+            'persistentexpansion' => 1,
+            'primarysort'         => 'fullname',
+            'primaryvector'       => 'ASC',
+            'secondarysort'       => 'none',
+            'secondaryvector'     => 'ASC',
         );
 
         foreach ($configdefaults as $name => $value) {

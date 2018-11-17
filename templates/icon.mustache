@@ -15,26 +15,19 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template block_filtered_course_list/favouriteicon
+    @template block_filtered_course_list/icon
 
-    This template renders the favourite icon for a course.
+    This template renders the icon for a list item.
 
     Example context (json):
     {
         "id": 3,
-        "isfavourite": true
+        "isfavourite": true,
+        "icon": "fa-star",
+        "title": "Starred course"
     }
 }}
-<span id="favorite-icon-{{ id }}-{{ uniqid }}"
-    data-region="favourite-icon"
-    data-course-id="{{id}}"
-    >
-    <span
-        class="text-primary {{^isfavourite}}hidden{{/isfavourite}}"
-        data-region="is-favourite"
-        aria-hidden="{{^isfavourite}}true{{/isfavourite}}{{#isfavourite}}false{{/isfavourite}}"
-        >
-        {{#pix}} i/star, core, {{#str}} favourite, core_course {{/str}} {{/pix}}
-        <span class="sr-only">{{#str}} aria:favourite, core_course {{/str}}</span>
-    </span>
+<span data-region="icon" data-course-id="{{ id }}">
+    <span class="fcl-icon icon fa {{ icon }}"></span>
+    <span class="fcl-sr-text sr-only">{{ title }}</span>
 </span>

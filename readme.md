@@ -75,7 +75,8 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 ## Changelog
 
 ### [???]
-* Feature: Enables persistent expansions states
+* Feature: Enables persistent expansion states
+* Feature: Displays stars for starred courses
 * Backend: Removes GDPR polyfill
 
 ### [v4.0.0]
@@ -98,7 +99,7 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ### [v3.3.5]
 * Backend: Better compliance with GDPR for multiple PHP versions
-* Testting: Covers Moodle 3.5
+* Testing: Covers Moodle 3.5
 
 ### [v3.3.4]
 * Policy: complies with GDPR
