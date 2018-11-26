@@ -104,14 +104,13 @@ class starred_filter extends \block_filtered_course_list\filter {
 
         $usercontext = \context_user::instance($USER->id);
         $userservice = \core_favourites\service_factory::get_service_for_user_context($usercontext);
-        $systemcontext = \context_system::instance();
 
-        $courselist = array_filter($this->courselist, function($course) use($userservice, $systemcontext) {
+        $courselist = array_filter($this->courselist, function($course) use($userservice) {
             return $userservice->favourite_exists(
                 'core_course', // Component.
                 'courses', // Itemtype.
                 $course->id, // Itemid.
-                $systemcontext // Context.
+                \context_course::instance($course->id) // Context.
             );
         });
         if (empty($courselist)) {
