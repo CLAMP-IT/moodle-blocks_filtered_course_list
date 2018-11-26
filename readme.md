@@ -1,8 +1,8 @@
-# [Filtered course list v3.3.7]
+# [Filtered course list v4.0.0]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
-For Moodle 3.3 or higher
+For Moodle 3.6
 
 The _Filtered course list_ block displays a configurable list of a user's courses. It is intended as a replacement for the _My courses_ block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
 
@@ -22,11 +22,18 @@ During the upgrade you will be shown only the "new settings" but it is important
 ## Configuration ##
 To configure the block, go to _Site Administration > Plugins > Blocks > Filtered course list._
 
-Most of the configuration will be done in the _textarea_ at the top of the page. Add one filter per line; use pipes ("|") to separate the different settings for each filter. Whitespace at the beginning or end of a value is removed automatically, so you can pad your layout to make it more readable. Here is a sample of the possibilities:
+### External filters ###
+If any external filters are available on your Moodle installation you can
+activate them by checking the appropriate boxes. If there are no external
+filters, this setting will not display.
+
+### Filters ###
+Most of the configuration will be done in the _textarea_ near the top of the page. Add one filter per line; use pipes ("|") to separate the different settings for each filter. Whitespace at the beginning or end of a value is removed automatically, so you can pad your layout to make it more readable. Here is a sample of the possibilities:
 ```
 category   | expanded  | 0 (category id) | 1 (depth)
 shortname  | exp       | Current courses | S17
 regex      | collapsed | Upcoming        | (Su|F)17$
+starred    | exp       | My starred courses
 completion | exp       | Incomplete      | incomplete
 completion | col       | Completed       | complete
 generic    | exp       | Categories      | Courses
@@ -65,6 +72,15 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v4.0.0]
+* Requirements: Requires Moodle 3.6
+* Feature: Filters are now pluggable. Details in the wiki.
+* Feature: Adds a starred courses filter
+* Feature: Adds enrolment filter
+* Testing: Fixes some superficial testing errors
+* Backend: updates deprecated coursecat calls to core_course_category
+* Backend: Updates node modules
 
 ### [v3.3.7]
 * Requirements: Requires Moodle 3.3 or higher
