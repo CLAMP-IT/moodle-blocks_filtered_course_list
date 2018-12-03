@@ -21,8 +21,8 @@ php:
 
 env:
  matrix:
-  - DB=pgsql MOODLE_BRANCH=master
-  - DB=mysqli MOODLE_BRANCH=master
+  - DB=pgsql MOODLE_BRANCH=MOODLE_36_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_36_STABLE
 
 before_install:
   - phpenv config-rm xdebug.ini
