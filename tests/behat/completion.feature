@@ -30,7 +30,8 @@ Feature: We can filter courses by completion status
     completion | collapsed | Incomplete courses | incomplete
     """
     And the following config values are set as admin:
-      | enablecompletion | 0 |
+      | enablecompletion | 0 | |
+      | persistentexpansion | 0 | block_filtered_course_list |
     When I log in as "testuser"
     And I am on site homepage
     And I follow "Test"

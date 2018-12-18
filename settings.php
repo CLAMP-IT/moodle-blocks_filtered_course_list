@@ -93,6 +93,10 @@ if ($ADMIN->fulltree) {
         get_string('hideothercourses', 'block_filtered_course_list'),
         get_string('confighideothercourses', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_FALSE));
 
+    $settings->add(new admin_setting_configcheckbox('block_filtered_course_list/persistentexpansion',
+        get_string('persistentexpansion', 'block_filtered_course_list'),
+        get_string('configpersistentexpanstion', 'block_filtered_course_list'), BLOCK_FILTERED_COURSE_LIST_TRUE));
+
     $settings->add(new admin_setting_configtext('block_filtered_course_list/maxallcourse',
         get_string('maxallcourse', 'block_filtered_course_list'),
         get_string('configmaxallcourse', 'block_filtered_course_list'), 10, '/^\d{1,3}$/', 3));
