@@ -52,6 +52,7 @@ Please see the usage guide for fuller details: https://github.com/CLAMP-IT/moodl
 | Hide "All courses" link | Check the box to suppress the "All courses" link that otherwise appears at the bottom of the block. This link takes the user to the main course index page. Note that this setting does not remove the link from an administrator's view. |
 | Hide from guests | Check this box to hide the block from guests and anonymous visitors. |
 | Hide other courses | By default an "Other courses" rubric appears at the end of the list and displays any of the user's courses that have not already been mentioned under some other heading. Check the box here to suppress that rubric. |
+| Persistent expansion | If activated, we will use cookies to persist expansion states for the duration of a session. |
 | Max for single category | On a site with only one category, admins and guests will see all courses, but above the number specified here they will see a category link instead. [Choose an integer between 0 and 999.] Unless you have a single-category installation there is no need to adjust this setting. |
 | Course name template | Use replacement tokens (FULLNAME, SHORTNAME, IDNUMBER or CATEGORY) to control the way links to courses are displayed. Add a character limit to any token by suffixing it in curly braces to the token. For instance: FULLNAME{20} |
 | Category rubric template | Use replacement tokens (NAME, IDNUMBER, PARENT or ANCESTRY) to control the way rubrics display when using a category filter. Add a character limit to any token by suffixing it in curly braces to the token. For instance: NAME{20} |
@@ -72,6 +73,9 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [???]
+* Feature: Enables persistent expansions states
 
 ### [v4.0.0]
 * Requirements: Requires Moodle 3.6

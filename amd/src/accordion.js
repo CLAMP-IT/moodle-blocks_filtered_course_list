@@ -20,15 +20,49 @@
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery'], function($) {
+define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
+
+    /**
+     * Expand a rubric.
+     *
+     * @function expandRubric
+     * @param {Element} rubric
+     * @param {Integer} persist
+     */
+    function expandRubric(rubric, persist) {
+        $(rubric).removeClass('block-fcl__rubric--collapsed');
+        $(rubric).addClass('block-fcl__rubric--expanded');
+        $(rubric).attr('aria-expanded', 'true');
+        $(rubric).next().attr('aria-hidden', 'false');
+        if (persist == 1) {
+            cookie.set('block_' + rubric.id, 'expanded');
+        }
+    }
+
+    /**
+     * Collapse a rubric.
+     *
+     * @function collapseRubric
+     * @param {Element} rubric
+     * @param {Integer} persist
+     */
+    function collapseRubric(rubric, persist) {
+        $(rubric).removeClass('block-fcl__rubric--expanded');
+        $(rubric).addClass('block-fcl__rubric--collapsed');
+        $(rubric).attr('aria-expanded', 'false');
+        $(rubric).next().attr('aria-hidden', 'true');
+        if (persist == 1) {
+            cookie.set('block_' + rubric.id, 'collapsed');
+        }
+    }
+
     return {
         init: function(params) {
             var blockid = params.blockid;
             $('#' + blockid + ' .block-fcl__rubric').each(function() {
-                if (!($(this).hasClass('block-fcl__rubric--expanded'))) {
-                    $(this).addClass('block-fcl__rubric--collapsed');
-                    $(this).attr('aria-expanded', 'false');
-                    $(this).next().attr('aria-hidden', 'true');
+                var state = cookie.get('block_' + this.id);
+                if (!($(this).hasClass('block-fcl__rubric--expanded')) && (!state || state == 'collapsed')) {
+                    collapseRubric(this, params.persist);
                 }
                 $(this).wrapInner(document.createElement('a'));
                 $(this).find('a').attr('href', '#');
@@ -39,15 +73,9 @@ define(['jquery'], function($) {
                     });
                     $(this).attr('aria-selected', 'true');
                     if ($(this).hasClass('block-fcl__rubric--collapsed')) {
-                        $(this).removeClass('block-fcl__rubric--collapsed');
-                        $(this).addClass('block-fcl__rubric--expanded');
-                        $(this).attr('aria-expanded', 'true');
-                        $(this).next().attr('aria-hidden', 'false');
+                        expandRubric(this, params.persist);
                     } else if ($(this).hasClass('block-fcl__rubric--expanded')) {
-                        $(this).removeClass('block-fcl__rubric--expanded');
-                        $(this).addClass('block-fcl__rubric--collapsed');
-                        $(this).attr('aria-expanded', 'false');
-                        $(this).next().attr('aria-hidden', 'true');
+                        collapseRubric(this, params.persist);
                     }
                 });
             });

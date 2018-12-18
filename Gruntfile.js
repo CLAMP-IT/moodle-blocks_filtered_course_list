@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     // We need to include the core Moodle grunt file too, otherwise we can't run tasks like "amd".
     require("grunt-load-gruntfile")(grunt);
@@ -60,7 +60,9 @@ module.exports = function (grunt) {
         uglify: {
             amd: {
                 files: {
-                    "amd/build/accordion.min.js": ["amd/src/accordion.js"]
+                    "amd/build/accordion.min.js": ["amd/src/accordion.js"],
+                    "amd/build/config.min.js": ["amd/src/config.js"],
+                    "amd/build/cookie.min.js": ["amd/src/cookie.js"]
                 },
                 options: {report: 'none'}
             }

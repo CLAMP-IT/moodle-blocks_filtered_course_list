@@ -35,6 +35,7 @@ Feature: Each instance of the block can have custom settings
     """
     And the following config values are set as admin:
       | managerview | own | block_filtered_course_list |
+      | persistentexpansion | 0 | block_filtered_course_list |
     And the following "blocks" exist:
       | blockname            | contextlevel | reference |
       | filtered_course_list | Course       | test      |

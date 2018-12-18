@@ -93,6 +93,6 @@
 </div>
 {{#js}}
 require(['jquery', 'block_filtered_course_list/accordion'], function($, accordion) {
-    accordion.init({"blockid": "fcl_{{ instid }}_content"});
+    accordion.init({"blockid": "fcl_{{ instid }}_content", "persist": "{{ persist }}" });
 });
 {{/js}}

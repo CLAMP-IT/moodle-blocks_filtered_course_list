@@ -4,8 +4,7 @@ Feature: Course rubrics are collapsible
   As a user
   I need to click on the rubric to expand it
 
-  @javascript
-  Scenario: Viewing the courses under a rubric
+  Background:
     Given the following "categories" exist:
       | name  | category | idnumber |
       | Test  | 0        | test     |
@@ -35,10 +34,15 @@ Feature: Course rubrics are collapsible
     And the following "blocks" exist:
       | blockname            | contextlevel | reference |
       | filtered_course_list | Course       | test      |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+
+  @javascript
+  Scenario: Viewing the courses under a rubric
+    Given I set the multiline "block_filtered_course_list" "filters" setting as admin to:
     """
     category | collapsed | 0
     """
+    And the following config values are set as admin:
+      | persistentexpansion | 0 | block_filtered_course_list |
     When I log in as "testuser"
     And I am on site homepage
     And I follow "Test"
@@ -80,3 +84,36 @@ Feature: Course rubrics are collapsible
     Then "Course 23" "link" in the ".block_filtered_course_list" "css_element" should be visible
     And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
     And "Course 22" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+
+  @javascript
+  Scenario: Expansion states can persist
+    Given I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    """
+    shortname | expanded  | Current courses | 3
+    shortname | collapsed | Future courses  | 2
+    shortname | expanded  | Ones            | 1
+    shortname |           | Twos            | 22
+    """
+    And the following config values are set as admin:
+      | persistentexpansion | 1 | block_filtered_course_list |
+    When I log in as "testuser"
+    And I am on site homepage
+    And I follow "Test"
+    Then I should see "Filtered course list"
+    Then "Course 23" "link" in the ".block_filtered_course_list" "css_element" should be visible
+    And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
+    And "Course 22" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+    And "Test" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+    When I follow "Current courses"
+    Then "Course 23" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+    When I follow "Ones"
+    Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+    When I follow "Future courses"
+    Then "Course 22" "link" in the ".block_filtered_course_list" "css_element" should be visible
+    When I follow "Other"
+    Then "Test" "link" in the ".block_filtered_course_list" "css_element" should be visible
+    When I reload the page
+    Then "Course 23" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+    And "Course 11" "link" in the ".block_filtered_course_list" "css_element" should not be visible
+    And "Course 22" "link" in the ".block_filtered_course_list" "css_element" should be visible
+    And "Test" "link" in the ".block_filtered_course_list" "css_element" should be visible
