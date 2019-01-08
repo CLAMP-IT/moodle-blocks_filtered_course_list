@@ -35,16 +35,13 @@ defined('MOODLE_INTERNAL') || die;
  */
 class provider implements \core_privacy\local\metadata\null_provider {
 
-    // Support PHP back to 5.6 (for Moodle 3.3 and lower).
-    use \core_privacy\local\legacy_polyfill;
-
     /**
      * Get the language string identifier from the component's language
      * file to explain why this plugin stores no data.
      *
      * @return string
      */
-    public static function _get_reason() {
+    public static function get_reason() : string {
         return 'privacy:metadata';
     }
 }

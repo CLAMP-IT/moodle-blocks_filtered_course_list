@@ -76,6 +76,7 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ### [???]
 * Feature: Enables persistent expansions states
+* Backend: Removes GDPR polyfill
 
 ### [v4.0.0]
 * Requirements: Requires Moodle 3.6
