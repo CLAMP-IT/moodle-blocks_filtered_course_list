@@ -239,7 +239,8 @@ class renderable_rubric implements \renderable, \templatable {
             return $export;
         }, $this->rubric->courses);
         $key = $this->key + 1;
-        $cookiename = "block_fcl_{$this->instid}_tab{$key}";
+        $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $this->rubric->title));
+        $cookiename = "block_fcl_{$this->instid}_tab{$key}_{$slug}";
         if (array_key_exists($cookiename, $_COOKIE)
                 && property_exists($this->rubric->config, 'persistentexpansion')
                 && $this->rubric->config->persistentexpansion) {
