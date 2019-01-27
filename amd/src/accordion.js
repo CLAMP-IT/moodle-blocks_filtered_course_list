@@ -35,7 +35,7 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         $(rubric).attr('aria-expanded', 'true');
         $(rubric).next().attr('aria-hidden', 'false');
         if (persist == 1) {
-            cookie.set('block_' + rubric.id, 'expanded');
+            cookie.set('block_' + rubric.id + '_' + titleSlug(rubric.innerText), 'expanded');
         }
     }
 
@@ -52,8 +52,19 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         $(rubric).attr('aria-expanded', 'false');
         $(rubric).next().attr('aria-hidden', 'true');
         if (persist == 1) {
-            cookie.set('block_' + rubric.id, 'collapsed');
+            cookie.set('block_' + rubric.id + '_' + titleSlug(rubric.innerText), 'collapsed');
         }
+    }
+
+    /**
+     * Create a slug from a title string.
+     *
+     * @function titleSlug
+     * @param {string} title
+     * @returns {string} sluggified title
+     */
+    function titleSlug(title) {
+        return title.replace(/[^a-zA-Z0-9]/, '').toLowerCase();
     }
 
     return {
