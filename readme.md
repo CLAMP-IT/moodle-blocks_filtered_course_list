@@ -1,4 +1,4 @@
-# [Filtered course list v4.0.0]
+# [Filtered course list v4.1.0]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -74,7 +74,7 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
-### [???]
+### [v4.1.0]
 * Feature: Enables persistent expansion states
 * Feature: Displays stars for starred courses
 * Backend: Removes GDPR polyfill
