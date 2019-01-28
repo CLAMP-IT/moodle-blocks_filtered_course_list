@@ -1,4 +1,4 @@
-# [Filtered course list v3.4.1]
+# [Filtered course list v3.4.2]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=MOODLE_35)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -73,7 +73,7 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
-### [???]
+### [v3.4.2]
 * Feature: Enables persistent expansions states
 
 ### [v3.4.1]
