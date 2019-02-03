@@ -64,14 +64,14 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
      * @returns {string} sluggified title
      */
     function titleSlug(title) {
-        return title.replace(/[^a-zA-Z0-9]/, '').toLowerCase();
+        return title.replace(/\W/g, '').toLowerCase();
     }
 
     return {
         init: function(params) {
             var blockid = params.blockid;
             $('#' + blockid + ' .block-fcl__rubric').each(function() {
-                var state = cookie.get('block_' + this.id);
+                var state = cookie.get('block_' + this.id + '_' + titleSlug(this.innerText));
                 if (!($(this).hasClass('block-fcl__rubric--expanded')) && (!state || state == 'collapsed')) {
                     collapseRubric(this, params.persist);
                 }
