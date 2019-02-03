@@ -102,7 +102,7 @@ class block_filtered_course_list_rubric {
      * @param string $expanded Indicates the rubrics initial state: expanded or collapsed
      */
     public function __construct($title, $courses, $config, $expanded = false) {
-        $this->title = $title;
+        $this->title = format_string(htmlspecialchars($title));
         $this->courses = $courses;
         $this->config = $config;
         $this->expanded = $expanded;
@@ -138,7 +138,7 @@ class block_filtered_course_list_lib {
         // If we have limits defined, apply them.
         static::apply_template_limits($replacements, $tpl);
         $displaytext = str_replace(array_keys($replacements), $replacements, $tpl);
-        return strip_tags($displaytext);
+        return format_string(strip_tags($displaytext));
     }
 
     /**

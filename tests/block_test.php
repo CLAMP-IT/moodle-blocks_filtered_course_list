@@ -814,9 +814,9 @@ EOF;
 
         // Any tags should be stripped.
         $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Miscellaneous :: Child category 2 :: Grandchild category 1';
-        $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;idnumber < Sibling category';
+        $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;idnumber &lt; Sibling category';
         $this->_courselistincludes ( array (
-            'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR < Sibling category',
+            'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category',
                 'Miscellaneous -  - Top - Miscellaneous',
                 $longrubric,
                 $htmlentities,
