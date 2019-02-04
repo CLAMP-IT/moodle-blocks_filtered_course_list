@@ -172,6 +172,7 @@ class icon implements \renderable, \templatable {
      * @param int $id course id
      * @param bool $isfavourite is favourite
      * @param str $icon Font-awesome class to use for icon
+     * @param str $title The title attribute for the icon link
      */
     public function __construct($id, $isfavourite, $icon, $title) {
         $this->id = $id;
