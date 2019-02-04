@@ -33,6 +33,7 @@
     * hidden - string: value for the aria-hidden attribute of the list of items
     * instid - string: instance id of the block
     * key - string: array key to make rubric unique within block
+    * hash - string: a unique identifier based on block, rubric order and name
     * items - array: of links
 
     Example context (json):
@@ -43,6 +44,7 @@
         "hidden": "false",
         "instid": "17",
         "key": "1",
+        "hash": "bcdefg",
         "items": [
             {
                 "classes": "block-fcl__list__item block-fcl__list__item--course",
@@ -61,7 +63,7 @@
         ]
     }
 }}
-<div id="fcl_{{ instid }}_tab{{ key }}" class="block-fcl__rubric block-fcl__rubric--{{ state }} tab{{ key }}" role="tab" aria-controls="fcl_{{ instid }}_tabpanel{{ key }}" aria-expanded="{{ exp }}" aria-selected="false">
+<div id="fcl_{{ instid }}_tab{{ key }}" class="block-fcl__rubric block-fcl__rubric--{{ state }} tab{{ key }}" role="tab" aria-controls="fcl_{{ instid }}_tabpanel{{ key }}" aria-expanded="{{ exp }}" aria-selected="false" data-hash="{{ hash }}">
     {{ label }}
 </div>
 <div id="fcl_{{ instid }}_tabpanel{{ key }}" class="block-fcl__list collapsible tabpanel{{ key }}" role="tabpanel" aria-labelledby="fcl_{{ instid }}_tab{{ key }}" aria-hidden="{{ hidden }}">

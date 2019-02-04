@@ -35,7 +35,7 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         $(rubric).attr('aria-expanded', 'true');
         $(rubric).next().attr('aria-hidden', 'false');
         if (persist == 1) {
-            cookie.set('block_' + rubric.id + '_' + titleSlug(rubric.innerText), 'expanded');
+            cookie.set(rubric.dataset.hash, 'expanded');
         }
     }
 
@@ -52,26 +52,15 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         $(rubric).attr('aria-expanded', 'false');
         $(rubric).next().attr('aria-hidden', 'true');
         if (persist == 1) {
-            cookie.set('block_' + rubric.id + '_' + titleSlug(rubric.innerText), 'collapsed');
+            cookie.set(rubric.dataset.hash, 'collapsed');
         }
-    }
-
-    /**
-     * Create a slug from a title string.
-     *
-     * @function titleSlug
-     * @param {string} title
-     * @returns {string} sluggified title
-     */
-    function titleSlug(title) {
-        return title.replace(/\W/g, '').toLowerCase();
     }
 
     return {
         init: function(params) {
             var blockid = params.blockid;
             $('#' + blockid + ' .block-fcl__rubric').each(function() {
-                var state = cookie.get('block_' + this.id + '_' + titleSlug(this.innerText));
+                var state = cookie.get(this.dataset.hash);
                 if (!($(this).hasClass('block-fcl__rubric--expanded')) && (!state || state == 'collapsed')) {
                     collapseRubric(this, params.persist);
                 }

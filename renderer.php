@@ -171,12 +171,11 @@ class renderable_rubric implements \renderable, \templatable {
             return $export;
         }, $this->rubric->courses);
         $key = $this->key + 1;
-        $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $this->rubric->title));
-        $cookiename = "block_fcl_{$this->instid}_tab{$key}_{$slug}";
-        if (array_key_exists($cookiename, $_COOKIE)
+        $hash = 'block-fcl_' . md5("{$this->instid}{$key}{$this->rubric->title}");
+        if (array_key_exists($hash, $_COOKIE)
                 && property_exists($this->rubric->config, 'persistentexpansion')
                 && $this->rubric->config->persistentexpansion) {
-            $this->rubric->expanded = ($_COOKIE[$cookiename] == 'expanded') ? 'expanded' : 'collapsed';
+            $this->rubric->expanded = ($_COOKIE[$hash] == 'expanded') ? 'expanded' : 'collapsed';
         }
         $exp = ($this->rubric->expanded == 'expanded') ? 'true' : 'false';
         $hidden = ($this->rubric->expanded != 'expanded') ? 'true' : 'false';
@@ -188,6 +187,7 @@ class renderable_rubric implements \renderable, \templatable {
             'instid' => $this->instid,
             'key'    => $key,
             'items'  => array_values($itemdata),
+            'hash'   => $hash,
         );
         return $data;
     }
