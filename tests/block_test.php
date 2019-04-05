@@ -229,6 +229,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         ));
 
         // Regular users should see links to visible courses in visible categories under 'Other courses'.
+        // This includes visible courses in visible categories in hidden categories.
         // Teachers should see links to all their courses, visible or hidden, and under hidden categories.
         $this->_courseunderrubric( array(
             'user1' => array(
@@ -237,6 +238,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'gc1_1' => 'Other courses',
                 'sc_2'  => 'Other courses',
                 'øthér' => 'Other courses',
+                'hcvc_1' => 'Other courses',
             ),
             'user2' => array(
                 'c_1'   => 'Other courses',
@@ -393,6 +395,19 @@ EOF;
         $this->_sectionexpanded ( array(
             'Child category 1' => 'expanded',
             'Sibling category' => 'collapsed',
+        ));
+
+        // Test that we can display a visible child category of a hidden parent category
+        $hcvcid = $this->categories['hcvc']->id;
+        $filterconfig = <<<EOF
+category | expanded | $hcvcid | 0
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'hcvc_1' => 'Hidden category visible child'
+            ),
         ));
     }
 
@@ -1040,6 +1055,10 @@ EOF;
      *       Course 1 in Hidden category child, hcc_1
      *       ...
      *       Course 3 in Hidden category child, hcc_3, hidden
+     *     Hidden category visible Child
+     *       Course 1 in Hidden category child, hcvc_1
+     *       ...
+     *       Course 3 in Hidden category child, hcvc_3, hidden
      * Sibling category
      *   Course 1 in Sibling category, sc_1
      *   ...
@@ -1081,6 +1100,12 @@ EOF;
             'parent'   => $hcid,
             'idnumber' => 'hcc'
         ));
+        $this->categories['hcvc'] = $this->getDataGenerator()->create_category( array(
+            'name'     => 'Hidden category visible child',
+            'parent'   => $hcid,
+            'idnumber' => 'hcvc',
+        ));
+        $this->categories['hcvc']->show();
         $this->categories['sc'] = $this->getDataGenerator()->create_category( array(
             'name'     => 'Sibling category',
             'idnumber' => 'sc'
