@@ -111,7 +111,10 @@ class category_filter extends \block_filtered_course_list\filter {
         foreach ($categories as $category) {
             $rubricname = $category->name;
             if (isset($this->config->catrubrictpl) && $this->config->catrubrictpl != '') {
-                $parent = \core_course_category::get($category->parent)->get_formatted_name();
+                $parent = '';
+                if ($parentobj = \core_course_category::get($category->parent, IGNORE_MISSING)) {
+                    $parent = $parentobj->get_formatted_name();
+                }
                 $separator = ' / ';
                 if (isset($this->config->catseparator) && $this->config->catseparator != '') {
                     $separator = strip_tags($this->config->catseparator);
