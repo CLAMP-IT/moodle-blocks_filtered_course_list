@@ -1,4 +1,4 @@
-# [Filtered course list v3.4.3]
+# [Filtered course list v3.5.0-dev]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=MOODLE_35)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -72,6 +72,9 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v3.5.0]
+* Requires: Moodle 3.4
 
 ### [v3.4.3]
 * Bug: Fixes some inconsistent persistence behaviours
