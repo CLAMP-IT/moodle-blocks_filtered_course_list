@@ -232,6 +232,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
         // Regular users should see links to visible courses in visible categories under 'Other courses'.
         // This includes visible courses in visible categories in hidden categories.
         // Teachers should see links to all their courses, visible or hidden, and under hidden categories.
+        // Students should see links to visible courses in hidden categories under 'Other courses'.
         $this->_courseunderrubric( array(
             'user1' => array(
                 'c_1'   => 'Other courses',
@@ -246,6 +247,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
                 'cc1_3' => 'Other courses',
                 'gc1_1' => 'Other courses',
                 'hc_1'  => 'Other courses',
+                'hcc_2' => 'Other courses',
                 'hcc_3' => 'Other courses',
                 'sc_2'  => 'Other courses',
             )
@@ -253,7 +255,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         // Students should not see links to hidden courses or visible courses under hidden categories.
         $this->_courselistexcludes( array(
-            'user1' => array( 'cc1_3', 'gc1_3', 'hc_1', 'hcc_2' )
+            'user1' => array( 'cc1_3', 'gc1_3' )
         ));
 
     }
@@ -305,6 +307,8 @@ EOF;
                 'cc1_2' => 'Child category 1',
                 'gc1_1' => 'Grandchild category 1',
                 'sc_2'  => 'Sibling category',
+                'hc_1'  => 'Other courses',
+                'hcc_2' => 'Other courses',
             ),
             'user2' => array(
                 'c_1'   => 'Miscellaneous',
@@ -326,9 +330,10 @@ EOF;
             'user2' => array ( 'gc1_1' => 'Child category 1' )
         ) , 'not' );
 
-        // Students should not see links to hidden courses or visible courses under hidden categories.
+        // Students should not see links to hidden courses.
+        // Students shoudl see links to visible courses even if they are in hidden categories.
         $this->_courselistexcludes( array(
-            'user1' => array( 'cc1_3', 'gc1_3', 'hc_1', 'hcc_2' )
+            'user1' => array( 'cc1_3', 'gc1_3' )
         ));
 
         // Now try switching the root category setting.
@@ -398,10 +403,65 @@ EOF;
             'Sibling category' => 'collapsed',
         ));
 
-        // Test that we can display a visible child category of a hidden parent category
+        // Test the behavior of hidden categories and their potentially visible descendants.
+        // Set the filter target to the be the visible child of the hidden category.
+        // It should behave like any other visible category.
         $hcvcid = $this->categories['hcvc']->id;
         $filterconfig = <<<EOF
 category | expanded | $hcvcid | 0
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'hcvc_1' => 'Hidden category visible child',
+            ),
+            'user2' => array(
+                'hcvc_1' => 'Hidden category visible child',
+                'hcvc_3' => 'Hidden category visible child',
+            ),
+        ));
+
+        $this->_courselistexcludes( array(
+            'user1' => array(
+                'hcvc_3',
+            ),
+        ));
+
+        // Test the behavior of hidden categories and their potentially visible descendants.
+        // Set the filter target to the be the hidden category itself.
+        // We should get a rubric for the visible child.
+        // We should get no rubric for the hidden category.
+        // Accessible courses in the hidden category should appear under "Other courses".
+        $hcid = $this->categories['hc']->id;
+        $filterconfig = <<<EOF
+category | expanded | $hcid | 0
+EOF;
+        set_config('filters', $filterconfig, 'block_filtered_course_list');
+
+        $this->_courseunderrubric( array(
+            'user1' => array(
+                'hcvc_1' => 'Hidden category visible child',
+                'hc_1'   => 'Other courses',
+            ),
+            'user2' => array(
+                'hcvc_1' => 'Hidden category visible child',
+                'hcvc_3' => 'Hidden category visible child',
+                'hc_1'   => 'Other courses',
+                'hc_3'   => 'Other courses',
+            ),
+        ));
+
+        $this->_courselistexcludes( array(
+            'user1' => array(
+                'hcvc_3',
+            ),
+        ));
+
+        // Test that we can display a visible child category of a hidden parent category.
+        // We can do this by pointing directly to the top-level category.
+        $filterconfig = <<<EOF
+category | expanded | 0 | 0
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
@@ -1124,6 +1184,8 @@ EOF;
                 );
                 if ( $i % 3 == 0 ) {
                     $params['visible'] = 0;
+                } else {
+                    $params['visible'] = 1;
                 }
                 $this->courses[$shortname] = $this->getDataGenerator()->create_course( $params );
             }
