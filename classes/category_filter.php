@@ -115,7 +115,8 @@ class category_filter extends \block_filtered_course_list\filter {
                 if (isset($this->config->catseparator) && $this->config->catseparator != '') {
                     $separator = strip_tags($this->config->catseparator);
                 }
-                $ancestry = $category->get_nested_name(false, $separator);
+                $ancestors = \coursecat::make_categories_list('', 0, $separator);
+                $ancestry = isset($ancestors[$category->id]) ? $ancestors[$category->id] : '';
                 $replacements = array(
                     'NAME'     => $category->name,
                     'IDNUMBER' => $category->idnumber,
@@ -150,30 +151,28 @@ class category_filter extends \block_filtered_course_list\filter {
      */
     protected function _get_cat_and_descendants($catid=0, $depth=0, &$accumulator=array()) {
 
-        if (!\coursecat::get($catid, IGNORE_MISSING)) {
-            return array();
+        $cats = Array();
+
+        if ($category = \coursecat::get($catid, IGNORE_MISSING, true)) {
+
+            $allchildren = \coursecat::get_many($category->get_all_children_ids());
+            array_unshift($allchildren, $category);
+
+            $visiblecats = array_filter($allchildren, function($cat) {
+                return $cat->is_uservisible();
+            });
+
+            $cats = array_filter($visiblecats, function($cat) use($depth, $category) {
+                if ($depth == 0) {
+                    return true;
+                }
+                if ($category->id == 0) {
+                    $depth++;
+                }
+                return $cat->depth - $category->depth < $depth;
+            });
         }
 
-        // If $catid is 0, we have a special case. We will need to get all the top-level categories.
-        // In the meantime, we don't start adding anything.
-        if ($catid != 0) {
-            $accumulator[$catid] = \coursecat::get($catid);
-        }
-
-        // We do, however, need to pad any non-zero depth, since the first iteration is just prep.
-        if ($catid == 0 && $depth > 0) {
-            $depth++;
-        }
-
-        // If depth was zero then we will keep iterating until there are no more children..
-        // Otherwise we bottom out when depth is 1.
-        if ($depth != 1) {
-            $children = \coursecat::get($catid)->get_children();
-            foreach ($children as $child) {
-                $this->_get_cat_and_descendants($child->id, $depth - 1, $accumulator);
-            }
-        }
-
-        return $accumulator;
+        return $cats;
     }
 }
