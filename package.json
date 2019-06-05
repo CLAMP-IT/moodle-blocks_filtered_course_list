@@ -1,9 +1,9 @@
 {
   "name": "block_filtered_course_list",
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-less": "^1.4.1",
-    "grunt-contrib-watch": "^1.0.0",
+    "grunt": "^1.0.4",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-watch": "^1.1.0",
     "grunt-fixindent": "^0.1.3",
     "grunt-load-gruntfile": "0.0.2"
   },
