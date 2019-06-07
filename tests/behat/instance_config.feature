@@ -29,7 +29,7 @@ Feature: Each instance of the block can have custom settings
       | admin | course22 | student |
       | admin | course23 | student |
       | admin | test     | student |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     category | collapsed | 0
     """

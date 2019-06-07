@@ -37,7 +37,7 @@ Feature: Course rubrics are collapsible
 
   @javascript
   Scenario: Viewing the courses under a rubric
-    Given I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    Given I set the multiline FCL "filters" setting as admin to:
     """
     category | collapsed | 0
     """
@@ -54,7 +54,7 @@ Feature: Course rubrics are collapsible
     Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should be visible
     When I log out
     And I log in as "admin"
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     category | expanded | 0 | 0
     """
@@ -70,7 +70,7 @@ Feature: Course rubrics are collapsible
     Then "Course 11" "link" in the ".block_filtered_course_list" "css_element" should not be visible
     When I log out
     And I log in as "admin"
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     shortname | expanded  | Current courses | 3
     shortname | collapsed | Future courses  | 2
@@ -87,7 +87,7 @@ Feature: Course rubrics are collapsible
 
   @javascript
   Scenario: Expansion states can persist
-    Given I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    Given I set the multiline FCL "filters" setting as admin to:
     """
     shortname | expanded  | Nøn-åskü & tést | 3
     shortname | collapsed | Future courses  | 2

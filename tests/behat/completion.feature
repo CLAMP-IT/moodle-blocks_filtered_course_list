@@ -24,7 +24,7 @@ Feature: We can filter courses by completion status
     And the following "blocks" exist:
       | blockname            | contextlevel | reference |
       | filtered_course_list | Course       | test      |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     completion | collapsed | Completed courses  | complete
     completion | collapsed | Incomplete courses | incomplete

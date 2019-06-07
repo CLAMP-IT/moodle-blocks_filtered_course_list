@@ -23,7 +23,7 @@ Feature: The starred courses filter displays a user's starred courses
     And the following "blocks" exist:
       | blockname            | contextlevel | reference            | pagetypepattern | defaultregion |
       | filtered_course_list | Course       | Acceptance test site | site-index      | site-pre      |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     starred | expanded | My starred courses
     """
