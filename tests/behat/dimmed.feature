@@ -28,7 +28,7 @@ Feature: Hidden courses and categories are dimmed for those who can see them
       | filtered_course_list | Course       | test      |
     And the following config values are set as admin:
       | maxallcourse | 1 | block_filtered_course_list |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     category | expanded | 0
     """

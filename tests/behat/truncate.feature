@@ -20,7 +20,7 @@ Feature: Course names and category names can be truncated with their respective 
     And the following "blocks" exist:
       | blockname            | contextlevel | reference |
       | filtered_course_list | Course       | course    |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
       """
       category | expanded | visible | 0
       """

@@ -35,7 +35,7 @@ Feature: Courses within a rubric can be sorted by various fields
       | primaryvector   | <vec1>     | block_filtered_course_list |
       | secondarysort   | <sort2>    | block_filtered_course_list |
       | secondaryvector | <vec2>     | block_filtered_course_list |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
       """
       shortname | expanded | Courses | shortname
       """
@@ -64,7 +64,7 @@ Feature: Courses within a rubric can be sorted by various fields
       | primaryvector   | ASC        | block_filtered_course_list |
       | secondarysort   | none       | block_filtered_course_list |
       | secondaryvector | ASC        | block_filtered_course_list |
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
       """
       shortname | expanded | Courses | shortname
       """

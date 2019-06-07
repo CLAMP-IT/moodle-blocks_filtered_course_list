@@ -25,7 +25,7 @@ Feature: External filters can be scanned and used
     Then "input[type='checkbox'][id*='id_s_block_filtered_course_list_externalfilters_test|block_filtered_course_list|/blocks/filtered_course_list/tests/behat/data']" "css_element" should exist
     And I click on "input[type='checkbox'][id*='id_s_block_filtered_course_list_externalfilters_test|block_filtered_course_list|/blocks/filtered_course_list/tests/behat/data']" "css_element"
     And I press "Save changes"
-    And I set the multiline "block_filtered_course_list" "filters" setting as admin to:
+    And I set the multiline FCL "filters" setting as admin to:
     """
     test | expanded | Test Filter
     """
