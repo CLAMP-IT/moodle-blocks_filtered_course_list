@@ -73,6 +73,9 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
+### [v3.5.2]
+* Testing: Isolates/namespaces our custom behat step
+
 ### [v3.5.1]
 * Bug: Hops over hidden categories when drilling down category trees
 
