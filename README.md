@@ -1,4 +1,4 @@
-# [Filtered course list v4.1.4]
+# [Filtered course list v4.1.5]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=master)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -73,6 +73,9 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v4.1.5]
+* Testing: Isolates/namespaces our custom behat step
 
 ### [v4.1.4]
 * Bug: Hops over hidden categories when drilling down category trees
