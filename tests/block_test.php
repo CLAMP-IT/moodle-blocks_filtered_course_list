@@ -476,15 +476,38 @@ EOF;
      */
     public function test_shortnames() {
 
+        $this->_shared_test('shortname');
+
+    }
+
+    /**
+     * Test idnumber filtering
+     */
+    public function test_idnumbers() {
+
+        $this->_shared_test('idnumber');
+
+    }
+
+    /**
+     * Generic test for shortname or idnumber filters
+     *
+     * @param string $filter 'shortname' or 'idnumber'
+     */
+    public function _shared_test($filter) {
+
         $this->_create_rich_site();
 
-        // Set a current and future shortname.
+        // We'll need to use uppercase for the idnumber_filter.
+        $transformation = ($filter == 'idnumber') ? 'mb_strtoupper' : 'mb_strtolower';
+
+        // Set up some idnumber filters.
         $filterconfig = <<<EOF
-shortname | expanded | Current courses       | _1
-shortname | expanded | Future courses        | _2
-shortname | expanded | Non-ascii             | ø
-shortname | expanded | Child courses         | cc
-shortname | expanded | Unnumbered categories | c_
+$filter | expanded | Current courses       | _1
+$filter | expanded | Future courses        | _2
+$filter | expanded | Non-ascii             | {$transformation('ø')}
+$filter | expanded | Child courses         | {$transformation('cc')}
+$filter | expanded | Unnumbered categories | {$transformation('c_')}
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
@@ -889,7 +912,7 @@ EOF;
 
         // Any tags should be stripped.
         $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Miscellaneous :: Child category 2 :: Grandchild category 1';
-        $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;idnumber &lt; Sibling category';
+        $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;IDNUMBER &lt; Sibling category';
         $this->_courselistincludes ( array (
             'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category',
                 'Miscellaneous -  - Top - Miscellaneous',
@@ -1082,7 +1105,7 @@ EOF;
             $this->courses["c_$i"] = $this->getDataGenerator()->create_course(array(
                 'fullname' => "Course $i in Misc",
                 'shortname' => "c_$i",
-                'idnumber' => "c_$i"
+                'idnumber' => strtoupper("c_$i"),
             ));
         }
     }
@@ -1203,7 +1226,7 @@ EOF;
         $params = array(
             'fullname'  => '&uuml;&amp;: HTML Entities',
             'shortname' => '&uuml;&amp;shortname',
-            'idnumber'  => '&uuml;&amp;idnumber',
+            'idnumber'  => '&uuml;&amp;IDNUMBER',
             'category'  => $this->categories['sc']->id
         );
         $this->courses['&uuml;&amp;shortname'] = $this->getDataGenerator()->create_course( $params );
@@ -1212,7 +1235,7 @@ EOF;
         $params = array(
             'fullname'  => 'Guest enrolment enabled',
             'shortname' => 'guestenrolment',
-            'idnumber'  => 'guestenrolment',
+            'idnumber'  => 'GUESTENROLMENT',
             'category'  => $this->categories['sc']->id
         );
         $this->courses['guestenrolment'] = $this->getDataGenerator()->create_course($params);
@@ -1227,7 +1250,7 @@ EOF;
         $params = array(
             'fullname'  => 'Self enrolment enabled',
             'shortname' => 'selfenrolment',
-            'idnumber'  => 'selfenrolment',
+            'idnumber'  => 'SELFENROLMENT',
             'category'  => $this->categories['sc']->id
         );
         $this->courses['selfenrolment'] = $this->getDataGenerator()->create_course($params);

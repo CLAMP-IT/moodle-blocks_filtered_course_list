@@ -1,4 +1,4 @@
-# [Filtered course list v3.5.1]
+# [Filtered course list v3.6.0]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=MOODLE_35)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
@@ -33,6 +33,7 @@ Most of the configuration will be done in the _textarea_ near the top of the pag
 category   | expanded  | 0 (category id) | 1 (depth)
 shortname  | exp       | Current courses | S17
 regex      | collapsed | Upcoming        | (Su|F)17$
+idnumber   | col       | History courses | HIST_
 completion | exp       | Incomplete      | incomplete
 completion | col       | Completed       | complete
 generic    | exp       | Categories      | Courses
@@ -72,6 +73,9 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [v3.6.0]
+* Feature: Adds filtering by idnumber
 
 ### [v3.5.2]
 * Testing: Isolates/namespaces our custom behat step
