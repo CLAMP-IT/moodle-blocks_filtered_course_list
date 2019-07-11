@@ -49,6 +49,8 @@ Feature: Each instance of the block can have custom settings
     And I should not see "Course 12"
     When I turn editing mode on
     And I configure the "Filtered course list" block
+    Then the field "Block title" matches value ""
+    And the field "Filter configuration" matches value ""
     And I set the following fields to these values:
       | config_title | My custom title |
     And I set the field "config_filters" to multiline:

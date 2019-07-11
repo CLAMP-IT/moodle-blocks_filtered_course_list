@@ -69,7 +69,11 @@ class block_filtered_course_list extends block_base {
      * Set the instance title and merge instance config as soon as nstance data is loaded
      */
     public function specialization() {
-        $this->title = isset($this->config->title) ? $this->config->title : get_string('blockname', 'block_filtered_course_list');
+
+        if (isset($this->config->title) && $this->config->title != '') {
+            $this->title = format_string($this->config->title, true, ['context' => $this->context]);
+        }
+
         if (isset($this->config->filters) && $this->config->filters != '') {
             $this->fclconfig->filters = $this->config->filters;
         }
