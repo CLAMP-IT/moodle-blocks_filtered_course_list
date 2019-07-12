@@ -8,6 +8,7 @@
     "grunt-load-gruntfile": "0.0.2"
   },
   "dependencies": {
-    "grunt-contrib-clean": "^1.1.0"
+    "grunt-contrib-clean": "^1.1.0",
+    "lodash": "^4.17.14"
   }
 }
