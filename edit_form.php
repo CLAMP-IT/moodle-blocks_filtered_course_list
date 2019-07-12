@@ -45,7 +45,6 @@ class block_filtered_course_list_edit_form extends block_edit_form {
 
         // Set the title for the block.
         $mform->addElement('text', 'config_title', get_string('configtitle', 'block_filtered_course_list'));
-        $mform->setDefault('config_title', get_string('blockname', 'block_filtered_course_list'));
         $mform->setType('config_title', PARAM_TEXT);
 
         // Instance filters.
@@ -53,7 +52,6 @@ class block_filtered_course_list_edit_form extends block_edit_form {
                         'config_filters',
                         get_string('filters', 'block_filtered_course_list'),
                         array('cols' => 80, 'rows' => 8, 'style' => 'resize: both; font-family: monospace;'));
-        $mform->setDefault('config_filters', get_config('block_filtered_course_list', 'filters'));
         $mform->addHelpButton('config_filters', 'filters', 'block_filtered_course_list');
         $mform->setType('config_filters', PARAM_RAW);
     }
