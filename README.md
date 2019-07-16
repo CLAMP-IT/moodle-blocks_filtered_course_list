@@ -1,8 +1,8 @@
-# [Filtered course list v3.6.0]
+# [Filtered course list v3.6.1]
 
 [![Build Status](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list.svg?branch=MOODLE_35)](https://travis-ci.org/CLAMP-IT/moodle-blocks_filtered_course_list)
 
-For Moodle 3.4 or 3.5
+For Moodle 3.5
 
 The _Filtered course list_ block displays a configurable list of a user's courses. It is intended as a replacement for the _My courses_ block, although both may be used. It is maintained by the Collaborative Liberal Arts Moodle Project (CLAMP).
 
@@ -74,6 +74,10 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
+### [v3.6.1]
+* Bug: Instance config defaults to empty, multilang fix
+* Dev: npm update
+*
 ### [v3.6.0]
 * Feature: Adds filtering by idnumber
 
