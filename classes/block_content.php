@@ -102,11 +102,63 @@ class block_filtered_course_list extends block_base {
      * @return stdClass The block contents
      */
     public function get_content() {
+        global $PAGE;
+
+
         if ($this->content !== null) {
             return $this->content;
         }
         $block_content = new \block_filtered_course_list\block_content($this->instance->id);
-        $this->content = $block_content->get_content();
+        $content = $block_content->get_content();
+        $this->content = $content;
+        return $this->content;
+
+        $this->content         = new stdClass;
+        $this->content->text   = '';
+        $this->content->footer = '';
+
+        $sortsettings = array(
+            array(
+                $this->fclconfig->primarysort,
+                $this->fclconfig->primaryvector,
+            ),
+            array(
+                $this->fclconfig->secondarysort,
+                $this->fclconfig->secondaryvector,
+            ),
+        );
+
+        $sortstring = "visible DESC";
+
+        foreach ($sortsettings as $sortsetting) {
+            if ($sortsetting[0] == 'none') {
+                continue;
+            } else {
+                $sortstring .= ", " . $sortsetting[0] . " " . $sortsetting[1];
+            }
+        }
+
+        $this->mycourses = enrol_get_my_courses(null, "$sortstring");
+
+        $this->_calculate_usertype();
+        $this->liststyle = $this->_set_liststyle();
+
+        if ($this->liststyle != 'empty_block') {
+            if ($this->liststyle == 'generic_list') {
+                $this->fclconfig->filters = BLOCK_FILTERED_COURSE_LIST_GENERIC_CONFIG;
+            }
+            $this->_process_filtered_list();
+        }
+
+        $output = $PAGE->get_renderer('block_filtered_course_list');
+        $params = array(
+            'usertype'           => $this->usertype,
+            'liststyle'          => $this->liststyle,
+            'hideallcourseslink' => $this->fclconfig->hideallcourseslink,
+        );
+        $footer = new \block_filtered_course_list\output\footer($params);
+        $this->content->footer = $output->render($footer);
+
         return $this->content;
     }
 
