@@ -49,6 +49,8 @@ class mobile
         $block_content = new \block_filtered_course_list\block_content($args->instanceid, true);
         $rubrics = $block_content->get_content();
         foreach ($rubrics as $rubric) {
+            unset($rubric->expanded);
+            unset($rubric->config);
             $rubric->courses = array_values($rubric->courses);
             foreach ($rubric->courses as $course) {
                 $course->fullname = format_string(strip_tags($course->fullname));
