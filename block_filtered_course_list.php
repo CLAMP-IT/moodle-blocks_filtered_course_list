@@ -36,23 +36,11 @@ require_once(dirname(__FILE__) . '/locallib.php');
  */
 class block_filtered_course_list extends block_base {
 
-    /** @var array Admin settings for the FCL block */
-    private $fclconfig;
-    /** @var array A list of rubric objects for display */
-    private $rubrics = array();
-    /** @var arrray A list of courses for the current user */
-    private $mycourses = array();
-    /** @var string A type of user for purposes of list display, should be 'user', 'manager' or 'guest' */
-    private $usertype;
-    /** @var string Type of list: 'generic_list', 'filtered_list' or 'empty_block' */
-    private $liststyle;
-
     /**
      * Set the initial properties for the block
      */
     public function init() {
         $this->title   = get_string('blockname', 'block_filtered_course_list');
-        $this->fclconfig = get_config('block_filtered_course_list');
     }
 
     /**
@@ -110,102 +98,4 @@ class block_filtered_course_list extends block_base {
         return $this->content;
     }
 
-    /**
-     * Set the usertype for purposes of the course list display
-     */
-    private function _calculate_usertype() {
-
-        global $USER;
-
-        if (empty($USER->id) || isguestuser()) {
-            $this->usertype = 'guest';
-        } else if (has_capability('moodle/course:view', context_system::instance())) {
-            $this->usertype = 'manager';
-        } else {
-            $this->usertype = 'user';
-        }
-    }
-
-    /**
-     * Set the list style
-     */
-    private function _set_liststyle() {
-        global $CFG;
-
-        // The default liststyle is 'filtered_list' but ...
-        $liststyle = 'filtered_list';
-
-        if (!empty($CFG->disablemycourses) && $this->usertype != 'manager') {
-            $liststyle = 'generic_list';
-        }
-
-        if ($this->usertype == 'manager' &&
-            $this->fclconfig->managerview != BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN) {
-            $liststyle = "generic_list";
-        }
-
-        if ($this->fclconfig->hidefromguests == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->usertype == 'guest') {
-            $liststyle = "empty_block";
-        }
-
-        return $liststyle;
-    }
-
-    /**
-     * Build a user-specific Filtered course list block
-     */
-    private function _process_filtered_list() {
-        global $PAGE;
-        $output = $PAGE->get_renderer('block_filtered_course_list');
-
-        // Parse the textarea settings into an array of arrays.
-        $filterconfigs = array_map(function($line) {
-            return array_map(function($item) {
-                return trim($item);
-            }, explode('|', $line, 2));
-        }, explode("\n", $this->fclconfig->filters));
-
-        // Get the arrays of rubrics based on the config lines, filter out failures, and merge them into one array.
-        $this->rubrics = array_reduce(
-            array_filter(
-                array_map(function($config) {
-                    $classname = get_filter($config[0], $this->fclconfig->externalfilters);
-                    if (class_exists($classname)) {
-                        $item = new $classname($config, $this->mycourses, $this->fclconfig);
-                        return $item->get_rubrics();
-                    }
-                    return null;
-                }, $filterconfigs), function($item) {
-                return is_array($item);
-            }
-            ),
-            'array_merge', array());
-
-        if ($this->fclconfig->hideothercourses == BLOCK_FILTERED_COURSE_LIST_FALSE &&
-            $this->liststyle != 'generic_list') {
-
-            $mentionedcourses = array_unique(array_reduce(array_map(function($item) {
-                return $item->courses;
-            }, $this->rubrics), 'array_merge', array()), SORT_REGULAR);
-
-            $othercourses = array_udiff($this->mycourses, $mentionedcourses, function($a, $b) {
-                return $a->id - $b->id;
-            });
-
-            if (!empty($othercourses)) {
-                $otherrubric = new block_filtered_course_list_rubric(get_string('othercourses',
-                    'block_filtered_course_list'), $othercourses, $this->fclconfig);
-                $this->rubrics[] = $otherrubric;
-            }
-        }
-
-        if (count($this->rubrics) > 0) {
-            $content = new \block_filtered_course_list\output\content($this->rubrics, $this->instance->id);
-            $this->content->text = $output->render($content);
-        } else if ($this->fclconfig->filters != BLOCK_FILTERED_COURSE_LIST_GENERIC_CONFIG) {
-            $this->liststyle = 'generic_list';
-            $this->fclconfig->filters = 'generic|e';
-            $this->_process_filtered_list();
-        }
-    }
 }
