@@ -22,10 +22,6 @@ $addons = array(
             'filteredcourselist' => array( // Handler unique name (alphanumeric).
                 'delegate'    => 'CoreBlockDelegate', // Delegate (where to display the link to the plugin).
                 'method' => 'mobile_block_view',
-                'styles' => [
-                    'url' => $CFG->wwwroot . '/blocks/filtered_course_list/mobile.css?v=2020020901',
-                    'version' => 2020020901
-                ],
             )
         ),
         'lang' => [ // Language strings that are used in all the handlers.

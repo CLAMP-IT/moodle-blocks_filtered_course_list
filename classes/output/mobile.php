@@ -49,8 +49,8 @@ class mobile
         $block_content = new \block_filtered_course_list\block_content($args->instanceid, true);
         $rubrics = $block_content->get_content();
         foreach ($rubrics as $rubric) {
-            unset($rubric->expanded);
             unset($rubric->config);
+            $rubric->expanded = $rubric->expanded == "expanded";
             $rubric->courses = array_values($rubric->courses);
             foreach ($rubric->courses as $course) {
                 $course->fullname = format_string(strip_tags($course->fullname));
@@ -64,7 +64,7 @@ class mobile
                     'html' => $OUTPUT->render_from_template('block_filtered_course_list/mobile_block_view', $data),
                 ],
             ],
-            'javascript' => '',
+            'javascript' => file_get_contents($CFG->dirroot . '/blocks/filtered_course_list/mobile.js'),
             'otherdata' => ['rubrics' => json_encode($rubrics)],
             'files' => []
         ];
