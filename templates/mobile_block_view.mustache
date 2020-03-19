@@ -19,16 +19,14 @@
 <ion-item-divider>
     <h2>{{ 'plugin.block_filtered_course_list.pluginname' | translate }}</h2>
 </ion-item-divider>
-<ion-list>
-	<div *ngFor="let rubric of CONTENT_OTHERDATA.rubrics">
-		<ion-item-divider text-wrap (click)="toggle(rubric)" class="core-expandable">
-			<core-icon *ngIf="!rubric.expanded" name="fa-caret-right" item-start></core-icon>
-			<core-icon *ngIf="rubric.expanded" name="fa-caret-down" item-start></core-icon>
-			{{ rubric.title }}
-		</ion-item-divider>
-		<div [hidden]="!rubric.expanded">
-			<core-courses-course-list-item *ngFor="let course of rubric.courses" [course]="course"></core-courses-course-list-item>
-		</div>
+<div *ngFor="let rubric of CONTENT_OTHERDATA.rubrics">
+	<ion-item-divider text-wrap (click)="toggle(rubric)" class="core-expandable">
+		<core-icon *ngIf="!rubric.expanded" name="fa-caret-right" item-start></core-icon>
+		<core-icon *ngIf="rubric.expanded" name="fa-caret-down" item-start></core-icon>
+		{{ rubric.title }}
+	</ion-item-divider>
+	<div [hidden]="!rubric.expanded">
+		<core-courses-course-list-item *ngFor="let course of rubric.courses" [course]="course"></core-courses-course-list-item>
 	</div>
-</ion-list>
+</div>
 
