@@ -1,41 +1,15 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * This file contains the class used to display a Filtered course list block.
- *
- * @package    block_filtered_course_list
- * @copyright  2016 CLAMP
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_filtered_course_list;
 
-require_once($CFG->dirroot . '/course/lib.php');
-require_once(dirname(__FILE__) . '/locallib.php');
+require_once(dirname(__FILE__) . '/../locallib.php');
 
-/**
- * The Filtered course list block class
- *
- * @package    block_filtered_course_list
- * @copyright  2016 CLAMP
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class block_filtered_course_list extends block_base {
-
+class block_content
+{
+    private $content;
+    private $instanceid;
+    private $mobile;
     /** @var array Admin settings for the FCL block */
     private $fclconfig;
     /** @var array A list of rubric objects for display */
@@ -47,53 +21,15 @@ class block_filtered_course_list extends block_base {
     /** @var string Type of list: 'generic_list', 'filtered_list' or 'empty_block' */
     private $liststyle;
 
-    /**
-     * Set the initial properties for the block
-     */
-    public function init() {
-        $this->title   = get_string('blockname', 'block_filtered_course_list');
+
+    public function __construct($instanceid, $mobile = false)
+    {
+        $this->instanceid = $instanceid;
+        $this->mobile = $mobile;
         $this->fclconfig = get_config('block_filtered_course_list');
-    }
-
-    /**
-     * The FCL block uses a settings.php file
-     *
-     * @return bool Returns true
-     */
-    public function has_config() {
-        return true;
-    }
-
-    /**
-     * Set the instance title and merge instance config as soon as nstance data is loaded
-     */
-    public function specialization() {
-
-        if (isset($this->config->title) && $this->config->title != '') {
-            $this->title = format_string($this->config->title, true, ['context' => $this->context]);
-        }
-
-        if (isset($this->config->filters) && $this->config->filters != '') {
-            $this->fclconfig->filters = $this->config->filters;
-        }
-    }
-
-    /**
-     * Allow multiple instances
-     *
-     * @return bool Returns true
-     */
-    public function instance_allow_multiple() {
-        return true;
-    }
-
-    /**
-     * Returns the role that best describes the block... 'region'
-     *
-     * @return string 'region'
-     */
-    public function get_aria_role() {
-        return 'region';
+        $this->content = new \stdClass();
+        $this->content->text = '';
+        $this->content->footer = '';
     }
 
     /**
@@ -101,21 +37,11 @@ class block_filtered_course_list extends block_base {
      *
      * @return stdClass The block contents
      */
-    public function get_content() {
+    public function get_content()
+    {
+
         global $PAGE;
 
-
-        if ($this->content !== null) {
-            return $this->content;
-        }
-        $block_content = new \block_filtered_course_list\block_content($this->instance->id);
-        $content = $block_content->get_content();
-        $this->content = $content;
-        return $this->content;
-
-        $this->content         = new stdClass;
-        $this->content->text   = '';
-        $this->content->footer = '';
 
         $sortsettings = array(
             array(
@@ -141,6 +67,7 @@ class block_filtered_course_list extends block_base {
         $this->mycourses = enrol_get_my_courses(null, "$sortstring");
 
         $this->_calculate_usertype();
+
         $this->liststyle = $this->_set_liststyle();
 
         if ($this->liststyle != 'empty_block') {
@@ -149,29 +76,32 @@ class block_filtered_course_list extends block_base {
             }
             $this->_process_filtered_list();
         }
+        if ($this->mobile) {
+            return $this->rubrics;
+        }
 
         $output = $PAGE->get_renderer('block_filtered_course_list');
         $params = array(
-            'usertype'           => $this->usertype,
-            'liststyle'          => $this->liststyle,
+            'usertype' => $this->usertype,
+            'liststyle' => $this->liststyle,
             'hideallcourseslink' => $this->fclconfig->hideallcourseslink,
         );
         $footer = new \block_filtered_course_list\output\footer($params);
         $this->content->footer = $output->render($footer);
-
         return $this->content;
     }
 
     /**
      * Set the usertype for purposes of the course list display
      */
-    private function _calculate_usertype() {
+    private function _calculate_usertype()
+    {
 
         global $USER;
 
         if (empty($USER->id) || isguestuser()) {
             $this->usertype = 'guest';
-        } else if (has_capability('moodle/course:view', context_system::instance())) {
+        } else if (has_capability('moodle/course:view', \context_system::instance())) {
             $this->usertype = 'manager';
         } else {
             $this->usertype = 'user';
@@ -181,7 +111,8 @@ class block_filtered_course_list extends block_base {
     /**
      * Set the list style
      */
-    private function _set_liststyle() {
+    private function _set_liststyle()
+    {
         global $CFG;
 
         // The default liststyle is 'filtered_list' but ...
@@ -206,13 +137,14 @@ class block_filtered_course_list extends block_base {
     /**
      * Build a user-specific Filtered course list block
      */
-    private function _process_filtered_list() {
+    private function _process_filtered_list()
+    {
         global $PAGE;
         $output = $PAGE->get_renderer('block_filtered_course_list');
 
         // Parse the textarea settings into an array of arrays.
-        $filterconfigs = array_map(function($line) {
-            return array_map(function($item) {
+        $filterconfigs = array_map(function ($line) {
+            return array_map(function ($item) {
                 return trim($item);
             }, explode('|', $line, 2));
         }, explode("\n", $this->fclconfig->filters));
@@ -220,14 +152,14 @@ class block_filtered_course_list extends block_base {
         // Get the arrays of rubrics based on the config lines, filter out failures, and merge them into one array.
         $this->rubrics = array_reduce(
             array_filter(
-                array_map(function($config) {
+                array_map(function ($config) {
                     $classname = get_filter($config[0], $this->fclconfig->externalfilters);
                     if (class_exists($classname)) {
                         $item = new $classname($config, $this->mycourses, $this->fclconfig);
                         return $item->get_rubrics();
                     }
                     return null;
-                }, $filterconfigs), function($item) {
+                }, $filterconfigs), function ($item) {
                 return is_array($item);
             }
             ),
@@ -236,11 +168,11 @@ class block_filtered_course_list extends block_base {
         if ($this->fclconfig->hideothercourses == BLOCK_FILTERED_COURSE_LIST_FALSE &&
             $this->liststyle != 'generic_list') {
 
-            $mentionedcourses = array_unique(array_reduce(array_map(function($item) {
+            $mentionedcourses = array_unique(array_reduce(array_map(function ($item) {
                 return $item->courses;
             }, $this->rubrics), 'array_merge', array()), SORT_REGULAR);
 
-            $othercourses = array_udiff($this->mycourses, $mentionedcourses, function($a, $b) {
+            $othercourses = array_udiff($this->mycourses, $mentionedcourses, function ($a, $b) {
                 return $a->id - $b->id;
             });
 
@@ -252,8 +184,10 @@ class block_filtered_course_list extends block_base {
         }
 
         if (count($this->rubrics) > 0) {
-            $content = new \block_filtered_course_list\output\content($this->rubrics, $this->instance->id);
-            $this->content->text = $output->render($content);
+            if (!$this->mobile) {
+                $content = new \block_filtered_course_list\output\content($this->rubrics, $this->instanceid);
+                $this->content->text = $output->render($content);
+            }
         } else if ($this->fclconfig->filters != BLOCK_FILTERED_COURSE_LIST_GENERIC_CONFIG) {
             $this->liststyle = 'generic_list';
             $this->fclconfig->filters = 'generic|e';
