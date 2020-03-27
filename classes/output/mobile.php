@@ -44,8 +44,9 @@ class mobile
     public static function mobile_block_view(array $args): array
     {
         $args = (object)$args;
-        global $OUTPUT;
-        global $CFG;
+
+        global $OUTPUT, $CFG;
+
         $block_content = new \block_filtered_course_list\block_content($args->instanceid, true);
         $rubrics = $block_content->get_content();
         foreach ($rubrics as $rubric) {
@@ -56,6 +57,7 @@ class mobile
                 $course->fullname = format_string(strip_tags($course->fullname));
             }
         }
+
         $data = [];
         return [
             'templates' => [
