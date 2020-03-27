@@ -3,6 +3,9 @@
 
 namespace block_filtered_course_list;
 
+use block_filtered_course_list\output\content;
+use block_filtered_course_list_rubric;
+
 require_once(dirname(__FILE__) . '/../locallib.php');
 
 class block_content
@@ -185,7 +188,7 @@ class block_content
 
         if (count($this->rubrics) > 0) {
             if (!$this->mobile) {
-                $content = new \block_filtered_course_list\output\content($this->rubrics, $this->instanceid);
+                $content = new content($this->rubrics, $this->instanceid);
                 $this->content->text = $output->render($content);
             }
         } else if ($this->fclconfig->filters != BLOCK_FILTERED_COURSE_LIST_GENERIC_CONFIG) {

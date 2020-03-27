@@ -7,4 +7,3 @@ that.toggle = function(rubric) {
         rubric.expanded = true;
     }
 }
-
