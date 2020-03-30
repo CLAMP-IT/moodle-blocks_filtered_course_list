@@ -53,11 +53,18 @@ class mobile
             unset($rubric->config);
             $rubric->expanded = $rubric->expanded == "expanded";
             $rubric->courses = array_values($rubric->courses);
-            foreach ($rubric->courses as $course) {
-                $course->fullname = format_string(strip_tags($course->fullname));
+            foreach ($rubric->courses as $index => $course) {
+                $courseobj = new \stdClass();
+                $courseobj->id = $course->id;
+                if (!is_a($course, 'core_course_category')) {
+                    $courseobj->fullname = format_string(strip_tags($course->fullname));
+                } else {
+                    $courseobj->name = $course->name;
+                    $courseobj->category = true;
+                }
+                $rubric->courses[$index] = $courseobj;
             }
         }
-
         $data = [];
         return [
             'templates' => [
