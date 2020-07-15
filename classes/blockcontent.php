@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace block_filtered_course_list;
-
+defined('MOODLE_INTERNAL') || die();
 use block_filtered_course_list\output\content;
 use block_filtered_course_list_rubric;
 
