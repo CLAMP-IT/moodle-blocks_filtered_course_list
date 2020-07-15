@@ -93,8 +93,8 @@ class block_filtered_course_list extends block_base {
         if ($this->content !== null) {
             return $this->content;
         }
-        $block_content = new \block_filtered_course_list\block_content($this->instance->id);
-        $this->content = $block_content->get_content();
+        $blockcontent = new \block_filtered_course_list\blockcontent($this->instance->id);
+        $this->content = $blockcontent->get_content();
         return $this->content;
     }
 

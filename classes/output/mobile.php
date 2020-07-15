@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -32,8 +31,7 @@ use block_filtered_course_list;
 /**
  * Mobile output functions.
  */
-class mobile
-{
+class mobile {
 
     /**
      * Returns the SC document view page for the mobile app.
@@ -41,14 +39,13 @@ class mobile
      * @param array $args Arguments from tool_mobile_get_content WS
      * @return array HTML, javascript and otherdata
      */
-    public static function mobile_block_view(array $args): array
-    {
+    public static function mobile_block_view(array $args): array {
         $args = (object)$args;
 
         global $OUTPUT, $CFG;
 
-        $block_content = new \block_filtered_course_list\block_content($args->instanceid, true);
-        $rubrics = $block_content->get_content();
+        $blockcontent = new \block_filtered_course_list\blockcontent($args->instanceid, true);
+        $rubrics = $blockcontent->get_content();
         foreach ($rubrics as $rubric) {
             unset($rubric->config);
             $rubric->expanded = $rubric->expanded == "expanded";
