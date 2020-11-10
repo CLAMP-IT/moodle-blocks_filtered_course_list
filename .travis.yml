@@ -1,27 +1,22 @@
 language: php
 
-sudo: true
-
 addons:
-  firefox: "47.0.1"
-  postgresql: "9.5"
+  postgresql: "9.6"
+
+services:
+  - mysql
+  - postgresql
+  - docker
 
 cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.npm
 
-services:
-  - mysql
-
 matrix:
   # Just run the highest and lowest for each branch
   include:
     - php: 7.1
-      env: DB=pgsql MOODLE_BRANCH=MOODLE_37_STABLE
-    - php: 7.1
-      env: DB=mysqli MOODLE_BRANCH=MOODLE_37_STABLE
-    - php: 7.1
       env: DB=pgsql MOODLE_BRANCH=MOODLE_38_STABLE
     - php: 7.1
       env: DB=mysqli MOODLE_BRANCH=MOODLE_38_STABLE
@@ -29,10 +24,10 @@ matrix:
       env: DB=pgsql MOODLE_BRANCH=MOODLE_39_STABLE
     - php: 7.2
       env: DB=mysqli MOODLE_BRANCH=MOODLE_39_STABLE
-    - php: 7.3
-      env: DB=pgsql MOODLE_BRANCH=MOODLE_37_STABLE
-    - php: 7.3
-      env: DB=mysqli MOODLE_BRANCH=MOODLE_37_STABLE
+    - php: 7.2
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_310_STABLE
+    - php: 7.2
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_310_STABLE
     - php: 7.3
       env: DB=pgsql MOODLE_BRANCH=MOODLE_38_STABLE
     - php: 7.3
@@ -41,13 +36,15 @@ matrix:
       env: DB=pgsql MOODLE_BRANCH=MOODLE_39_STABLE
     - php: 7.4
       env: DB=mysqli MOODLE_BRANCH=MOODLE_39_STABLE
+    - php: 7.4
+      env: DB=pgsql MOODLE_BRANCH=MOODLE_310_STABLE
+    - php: 7.4
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_310_STABLE
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - nvm install 14.2.0
-  - nvm use 14.2.0
   - cd ../..
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^2
+  - composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:

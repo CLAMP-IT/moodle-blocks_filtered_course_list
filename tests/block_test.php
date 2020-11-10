@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
+require_once($CFG->dirroot . '/lib/pagelib.php');
 require_once(dirname(__FILE__) . '/../block_filtered_course_list.php');
 
 /**
@@ -52,7 +53,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
     /**
      * General setup for PHPUnit testing
      */
-    protected function setUp() {
+    protected function setUp(): void {
 
         global $CFG;
         unset ( $CFG->maxcategorydepth );
@@ -1278,22 +1279,23 @@ EOF;
      * @param array $expectations A list of users and whether or not they should see any block
      */
     private function _noblock ( $expectations=array() ) {
+        $page = new moodle_page;
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
             $bi = new block_filtered_course_list;
             $bi->instance = new StdClass;
             $bi->instance->id = 17;
             if ( $result === true ) {
-                if ( isset ( $bi->get_content()->text ) ) {
+                if ( isset ( $bi->get_content($page)->text ) ) {
                     // In some cases the text exists but is empty.
-                    $this->assertEmpty ( $bi->get_content()->text ,
-                                    "$user should not see a block, but ... " . $bi->get_content()->text);
+                    $this->assertEmpty ( $bi->get_content($page)->text ,
+                                    "$user should not see a block, but ... " . $bi->get_content($page)->text);
                 } else {
                     // In other cases the text will not have been set at all.
-                    $this->assertFalse ( isset ( $bi->get_content()->text ) );
+                    $this->assertFalse ( isset ( $bi->get_content($page)->text ) );
                 }
             } else {
-                $this->assertNotEmpty ( $bi->get_content()->text , "$user should see a block." );
+                $this->assertNotEmpty ( $bi->get_content($page)->text , "$user should see a block." );
             }
         }
     }
@@ -1304,16 +1306,17 @@ EOF;
      * @param array $expectations A list of users and whether or not they should see the link
      */
     private function _allcourseslink ( $expectations=array() ) {
+        $page = new moodle_page;
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
             $bi = new block_filtered_course_list;
             $bi->instance = new StdClass;
             $bi->instance->id = 17;
-            $footer = $bi->get_content()->footer;
+            $footer = $bi->get_content($page)->footer;
             if ( $result ) {
-                $this->assertContains ( $result , $footer , "$user should see the All-courses link." );
+                $this->assertStringContainsString ( $result , $footer , "$user should see the All-courses link." );
             } else {
-                $this->assertNotContains ( 'All courses' , $footer , "$user should not see the All-courses link." );
+                $this->assertStringNotContainsString ( 'All courses' , $footer , "$user should not see the All-courses link." );
             }
         }
     }
@@ -1324,13 +1327,14 @@ EOF;
      * @param array $expectations A list of users and courses they should see
      */
     private function _courselistincludes ( $expectations=array() ) {
+        $page = new moodle_page;
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
             $bi = new block_filtered_course_list;
             $bi->instance = new StdClass;
             $bi->instance->id = 17;
             foreach ($courses as $course) {
-                $this->assertContains ( $course , $bi->get_content()->text , "$user should see $course." );
+                $this->assertStringContainsString ( $course , $bi->get_content($page)->text , "$user should see $course." );
             }
         }
     }
@@ -1341,13 +1345,14 @@ EOF;
      * @param array $expectations A list of users and courses they should not see
      */
     private function _courselistexcludes ( $expectations=array() ) {
+        $page = new moodle_page;
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
             $bi = new block_filtered_course_list;
             $bi->instance = new StdClass;
             $bi->instance->id = 17;
             foreach ($courses as $course) {
-                $this->assertNotContains ( $course , $bi->get_content()->text , "$user should not see $course." );
+                $this->assertStringNotContainsString ( $course , $bi->get_content($page)->text , "$user should not see $course." );
             }
         }
     }
@@ -1376,13 +1381,14 @@ EOF;
      * @param string $relation 'under' indicates that the user should see the course, otherwise not
      */
     private function _courseunderrubric ( $expectations=array() , $relation='under' ) {
+        $page = new moodle_page;
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
             $bi = new block_filtered_course_list;
             $bi->instance = new StdClass;
             $bi->instance->id = 17;
             $html = new DOMDocument;
-            $html->loadHTML( mb_convert_encoding( $bi->get_content()->text, 'HTML-ENTITIES', 'UTF-8' ));
+            $html->loadHTML( mb_convert_encoding( $bi->get_content($page)->text, 'HTML-ENTITIES', 'UTF-8' ));
             $rubrics = $html->getElementsByTagName('div');
             foreach ($courses as $course => $rubricmatch) {
                 $hits = 0;
@@ -1422,12 +1428,13 @@ EOF;
      * @param string $operator Indicates whether to expect expanded or collapsed
      */
     private function _sectionexpanded ( $expectations=array(), $operator='' ) {
+        $page = new moodle_page;
         $this->_switchuser('user1');
         $bi = new block_filtered_course_list;
         $bi->instance = new StdClass;
         $bi->instance->id = 17;
         $html = new DOMDocument;
-        $html->loadHTML( $bi->get_content()->text );
+        $html->loadHTML( $bi->get_content($page)->text );
         $rubrics = $html->getElementsByTagName('div');
         foreach ($rubrics as $rubric) {
             $title = $rubric->textContent;

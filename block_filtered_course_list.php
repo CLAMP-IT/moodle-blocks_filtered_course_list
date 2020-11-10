@@ -101,8 +101,12 @@ class block_filtered_course_list extends block_base {
      *
      * @return stdClass The block contents
      */
-    public function get_content() {
-        global $PAGE;
+    public function get_content($page=null) {
+
+        // We allow unit tests to pass in the global $PAGE object.
+        if ($page !== null) {
+            $this->page = $page;
+        }
 
         if ($this->content !== null) {
             return $this->content;
@@ -145,7 +149,7 @@ class block_filtered_course_list extends block_base {
             $this->_process_filtered_list();
         }
 
-        $output = $PAGE->get_renderer('block_filtered_course_list');
+        $output = $this->page->get_renderer('block_filtered_course_list');
         $params = array(
             'usertype'           => $this->usertype,
             'liststyle'          => $this->liststyle,
@@ -202,8 +206,8 @@ class block_filtered_course_list extends block_base {
      * Build a user-specific Filtered course list block
      */
     private function _process_filtered_list() {
-        global $PAGE;
-        $output = $PAGE->get_renderer('block_filtered_course_list');
+
+        $output = $this->page->get_renderer('block_filtered_course_list');
 
         // Parse the textarea settings into an array of arrays.
         $filterconfigs = array_map(function($line) {
