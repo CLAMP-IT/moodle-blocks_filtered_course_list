@@ -14,6 +14,38 @@
    You should have received a copy of the GNU General Public License
    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
+{{!
+    @template block_filtered_course_list/mobile_block_view
+
+    Template to define the mobile view
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * title - string: Text to display on block header.
+
+    Additional context variables:
+    * rubrics - array: Object containing courses to display and expanded status.
+
+    Example context (json):
+    {
+        "title": "Text to display on block header",
+        "CONTENT_OTHERDATA": [
+            "rubrics": {
+                "title": "Title of the rubric"
+                "expanded": "true/false"
+                "courses" :[
+                    {"id": "Id of the course", "fullname": "Fullname of the course"}
+                    {"id": "Id of the category", "name": "Name of the category","category": "Set if this is a category"}
+                ]
+            }
+        ]
+    }
+}}
 
 {{=<% %>=}}
 <ion-item-divider>

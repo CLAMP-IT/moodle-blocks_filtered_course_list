@@ -64,6 +64,7 @@ class mobile {
             foreach ($rubric->courses as $index => $course) {
                 $courseobj = new \stdClass();
                 $courseobj->id = $course->id;
+                // Check if $course is a core_course_category object or not
                 if (!is_a($course, 'core_course_category')) {
                     $courseobj->fullname = format_string(strip_tags($course->fullname));
                 } else {
@@ -84,7 +85,7 @@ class mobile {
                 ],
             ],
             'javascript' => file_get_contents($CFG->dirroot . '/blocks/filtered_course_list/mobile.js'),
-            'otherdata' => ['rubrics' => json_encode($rubrics)],
+            'otherdata' => ['rubrics' => json_encode($rubrics)], // We pass $rubrics in other data to use it also in javascript.
             'files' => []
         ];
 
