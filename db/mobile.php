@@ -14,13 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file define the mobile configurations used by the Filtered course list block.
+ *
+ * @package    block_filtered_course_list
+ * @copyright  2016 CLAMP
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 $addons = array(
     "block_filtered_course_list" => array( // Plugin identifier.
-        'handlers' => array( // Different places where the plugin will display content.
+        'handlers' => array(
             'filteredcourselist' => array( // Handler unique name (alphanumeric).
-                'delegate'    => 'CoreBlockDelegate', // Delegate (where to display the link to the plugin).
+                'delegate'    => 'CoreBlockDelegate', // CoreBlockDelegate for native block visualization
                 'method' => 'mobile_block_view',
             )
         ),
