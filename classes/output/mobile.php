@@ -40,22 +40,26 @@ class mobile {
      * @return array HTML, javascript and otherdata
      */
     public static function mobile_block_view(array $args): array {
-        global $OUTPUT, $CFG, $DB;
+        global $OUTPUT, $CFG;
+
+        // Get block instance from blockid argument.
         $b = block_instance_by_id($args['blockid']);
         $b->specialization();
         $title = $b->get_title();
-		
-		// this is needed to generate rubrics object
-        $foo = $b->get_content();
-		
-		$rubrics = $b->get_rubrics();
 
-        // preparing rubrics object for javascript
-		foreach ($rubrics as $rubric) {
-			unset($rubric->config);// removing unused heavy field
-			$rubric->expanded = $rubric->expanded == "expanded";// this needs to be boolean
-			
-			// fill fields so we can use core-courses-course-list-item widget in the template
+        // This is needed to generate rubrics object.
+        $foo = $b->get_content();
+
+        // Get rubrics. Needed to prepare data for mobile rendering.
+        $rubrics = $b->get_rubrics();
+        // Preparing rubrics object for javascript.
+        foreach ($rubrics as $rubric) {
+            // The config property is not needed for mobile rendering and it's "heavy" to pass to mobile.
+            unset($rubric->config);
+            // For mobile rendering we need boolean values, so we need to convert the property.
+            $rubric->expanded = $rubric->expanded == "expanded";
+
+            // Fill fields so we can use core-courses-course-list-item widget in the template.
             $rubric->courses = array_values($rubric->courses);
             foreach ($rubric->courses as $index => $course) {
                 $courseobj = new \stdClass();
