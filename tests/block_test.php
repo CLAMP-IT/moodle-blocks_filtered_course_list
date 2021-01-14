@@ -1274,6 +1274,22 @@ EOF;
     }
 
     /**
+     * Test the get_rubrics method that facilitates mobile rendering
+     */
+    public function test_get_rubrics() {
+
+        // Create 8 courses in the default category: Miscellaneous.
+        $this->_create_misc_courses( 1, 8 );
+        $page = new moodle_page;
+        $this->_switchuser( 'admin' );
+        $bi = new block_filtered_course_list;
+        $bi->instance = new StdClass;
+        $bi->instance->id = 17;
+        $bi->get_content( $page );
+        $this->assertEquals( 8, count( $bi->get_rubrics()[0]->courses ));
+    }
+
+    /**
      * Test whether given users see any block at all
      *
      * @param array $expectations A list of users and whether or not they should see any block

@@ -97,6 +97,17 @@ class block_filtered_course_list extends block_base {
     }
 
     /**
+     * Returns the rubrics data
+     *
+     * We provide this function to facilitate forks that render the block for the mobile app.
+     *
+     * @return array
+     */
+    public function get_rubrics() {
+        return $this->rubrics;
+    }
+
+    /**
      * Return the block contents
      *
      * @return stdClass The block contents
