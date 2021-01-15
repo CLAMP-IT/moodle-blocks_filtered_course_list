@@ -1,4 +1,4 @@
-# [Filtered course list v4.4.0]
+# [Filtered course list v4.4.1]
 
 For Moodle 3.8, 3.9 and 3.10
 
@@ -76,7 +76,9 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
+### [v4.4.1]
 * Migrates CI to Github Actions
+* Adds method to facilitate mobile rendering
 
 ### [v4.4.0]
 * Drops support for Moodle 3.7
