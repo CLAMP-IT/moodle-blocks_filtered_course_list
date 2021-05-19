@@ -78,6 +78,7 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ### [Unreleased]
 * Add support for Moodle 3.11
+* Move renderer to classes directory
 
 ### [v4.4.1]
 * Migrates CI to Github Actions
