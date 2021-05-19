@@ -91,9 +91,9 @@ jobs:
         if: ${{ always() }}
         run: moodle-plugin-ci codechecker
 
-      - name: Moodle PHPDoc Checker
-        if: ${{ always() }}
-        run: moodle-plugin-ci phpdoc
+      #- name: Moodle PHPDoc Checker
+      #  if: ${{ always() }}
+      #  run: moodle-plugin-ci phpdoc
 
       - name: Validating
         if: ${{ always() }}
@@ -103,13 +103,13 @@ jobs:
         if: ${{ always() }}
         run: moodle-plugin-ci savepoints
 
-      - name: Mustache Lint
-        if: ${{ always() }}
-        run: moodle-plugin-ci mustache
+      #- name: Mustache Lint
+      #  if: ${{ always() }}
+      #  run: moodle-plugin-ci mustache
 
-      - name: Grunt
-        if: ${{ always() }}
-        run: moodle-plugin-ci grunt --max-lint-warnings 0
+      #- name: Grunt
+      #  if: ${{ always() }}
+      #  run: moodle-plugin-ci grunt --max-lint-warnings 0
 
       - name: PHPUnit tests
         if: ${{ always() }}

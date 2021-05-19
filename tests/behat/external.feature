@@ -52,4 +52,3 @@ Feature: External filters can be scanned and used
     And I follow "Course 1"
     Then I should see "Filtered course list"
     And I should not see "Test Filter" in the ".block_filtered_course_list" "css_element"
-    
