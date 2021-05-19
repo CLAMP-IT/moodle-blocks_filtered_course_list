@@ -1,6 +1,6 @@
-# [Filtered course list v4.4.1]
+# [Filtered course list v4.4.2]
 
-For Moodle 3.8, 3.9 and 3.10
+For Moodle 3.8, 3.9, 3.10, and 3.11
 
 ![Moodle Plugin
 CI](https://github.com/CLAMP-IT/moodle-blocks_filtered_course_list/workflows/Moodle%20Plugin%20CI/badge.svg)
