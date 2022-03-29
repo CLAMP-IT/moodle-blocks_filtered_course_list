@@ -27,11 +27,13 @@ Feature: The starred courses filter displays a user's starred courses
     """
     starred | expanded | My starred courses
     """
-    When I log in as "student2"
+    Given I am on the "My courses" page logged in as "student2"
+    And I hover "//div[@class='card dashboard-card' and contains(.,'Course 2')]" "xpath_element"
     And I click on ".coursemenubtn" "css_element" in the "//div[@class='card dashboard-card' and contains(.,'Course 2')]" "xpath_element"
     And I click on "Star this course" "link" in the "//div[@class='card dashboard-card' and contains(.,'Course 2')]" "xpath_element"
     And I log out
-    And I log in as "student1"
+    Given I am on the "My courses" page logged in as "student1"
+    And I hover "//div[@class='card dashboard-card' and contains(.,'Course 1')]" "xpath_element"
     And I click on ".coursemenubtn" "css_element" in the "//div[@class='card dashboard-card' and contains(.,'Course 1')]" "xpath_element"
     And I click on "Star this course" "link" in the "//div[@class='card dashboard-card' and contains(.,'Course 1')]" "xpath_element"
     And I am on site homepage

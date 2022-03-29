@@ -40,7 +40,7 @@ completion | exp       | Incomplete      | incomplete
 completion | col       | Completed       | complete
 generic    | exp       | Categories      | Courses
 enrolment  | col       | guest, self     | Open courses
-#category  | col       | 1 (Misc)        | 0 (show all children)
+#category  | col       | 1 (Category 1)  | 0 (show all children)
 The line above will be ignored, as will this comment.
 ```
 
@@ -75,6 +75,10 @@ Please report any bugs or feature requests to the public repository page: <https
 Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev documentation: https://docs.moodle.org/dev/Grunt
 
 ## Changelog
+
+### [Unreleased]
+* Add support for Moodle 4.0
+* Drop support for Moodles 3.11-3.9
 
 ### [v4.4.2]
 * Add support for Moodle 3.11
