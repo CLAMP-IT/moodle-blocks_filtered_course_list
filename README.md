@@ -76,6 +76,10 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
+### [Unreleased]
+* Add support for Moodle 4.0
+* Drop support for Moodles 3.11-3.9
+
 ### [v4.4.2]
 * Add support for Moodle 3.11
 * Ensure PHPUnit test can access renderer

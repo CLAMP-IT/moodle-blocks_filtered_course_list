@@ -116,7 +116,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
      */
     public function test_single_category_site_with_no_enrollments() {
 
-        // Create 8 courses in the default category: Miscellaneous.
+        // Create 8 courses in the default category: Category 1.
         $this->_create_misc_courses( 1, 8 );
 
         // Everyone should see all courses.
@@ -134,7 +134,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
      */
     public function test_small_single_category_site_with_enrollments() {
 
-        // Create 8 courses in the default category: Miscellaneous.
+        // Create 8 courses in the default category: Category 1.
         $this->_create_misc_courses( 1, 8 );
 
         // Enroll user1 as a teacher in course 1 and a student in courses 3 and 5.
@@ -172,7 +172,7 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
      */
     public function test_larger_single_category_site_with_enrollments() {
 
-        // Create 12 courses in the default category: Miscellaneous.
+        // Create 12 courses in the default category: Category 1.
         $this->_create_misc_courses( 1, 12 );
 
         // Enroll user1 as a teacher in course 1 and a student in courses 3 and 5.
@@ -189,9 +189,9 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         // The block should offer a category link to anonymous, guest, and admin.
         $this->_courselistincludes ( array (
-            'none'  => array ( 'Miscellaneous' ),
-            'guest' => array ( 'Miscellaneous' ),
-            'admin' => array ( 'Miscellaneous' )
+            'none'  => array ( 'Category 1' ),
+            'guest' => array ( 'Category 1' ),
+            'admin' => array ( 'Category 1' )
         ));
 
         // User1 should still see courses 1, 3 and 5.
@@ -225,10 +225,10 @@ class block_filtered_course_list_block_testcase extends advanced_testcase {
 
         // The block should offer top-level category links to anonymous, guest, admin or an unenrolled user.
         $this->_courselistincludes ( array (
-            'none'  => array ( 'Miscellaneous', 'Sibling' ),
-            'guest' => array ( 'Miscellaneous', 'Sibling' ),
-            'admin' => array ( 'Miscellaneous', 'Sibling' ),
-            'user3' => array ( 'Miscellaneous', 'Sibling' ),
+            'none'  => array ( 'Category 1', 'Sibling' ),
+            'guest' => array ( 'Category 1', 'Sibling' ),
+            'admin' => array ( 'Category 1', 'Sibling' ),
+            'user3' => array ( 'Category 1', 'Sibling' ),
         ));
 
         // Regular users should see links to visible courses in visible categories under 'Other courses'.
@@ -286,10 +286,10 @@ EOF;
         // The block should offer top-level category links to anonymous, guest, and admin.
         // A user not enrolled in any visible courses should see the same.
         $this->_courselistincludes ( array (
-            'none'  => array ( 'Miscellaneous', 'Sibling' ),
-            'guest' => array ( 'Miscellaneous', 'Sibling' ),
-            'admin' => array ( 'Miscellaneous', 'Sibling' ),
-            'user3' => array ( 'Miscellaneous', 'Sibling' ),
+            'none'  => array ( 'Category 1', 'Sibling' ),
+            'guest' => array ( 'Category 1', 'Sibling' ),
+            'admin' => array ( 'Category 1', 'Sibling' ),
+            'user3' => array ( 'Category 1', 'Sibling' ),
         ));
 
         // Regular users should see links to visible courses under corresponding visible categories.
@@ -305,7 +305,7 @@ EOF;
 
         $this->_courseunderrubric( array(
             'user1' => array(
-                'c_1'   => 'Miscellaneous',
+                'c_1'   => 'Category 1',
                 'cc1_2' => 'Child category 1',
                 'gc1_1' => 'Grandchild category 1',
                 'sc_2'  => 'Sibling category',
@@ -313,7 +313,7 @@ EOF;
                 'hcc_2' => 'Other courses',
             ),
             'user2' => array(
-                'c_1'   => 'Miscellaneous',
+                'c_1'   => 'Category 1',
                 'cc1_3' => 'Child category 1',
                 'gc1_1' => 'Grandchild category 1',
                 'hc_1'  => 'Other courses',
@@ -328,7 +328,7 @@ EOF;
 
         // Courses should appear only under immediate parents.
         $this->_courseunderrubric ( array (
-            'user1' => array ( 'gc1_1' => 'Miscellaneous' ),
+            'user1' => array ( 'gc1_1' => 'Category 1' ),
             'user2' => array ( 'gc1_1' => 'Child category 1' )
         ) , 'not' );
 
@@ -345,12 +345,12 @@ category | collapsed | $cc2id
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        // There should be no rubric for Miscellaneous.
+        // There should be no rubric for Category 1.
         $this->_courselistexcludes( array (
-            'user1' => array ( 'Miscellaneous' )
+            'user1' => array ( 'Category 1' )
         ));
 
-        // Courses directly under Miscellaneous should continue to appear in 'Other courses'.
+        // Courses directly under Category 1 should continue to appear in 'Other courses'.
         $this->_courseunderrubric( array(
             'user1' => array(
                 'c_1'   => 'Other courses',
@@ -370,7 +370,7 @@ EOF;
 
         $this->_courseunderrubric( array(
             'user1' => array(
-                'c_1'   => 'Miscellaneous',
+                'c_1'   => 'Category 1',
                 'cc1_2' => 'Other courses',
                 'gc1_1' => 'Other courses',
                 'sc_2'  => 'Sibling category',
@@ -378,7 +378,7 @@ EOF;
         ));
 
         $this->_sectionexpanded ( array(
-            'Miscellaneous'    => 'collapsed',
+            'Category 1'    => 'collapsed',
             'Sibling category' => 'collapsed',
         ));
 
@@ -524,9 +524,9 @@ EOF;
 
         // The block should offer top-level category links to anonymous, guest, and admin.
         $this->_courselistincludes ( array (
-            'none'  => array ( 'Miscellaneous', 'Sibling' ),
-            'guest' => array ( 'Miscellaneous', 'Sibling' ),
-            'admin' => array ( 'Miscellaneous', 'Sibling' )
+            'none'  => array ( 'Category 1', 'Sibling' ),
+            'guest' => array ( 'Category 1', 'Sibling' ),
+            'admin' => array ( 'Category 1', 'Sibling' )
         ));
 
         // The block should list'Current', 'Future', and 'Other courses'.
@@ -800,7 +800,7 @@ EOF;
             'Future courses'        => 'collapsed',
             'Child courses'         => 'collapsed',
             'Unnumbered categories' => 'collapsed',
-            'Miscellaneous'         => 'collapsed',
+            'Category 1'         => 'collapsed',
             'Child category'        => 'collapsed',
         ));
 
@@ -820,7 +820,7 @@ EOF;
             'Future courses'        => 'collapsed',
             'Child courses'         => 'collapsed',
             'Unnumbered categories' => 'expanded',
-            'Miscellaneous'         => 'expanded',
+            'Category 1'         => 'expanded',
             'Child category'        => 'expanded',
         ));
 
@@ -875,7 +875,7 @@ EOF;
 
         // The block should offer top-level category links to anonymous, guest, and admin.
         $this->_courselistincludes ( array (
-            'admin' => array ( 'Miscellaneous', 'Sibling' )
+            'admin' => array ( 'Category 1', 'Sibling' )
         ));
 
         // Change the managerview setting to 'own'.
@@ -887,7 +887,7 @@ EOF;
         ));
 
         $this->_courselistincludes ( array (
-            'admin' => array ( 'Miscellaneous', 'Sibling' )
+            'admin' => array ( 'Category 1', 'Sibling' )
         ));
 
         // Put the admin in a course.
@@ -895,7 +895,7 @@ EOF;
 
         // Admin should see the course listing as a regular user would.
         $this->_courselistexcludes ( array (
-            'admin' => array ( 'Miscellaneous', 'Sibling' )
+            'admin' => array ( 'Category 1', 'Sibling' )
         ));
 
         $this->_courseunderrubric ( array (
@@ -914,11 +914,11 @@ EOF;
         set_config('catseparator', ' :: ', 'block_filtered_course_list');
 
         // Any tags should be stripped.
-        $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Miscellaneous :: Child category 2 :: Grandchild category 1';
+        $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Category 1 :: Child category 2 :: Grandchild category 1';
         $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;IDNUMBER &lt; Sibling category';
         $this->_courselistincludes ( array (
             'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category',
-                'Miscellaneous -  - Top - Miscellaneous',
+                'Category 1 -  - Top - Category 1',
                 $longrubric,
                 $htmlentities,
              ),
@@ -941,7 +941,7 @@ EOF;
 
         // Enrolled users, like guests, should see a generic list of categories.
         $this->_courselistincludes ( array (
-            'user1' => array ( 'Miscellaneous', 'Sibling' )
+            'user1' => array ( 'Category 1', 'Sibling' )
         ));
 
         // Enrolled users, like guests, should not see subcategories or specific courses.
@@ -1097,7 +1097,7 @@ EOF;
     }
 
     /**
-     * Generate some courses in the Miscellaneous category
+     * Generate some courses in the Category 1 category
      *
      * @param int $start A first value to apply incrementally to several courses
      * @param int $end The value at which to stop generating courses
@@ -1117,7 +1117,7 @@ EOF;
      * Build a more complicated site for more intresting testing
      * Use the following structure
      *
-     * Miscellaneous
+     * Category 1
      *   Course 1, c_1
      *   ...
      *   Course 12, c_12
@@ -1154,7 +1154,7 @@ EOF;
     private function _create_rich_site() {
         global $DB;
 
-        // Add some courses under Miscellaneous.
+        // Add some courses under Category 1.
         $this->_create_misc_courses ( 1, 3 );
 
         // Create categories.
@@ -1279,7 +1279,7 @@ EOF;
      */
     public function test_get_rubrics() {
 
-        // Create 8 courses in the default category: Miscellaneous.
+        // Create 8 courses in the default category: Category 1.
         $this->_create_misc_courses( 1, 8 );
         $page = new moodle_page;
         $this->_switchuser( 'admin' );
