@@ -40,7 +40,7 @@ completion | exp       | Incomplete      | incomplete
 completion | col       | Completed       | complete
 generic    | exp       | Categories      | Courses
 enrolment  | col       | guest, self     | Open courses
-#category  | col       | 1 (Category 1)  | 0 (show all children)
+#category  | col       | 1 (Misc)        | 0 (show all children)
 The line above will be ignored, as will this comment.
 ```
 

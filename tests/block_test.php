@@ -1106,7 +1106,7 @@ EOF;
 
         for ($i = $start; $i <= $end; $i++) {
             $this->courses["c_$i"] = $this->getDataGenerator()->create_course(array(
-                'fullname' => "Course $i in Category 1",
+                'fullname' => "Course $i in Misc",
                 'shortname' => "c_$i",
                 'idnumber' => strtoupper("c_$i"),
             ));
