@@ -28,19 +28,14 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 if ($ADMIN->fulltree) {
 
-    $dir = new RecursiveDirectoryIterator($CFG->dirroot);
-    $itr = new RecursiveIteratorIterator($dir);
-    foreach ($itr as $file) {
-        if (preg_match('/.*fcl_filter\.php$/', $file)) {
+    $filterfiles = block_filtered_course_list_lib::get_filter_files();
+    if (count($filterfiles) > 0) {
+        foreach ($filterfiles as $file) {
             require_once($file);
         }
     }
 
-    $exfilters = array_filter(get_declared_classes(), function($class) {
-        return preg_match('/.*fcl_filter/', $class);
-    });
-
-    $options = array();
+    $exfilters = block_filtered_course_list_lib::get_filter_classes();
 
     foreach ($exfilters as $classname) {
         $shortname = $classname::getshortname();
