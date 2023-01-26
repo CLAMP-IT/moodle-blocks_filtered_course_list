@@ -117,6 +117,33 @@ class block_filtered_course_list_rubric {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_filtered_course_list_lib {
+    public static function get_filter_files() {
+        global $CFG;
+
+        $files = [];
+        $dir = new RecursiveDirectoryIterator($CFG->dirroot);
+        $flt = new RecursiveCallbackFilterIterator($dir, function($current, $key, $iterator) {
+            if ($current->getFilename()[0] === '.') {
+                return false;
+            }
+            return true;
+        });
+        $itr = new RecursiveIteratorIterator($flt);
+        foreach ($itr as $file) {
+            if (preg_match('/.*fcl_filter\.php$/', $file)) {
+                $files[] = $file;
+            }
+        }
+        return $files;
+    }
+
+    public static function get_filter_classes() {
+        $exfilters = array_filter(get_declared_classes(), function($class) {
+            return preg_match('/.*fcl_filter/', $class);
+        });
+        return $exfilters;
+    }
+
     /**
      * Display a coursename according to the template
      *

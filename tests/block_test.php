@@ -27,6 +27,7 @@ namespace block_filtered_course_list;
 use advanced_testcase;
 use moodle_page;
 use block_filtered_course_list;
+use block_filtered_course_list_lib;
 use stdClass;
 use DOMDocument;
 use DOMElement;
@@ -70,7 +71,27 @@ class block_test extends advanced_testcase {
         unset ( $CFG->maxcategorydepth );
         $this->resetAfterTest(true);
         $this->_setupusers();
+        $this->_setupfilter();
+    }
 
+    protected function tearDown(): void {
+        $rmpath = __DIR__ . '/behat/data/fcl_filter.php';
+        if (file_exists($rmpath)) {
+            unlink($rmpath);
+        }
+    }
+
+    /**
+     * Text external filter detection.
+     */
+    public function test_external_filter_detection() {
+        $files = block_filtered_course_list_lib::get_filter_files();
+        $this->assertCount(1, $files);
+        $this->assertEquals('fcl_filter.php', $files[0]->getFilename());
+        require_once($files[0]->getPathname());
+        $classes = block_filtered_course_list_lib::get_filter_classes();
+        $this->assertCount(1, $classes);
+        $this->assertEquals('test_fcl_filter', reset($classes));
     }
 
     /**
@@ -1104,6 +1125,17 @@ EOF;
             'email'     => 'user3@unittest.com'
         ));
 
+    }
+
+    /**
+     * Copy the test filter so that settings will detect it.
+     */
+    private function _setupfilter() {
+        $frompath = __DIR__ . '/behat/data/external_filter.php';
+        $topath = __DIR__ . '/behat/data/fcl_filter.php';
+        if (file_exists($frompath)) {
+            copy($frompath, $topath);
+        }
     }
 
     /**
