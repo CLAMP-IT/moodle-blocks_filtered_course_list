@@ -22,6 +22,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_filtered_course_list;
+
+use advanced_testcase;
+use moodle_page;
+use block_filtered_course_list;
+use stdClass;
+use DOMDocument;
+use DOMElement;
+use completion_completion;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -38,7 +48,7 @@ require_once(dirname(__FILE__) . '/../renderer.php');
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_filtered_course_list_block_testcase extends advanced_testcase {
+class block_test extends advanced_testcase {
 
     /** @var int The admin user's id number */
     private $adminid;
