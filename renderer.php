@@ -279,10 +279,10 @@ class content implements \renderable, \templatable {
     /**
      * Constructor
      *
-     * @param array $rubrics The list of rubrics to display
      * @param string $instid The instance id of the calling block
+     * @param array $rubrics The list of rubrics to display
      */
-    public function __construct($rubrics = array(), $instid) {
+    public function __construct($instid, $rubrics = array()) {
         $this->rubrics = $rubrics;
         $this->instid = $instid;
     }

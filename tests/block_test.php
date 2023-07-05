@@ -1242,7 +1242,7 @@ EOF;
         // Create three courses in each category, the third of which is hidden.
         foreach ($this->categories as $id => $category) {
             for ($i = 1; $i <= 3; $i++) {
-                $shortname = "${id}_$i";
+                $shortname = "{$id}_$i";
                 $params = array (
                     'fullname'  => "Course $i in $category->name",
                     'shortname' => $shortname,

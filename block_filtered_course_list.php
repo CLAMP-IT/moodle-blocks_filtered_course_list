@@ -262,7 +262,7 @@ class block_filtered_course_list extends block_base {
         }
 
         if (count($this->rubrics) > 0) {
-            $content = new \block_filtered_course_list\output\content($this->rubrics, $this->instance->id);
+            $content = new \block_filtered_course_list\output\content($this->instance->id, $this->rubrics);
             $this->content->text = $output->render($content);
         } else if ($this->fclconfig->filters != BLOCK_FILTERED_COURSE_LIST_GENERIC_CONFIG) {
             $this->liststyle = 'generic_list';

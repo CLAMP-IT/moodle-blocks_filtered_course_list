@@ -123,17 +123,17 @@ function xmldb_block_filtered_course_list_upgrade($oldversion) {
 
         $disabled = ($fclcnf->filtertype == 'categories') ? '' : 'DISABLED ';
         $expanded = ($fclcnf->collapsible == 0) ? 'expanded' : 'collapsed';
-        $newcnf = "${disabled}category | $expanded | $fclcnf->categories (catID) | 0 (depth) \n";
+        $newcnf = "{$disabled}category | $expanded | $fclcnf->categories (catID) | 0 (depth) \n";
 
         $type = ($fclcnf->useregex) ? 'regex' : 'shortname';
         $disabled = ($fclcnf->filtertype == 'shortname') ? '' : 'DISABLED ';
         if ($fclcnf->currentshortname != '') {
             $expanded = ($fclcnf->currentexpanded || $fclcnf->collapsible == 0) ? 'expanded' : 'collapsed';
-            $newcnf .= "${disabled}$type | $expanded | Current courses | $fclcnf->currentshortname \n";
+            $newcnf .= "{$disabled}$type | $expanded | Current courses | $fclcnf->currentshortname \n";
         }
         if ($fclcnf->futureshortname != '') {
             $expanded = ($fclcnf->futureexpanded || $fclcnf->collapsible == 0) ? 'expanded' : 'collapsed';
-            $newcnf .= "${disabled}$type | $expanded | Future courses | $fclcnf->futureshortname \n";
+            $newcnf .= "{$disabled}$type | $expanded | Future courses | $fclcnf->futureshortname \n";
         }
 
         for ($i = 1; $i <= 10; $i++) {
@@ -146,7 +146,7 @@ function xmldb_block_filtered_course_list_upgrade($oldversion) {
                 $shortname = $fclcnf->$shortnamevarname;
                 $expanded = ($fclcnf->$expandedvarname || $fclcnf->collapsible == 0) ? 'expanded' : 'collapsed';
                 $disabled = ($i > $fclcnf->labelscount) ? 'DISABLED ' : $disabled;
-                $newcnf .= "${disabled}$type | $expanded | $label | $shortname \n";
+                $newcnf .= "{$disabled}$type | $expanded | $label | $shortname \n";
             }
         }
 
