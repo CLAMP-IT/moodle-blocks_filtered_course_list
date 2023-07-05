@@ -37,9 +37,11 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.0']
-        moodle-branch: ['MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'master']
+        moodle-branch: ['MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'master']
         database: [pgsql, mariadb]
         exclude:
+          - {moodle-branch: 'MOODLE_402_STABLE', php: '7.4', database: 'pgsql'}
+          - {moodle-branch: 'MOODLE_402_STABLE', php: '7.4', database: 'mariadb'}
           - {moodle-branch: 'master', php: '7.4', database: 'pgsql'}
           - {moodle-branch: 'master', php: '7.4', database: 'mariadb'}
 
