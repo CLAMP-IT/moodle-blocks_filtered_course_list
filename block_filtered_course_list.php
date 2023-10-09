@@ -232,7 +232,7 @@ class block_filtered_course_list extends block_base {
             array_filter(
                 array_map(function($config) {
                     $classname = get_filter($config[0], $this->fclconfig->externalfilters);
-                    if (class_exists($classname)) {
+                    if (!empty($classname) && class_exists($classname)) {
                         $item = new $classname($config, $this->mycourses, $this->fclconfig);
                         return $item->get_rubrics();
                     }
