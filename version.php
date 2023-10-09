@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021011503;
+$plugin->version   = 2021011504;
 $plugin->requires  = 2019111800; // Requires Moodle 3.8.
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v4.4.4';
+$plugin->release   = 'v4.4.5';
 $plugin->component = 'block_filtered_course_list';

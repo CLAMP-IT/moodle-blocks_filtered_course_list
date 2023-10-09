@@ -76,6 +76,9 @@ Use Grunt to manage LESS/CSS and Javascript as described in the Moodle dev docum
 
 ## Changelog
 
+### [v4.4.5]
+* Code cleanup: compatibility changes for PHP 8.1-8.2
+
 ### [v4.4.4]
 * Code cleanup: compatibility changes for PHP 8.0
 
