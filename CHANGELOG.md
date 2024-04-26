@@ -1,5 +1,11 @@
 ## Changelog
 
+### Unreleased
+
+* Rename `master` branch to `main`
+* Drop testing support on `main` branch for pre-Moodle 4.4 releases
+* Create `MOODLE_403_STABLE` branch for pre-Moodle 4.4 releases
+
 ### [v4.4.5]
 * Code cleanup: compatibility changes for PHP 8.1-8.2
 
