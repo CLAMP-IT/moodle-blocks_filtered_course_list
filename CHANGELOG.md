@@ -1,5 +1,8 @@
 ## Changelog
 
+### Unreleased
+* Cap testing at Moodle 4.3
+
 ### [v4.4.5]
 * Code cleanup: compatibility changes for PHP 8.1-8.2
 

@@ -8,7 +8,7 @@ The _Filtered course list_ block displays a configurable list of a user's course
 
 ## Requirements
 
-- Moodle 4.4 (build 2024042200 or later)
+- Moodle 4.1 (build 2022112800 or later)
 
 ## Installation
 Unzip files into your Moodle blocks directory. This will create a folder called `filtered_course_list`. Alternatively, you may install it with git. In the top-level folder of your Moodle install, type the command: 
