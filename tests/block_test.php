@@ -76,6 +76,8 @@ class block_test extends advanced_testcase {
     }
 
     protected function tearDown(): void {
+        parent::tearDown();
+
         $rmpath = __DIR__ . '/behat/data/fcl_filter.php';
         if (file_exists($rmpath)) {
             unlink($rmpath);
