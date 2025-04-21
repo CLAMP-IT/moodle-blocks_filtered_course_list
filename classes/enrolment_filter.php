@@ -79,13 +79,13 @@ class enrolment_filter extends \block_filtered_course_list\filter {
      * @return array A fixed-up line array
      */
     public function validate_line($line) {
-        $keys = array('expanded', 'enrol', 'label');
+        $keys = ['expanded', 'enrol', 'label'];
         $values = array_map(function($item) {
             return trim($item);
         }, explode('|', $line[1], 3));
         $this->validate_expanded(0, $values);
         if (!array_key_exists(1, $values)) {
-            $values[1] = array('guest');
+            $values[1] = ['guest'];
         } else {
             $values[1] = array_map(function($item) {
                 return trim($item);
@@ -118,7 +118,7 @@ class enrolment_filter extends \block_filtered_course_list\filter {
         $candidates = $DB->get_fieldset_select('enrol', 'courseid', $where);
 
         $courselist = array_map(function($courseid) use($DB) {
-            return $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+            return $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
         }, array_unique($candidates));
 
         if (empty($courselist)) {

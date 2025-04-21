@@ -23,8 +23,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Upgrade code for the section links block.
  *
@@ -71,7 +69,7 @@ function xmldb_block_filtered_course_list_upgrade($oldversion) {
 
     if ($oldversion < 2015102002) {
 
-        $fclsettings = array(
+        $fclsettings = [
             'filtertype',
             'hideallcourseslink',
             'hidefromguests',
@@ -86,13 +84,13 @@ function xmldb_block_filtered_course_list_upgrade($oldversion) {
             'adminview',
             'maxallcourse',
             'collapsible',
-        );
+        ];
 
-        $customrubrics = array(
+        $customrubrics = [
             'customlabel',
             'customshortname',
             'labelexpanded',
-        );
+        ];
 
         foreach ($fclsettings as $name) {
             $value = get_config('moodle', 'block_filtered_course_list_' . $name);

@@ -79,7 +79,7 @@ class shortname_filter extends \block_filtered_course_list\filter {
      * @return array A fixed-up line array
      */
     public function validate_line($line) {
-        $keys = array('expanded', 'label', 'match');
+        $keys = ['expanded', 'label', 'match'];
         $values = array_map(function($item) {
             return trim($item);
         }, explode('|', $line[1], 3));

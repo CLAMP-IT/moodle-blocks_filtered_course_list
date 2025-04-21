@@ -321,7 +321,7 @@ class footer implements \renderable, \templatable {
     public $linktext;
     /** @var string Link to the Course index page */
     public $url;
-    /** @var boolean Whether or not to display the link */
+    /** @var bool Whether or not to display the link */
     public $visible = false;
 
     /**
@@ -377,7 +377,7 @@ class renderer extends \plugin_renderer_base {
      * @param footer $footer A footer object
      * @return string The rendered html
      */
-    protected function render_footer (footer $footer) {
+    protected function render_footer(footer $footer) {
         $data = $footer->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/footer', $data);
     }
@@ -388,7 +388,7 @@ class renderer extends \plugin_renderer_base {
      * @param list_item $listitem
      * @return string The rendered html
      */
-    protected function render_list_item (list_item $listitem) {
+    protected function render_list_item(list_item $listitem) {
         $data = $listitem->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/list_item', $data);
     }
@@ -399,7 +399,7 @@ class renderer extends \plugin_renderer_base {
      * @param icon $icon
      * @return string The rendered html
      */
-    protected function render_icon (icon $icon) {
+    protected function render_icon(icon $icon) {
         $data = $icon->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/icon', $data);
     }
@@ -410,7 +410,7 @@ class renderer extends \plugin_renderer_base {
      * @param rubric $rubric
      * @return string The rendered html
      */
-    protected function render_rubric (rubric $rubric) {
+    protected function render_rubric(rubric $rubric) {
         $data = $rubric->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/rubric', $data);
     }
@@ -421,7 +421,7 @@ class renderer extends \plugin_renderer_base {
      * @param content $content
      * @return string The rendered html
      */
-    protected function render_content (content $content) {
+    protected function render_content(content $content) {
         $data = $content->export_for_template($this);
         return $this->render_from_template('block_filtered_course_list/content', $data);
     }

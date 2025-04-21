@@ -58,9 +58,9 @@ class block_test extends advanced_testcase {
     /** @var object A test user */
     private $user2;
     /** @var array A list of course objects to be used in several tests */
-    private $courses = array();
+    private $courses = [];
     /** @var array A list of categories into which the test courses can be grouped */
-    private $categories = array();
+    private $categories = [];
 
     /**
      * General setup for PHPUnit testing
@@ -104,7 +104,7 @@ class block_test extends advanced_testcase {
 
         $fclconfig = get_config('block_filtered_course_list');
 
-        $configdefaults = array (
+        $configdefaults = [
             'hideallcourseslink'  => 0,
             'hidefromguests'      => 0,
             'hideothercourses'    => 0,
@@ -118,7 +118,7 @@ class block_test extends advanced_testcase {
             'primaryvector'       => 'ASC',
             'secondarysort'       => 'none',
             'secondaryvector'     => 'ASC',
-        );
+        ];
 
         foreach ($configdefaults as $name => $value) {
             $expected = $configdefaults[$name];
@@ -133,12 +133,12 @@ class block_test extends advanced_testcase {
     public function test_site_with_no_courses() {
 
         // On a site with no courses, no users should see a block.
-        $this->_noblock ( array (
+        $this->_noblock (  [
             'none'  => true,
             'guest' => true,
             'user1' => true,
-            'admin' => true
-        ));
+            'admin' => true,
+        ]);
 
     }
 
@@ -151,12 +151,12 @@ class block_test extends advanced_testcase {
         $this->_create_misc_courses( 1, 8 );
 
         // Everyone should see all courses.
-        $this->_courselistincludes ( array (
-            'none'  => array ( 'Course 1' , 'Course 8' ),
-            'guest' => array ( 'Course 1' , 'Course 8' ),
-            'admin' => array ( 'Course 1' , 'Course 8' ),
-            'user1' => array ( 'Course 1' , 'Course 8' ),
-        ));
+        $this->_courselistincludes (  [
+            'none'  => [ 'Course 1' , 'Course 8' ],
+            'guest' => [ 'Course 1' , 'Course 8' ],
+            'admin' => [ 'Course 1' , 'Course 8' ],
+            'user1' => [ 'Course 1' , 'Course 8' ],
+        ]);
 
     }
 
@@ -174,28 +174,28 @@ class block_test extends advanced_testcase {
         $this->getDataGenerator()->enrol_user( $this->user1->id , $this->courses['c_5']->id );
 
         // Anonymous, Guest and Admin should see all courses.
-        $this->_courselistincludes ( array (
-            'none'  => array ( 'Course 1' , 'Course 8' ),
-            'guest' => array ( 'Course 1' , 'Course 8' ),
-            'admin' => array ( 'Course 1' , 'Course 8' )
-        ));
+        $this->_courselistincludes (  [
+            'none'  => [ 'Course 1' , 'Course 8' ],
+            'guest' => [ 'Course 1' , 'Course 8' ],
+            'admin' => [ 'Course 1' , 'Course 8' ],
+        ]);
 
         // User1 should see courses 1, 3 and 5.
-        $this->_courselistincludes ( array (
-            'user1' => array ( 'Course 1' , 'Course 3' , 'Course 5' )
-        ));
+        $this->_courselistincludes (  [
+            'user1' => [ 'Course 1' , 'Course 3' , 'Course 5' ],
+        ]);
 
         // User1 should not see course 2 or course 6.
-        $this->_courselistexcludes ( array (
-            'user1' => array ( 'Course 2' , 'Course 6' )
-        ));
+        $this->_courselistexcludes (  [
+            'user1' => [ 'Course 2' , 'Course 6' ],
+        ]);
 
         // We should also check the generic filter while we have this configuration.
         set_config('filters', 'generic|e', 'block_filtered_course_list');
         // User1 should now see all courses.
-        $this->_courselistincludes ( array (
-            'user1' => array ( 'Course 1' , 'Course 2', 'Course 3' , 'Course 5', 'Course 6' ),
-        ));
+        $this->_courselistincludes (  [
+            'user1' => [ 'Course 1' , 'Course 2', 'Course 3' , 'Course 5', 'Course 6' ],
+        ]);
     }
 
     /**
@@ -212,28 +212,28 @@ class block_test extends advanced_testcase {
         $this->getDataGenerator()->enrol_user( $this->user1->id , $this->courses['c_5']->id );
 
         // The block should not display individual courses to anonymous, guest, or admin.
-        $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course 1' ),
-            'guest' => array ( 'Course 1' ),
-            'admin' => array ( 'Course 1' )
-        ));
+        $this->_courselistexcludes (  [
+            'none'  => [ 'Course 1' ],
+            'guest' => [ 'Course 1' ],
+            'admin' => [ 'Course 1' ],
+        ]);
 
         // The block should offer a category link to anonymous, guest, and admin.
-        $this->_courselistincludes ( array (
-            'none'  => array ( 'Category 1' ),
-            'guest' => array ( 'Category 1' ),
-            'admin' => array ( 'Category 1' )
-        ));
+        $this->_courselistincludes (  [
+            'none'  => [ 'Category 1' ],
+            'guest' => [ 'Category 1' ],
+            'admin' => [ 'Category 1' ],
+        ]);
 
         // User1 should still see courses 1, 3 and 5.
-        $this->_courselistincludes ( array (
-            'user1' => array ( 'Course 1' , 'Course 3' , 'Course 5' )
-        ));
+        $this->_courselistincludes (  [
+            'user1' => [ 'Course 1' , 'Course 3' , 'Course 5' ],
+        ]);
 
         // User1 should not see course 2 or course 6.
-        $this->_courselistexcludes ( array (
-            'user1' => array ( 'Course 2' , 'Course 6' )
-        ));
+        $this->_courselistexcludes (  [
+            'user1' => [ 'Course 2' , 'Course 6' ],
+        ]);
     }
 
     /**
@@ -248,34 +248,34 @@ class block_test extends advanced_testcase {
 
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
-        $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course 1', 'Child', 'Grandchild' ),
-            'guest' => array ( 'Course 1', 'Child', 'Grandchild' ),
-            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
-        ));
+        $this->_courselistexcludes (  [
+            'none'  => [ 'Course 1', 'Child', 'Grandchild' ],
+            'guest' => [ 'Course 1', 'Child', 'Grandchild' ],
+            'admin' => [ 'Course 1', 'Child', 'Grandchild' ],
+        ]);
 
         // The block should offer top-level category links to anonymous, guest, admin or an unenrolled user.
-        $this->_courselistincludes ( array (
-            'none'  => array ( 'Category 1', 'Sibling' ),
-            'guest' => array ( 'Category 1', 'Sibling' ),
-            'admin' => array ( 'Category 1', 'Sibling' ),
-            'user3' => array ( 'Category 1', 'Sibling' ),
-        ));
+        $this->_courselistincludes (  [
+            'none'  => [ 'Category 1', 'Sibling' ],
+            'guest' => [ 'Category 1', 'Sibling' ],
+            'admin' => [ 'Category 1', 'Sibling' ],
+            'user3' => [ 'Category 1', 'Sibling' ],
+        ]);
 
         // Regular users should see links to visible courses in visible categories under 'Other courses'.
         // This includes visible courses in visible categories in hidden categories.
         // Teachers should see links to all their courses, visible or hidden, and under hidden categories.
         // Students should see links to visible courses in hidden categories under 'Other courses'.
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Other courses',
                 'cc1_2' => 'Other courses',
                 'gc1_1' => 'Other courses',
                 'sc_2'  => 'Other courses',
                 'øthér' => 'Other courses',
                 'hcvc_1' => 'Other courses',
-            ),
-            'user2' => array(
+            ],
+            'user2' => [
                 'c_1'   => 'Other courses',
                 'cc1_3' => 'Other courses',
                 'gc1_1' => 'Other courses',
@@ -283,13 +283,13 @@ class block_test extends advanced_testcase {
                 'hcc_2' => 'Other courses',
                 'hcc_3' => 'Other courses',
                 'sc_2'  => 'Other courses',
-            )
-        ));
+            ],
+        ]);
 
         // Students should not see links to hidden courses or visible courses under hidden categories.
-        $this->_courselistexcludes( array(
-            'user1' => array( 'cc1_3', 'gc1_3' )
-        ));
+        $this->_courselistexcludes( [
+            'user1' => [ 'cc1_3', 'gc1_3' ],
+        ]);
 
     }
 
@@ -308,20 +308,20 @@ EOF;
 
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
-        $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course 1', 'Child', 'Grandchild' ),
-            'guest' => array ( 'Course 1', 'Child', 'Grandchild' ),
-            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
-        ));
+        $this->_courselistexcludes (  [
+            'none'  => [ 'Course 1', 'Child', 'Grandchild' ],
+            'guest' => [ 'Course 1', 'Child', 'Grandchild' ],
+            'admin' => [ 'Course 1', 'Child', 'Grandchild' ],
+        ]);
 
         // The block should offer top-level category links to anonymous, guest, and admin.
         // A user not enrolled in any visible courses should see the same.
-        $this->_courselistincludes ( array (
-            'none'  => array ( 'Category 1', 'Sibling' ),
-            'guest' => array ( 'Category 1', 'Sibling' ),
-            'admin' => array ( 'Category 1', 'Sibling' ),
-            'user3' => array ( 'Category 1', 'Sibling' ),
-        ));
+        $this->_courselistincludes (  [
+            'none'  => [ 'Category 1', 'Sibling' ],
+            'guest' => [ 'Category 1', 'Sibling' ],
+            'admin' => [ 'Category 1', 'Sibling' ],
+            'user3' => [ 'Category 1', 'Sibling' ],
+        ]);
 
         // Regular users should see links to visible courses under corresponding visible categories.
         // Teachers should see links to all their courses, visible or hidden, and under hidden categories.
@@ -334,16 +334,16 @@ EOF;
         // Enroll admin in 'hc_1'.
         $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['hc_1']->id, 3 );
 
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Category 1',
                 'cc1_2' => 'Child category 1',
                 'gc1_1' => 'Grandchild category 1',
                 'sc_2'  => 'Sibling category',
                 'hc_1'  => 'Other courses',
                 'hcc_2' => 'Other courses',
-            ),
-            'user2' => array(
+            ],
+            'user2' => [
                 'c_1'   => 'Category 1',
                 'cc1_3' => 'Child category 1',
                 'gc1_1' => 'Grandchild category 1',
@@ -351,23 +351,23 @@ EOF;
                 'hcc_3' => 'Other courses',
                 'sc_2'  => 'Sibling category',
                 'øthér' => 'Sibling category',
-            ),
-            'admin' => array(
-                'hc_1' => 'Hidden category'
-            )
-        ));
+            ],
+            'admin' => [
+                'hc_1' => 'Hidden category',
+            ],
+        ]);
 
         // Courses should appear only under immediate parents.
-        $this->_courseunderrubric ( array (
-            'user1' => array ( 'gc1_1' => 'Category 1' ),
-            'user2' => array ( 'gc1_1' => 'Child category 1' )
-        ) , 'not' );
+        $this->_courseunderrubric (  [
+            'user1' => [ 'gc1_1' => 'Category 1' ],
+            'user2' => [ 'gc1_1' => 'Child category 1' ],
+        ] , 'not' );
 
         // Students should not see links to hidden courses.
         // Students shoudl see links to visible courses even if they are in hidden categories.
-        $this->_courselistexcludes( array(
-            'user1' => array( 'cc1_3', 'gc1_3' )
-        ));
+        $this->_courselistexcludes( [
+            'user1' => [ 'cc1_3', 'gc1_3' ],
+        ]);
 
         // Now try switching the root category setting.
         $cc2id = $this->categories['cc2']->id;
@@ -377,20 +377,20 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // There should be no rubric for Category 1.
-        $this->_courselistexcludes( array (
-            'user1' => array ( 'Category 1' )
-        ));
+        $this->_courselistexcludes(  [
+            'user1' => [ 'Category 1' ],
+        ]);
 
         // Courses directly under Category 1 should continue to appear in 'Other courses'.
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Other courses',
                 'cc1_2' => 'Other courses',
                 'cc2_1' => 'Child category 2',
                 'gc1_1' => 'Grandchild category 1',
                 'sc_2'  => 'Other courses',
-            )
-        ));
+            ],
+        ]);
 
         // Test the ability to set recursion depth on top-level category filter.
         // Confirm also that comments in the category and depth fields will be ignored.
@@ -399,19 +399,19 @@ category | collapsed | 0 (Top level) | 1 deep
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Category 1',
                 'cc1_2' => 'Other courses',
                 'gc1_1' => 'Other courses',
                 'sc_2'  => 'Sibling category',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->_sectionexpanded ( array(
+        $this->_sectionexpanded ( [
             'Category 1'    => 'collapsed',
             'Sibling category' => 'collapsed',
-        ));
+        ]);
 
         // Test the ability to set recursion depth on specific categories.
         $cc1id = $this->categories['cc1']->id;
@@ -422,19 +422,19 @@ category | collapsed | $scid  | 1
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Other courses',
                 'cc1_2' => 'Child category 1',
                 'gc1_1' => 'Other courses',
                 'sc_2'  => 'Sibling category',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->_sectionexpanded ( array(
+        $this->_sectionexpanded ( [
             'Child category 1' => 'expanded',
             'Sibling category' => 'collapsed',
-        ));
+        ]);
 
         // Test the behavior of hidden categories and their potentially visible descendants.
         // Set the filter target to the be the visible child of the hidden category.
@@ -445,21 +445,21 @@ category | expanded | $hcvcid | 0
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'hcvc_1' => 'Hidden category visible child',
-            ),
-            'user2' => array(
+            ],
+            'user2' => [
                 'hcvc_1' => 'Hidden category visible child',
                 'hcvc_3' => 'Hidden category visible child',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->_courselistexcludes( array(
-            'user1' => array(
+        $this->_courselistexcludes( [
+            'user1' => [
                 'hcvc_3',
-            ),
-        ));
+            ],
+        ]);
 
         // Test the behavior of hidden categories and their potentially visible descendants.
         // Set the filter target to the be the hidden category itself.
@@ -472,24 +472,24 @@ category | expanded | $hcid | 0
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'hcvc_1' => 'Hidden category visible child',
                 'hc_1'   => 'Other courses',
-            ),
-            'user2' => array(
+            ],
+            'user2' => [
                 'hcvc_1' => 'Hidden category visible child',
                 'hcvc_3' => 'Hidden category visible child',
                 'hc_1'   => 'Other courses',
                 'hc_3'   => 'Other courses',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->_courselistexcludes( array(
-            'user1' => array(
+        $this->_courselistexcludes( [
+            'user1' => [
                 'hcvc_3',
-            ),
-        ));
+            ],
+        ]);
 
         // Test that we can display a visible child category of a hidden parent category.
         // We can do this by pointing directly to the top-level category.
@@ -498,11 +498,11 @@ category | expanded | 0 | 0
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courseunderrubric( array(
-            'user1' => array(
-                'hcvc_1' => 'Hidden category visible child'
-            ),
-        ));
+        $this->_courseunderrubric( [
+            'user1' => [
+                'hcvc_1' => 'Hidden category visible child',
+            ],
+        ]);
     }
 
     /**
@@ -547,46 +547,43 @@ EOF;
 
         // The block should not display individual courses to anonymous, guest, or admin.
         // The block should not display links to categories below the top level.
-        $this->_courselistexcludes ( array (
-            'none'  => array ( 'Course 1', 'Child', 'Grandchild' ),
-            'guest' => array ( 'Course 1', 'Child', 'Grandchild' ),
-            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
-        ));
+        $this->_courselistexcludes (  [
+            'none'  => [ 'Course 1', 'Child', 'Grandchild' ],
+            'guest' => [ 'Course 1', 'Child', 'Grandchild' ],
+            'admin' => [ 'Course 1', 'Child', 'Grandchild' ],
+        ]);
 
         // The block should offer top-level category links to anonymous, guest, and admin.
-        $this->_courselistincludes ( array (
-            'none'  => array ( 'Category 1', 'Sibling' ),
-            'guest' => array ( 'Category 1', 'Sibling' ),
-            'admin' => array ( 'Category 1', 'Sibling' )
-        ));
+        $this->_courselistincludes (  [
+            'none'  => [ 'Category 1', 'Sibling' ],
+            'guest' => [ 'Category 1', 'Sibling' ],
+            'admin' => [ 'Category 1', 'Sibling' ],
+        ]);
 
         // The block should list'Current', 'Future', and 'Other courses'.
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Current courses',
                 'cc1_1' => 'Current courses',
-                'cc2_1' => 'Current courses',
                 'gc1_1' => 'Current courses',
                 'sc_1'  => 'Current courses',
                 'øthér' => 'Non-ascii',
                 'cc1_2' => 'Child courses',
                 'cc2_1' => 'Child courses',
                 'sc_2'  => 'Unnumbered categories',
-            ),
-            'user2' => array(
+            ],
+            'user2' => [
                 'c_2'   => 'Future courses',
                 'cc1_2' => 'Future courses',
-                'cc2_2' => 'Future courses',
                 'gc1_2' => 'Future courses',
                 'sc_2'  => 'Future courses',
                 'hc_2'  => 'Future courses',
                 'hc_3'  => 'Unnumbered categories',
                 'c_3'   => 'Unnumbered categories',
-                'cc2_2' => 'Child courses',
                 'cc2_2' => 'Future courses',
-                'gc1_3' => 'Other courses'
-            )
-        ));
+                'gc1_3' => 'Other courses',
+            ],
+        ]);
     }
 
     /**
@@ -604,22 +601,22 @@ EOF;
 
         // This new rubric should exclude courses with a shortname like 'c_1'.
         // It does not begin with two lowercase letters.
-        $this->_courseunderrubric ( array (
-            'user1' => array (
+        $this->_courseunderrubric (  [
+            'user1' => [
                 'c_1' => 'All but default',
-            )
-        ), 'not');
+            ],
+        ], 'not');
 
         // Courses under any other category should be listed.
-        $this->_courseunderrubric ( array (
-            'user1' => array (
+        $this->_courseunderrubric (  [
+            'user1' => [
                 'cc1_1' => 'All but default',
                 'cc2_1' => 'All but default',
                 'gc1_1' => 'All but default',
                 'sc_1'  => 'All but default',
                 'øthér' => 'All but default',
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -639,14 +636,14 @@ EOF;
         set_config('hideothercourses', 1, 'block_filtered_course_list');
 
         // The block should offer top-level category links to all users including logged-in user enrolled in no courses.
-        $this->_courselistincludes ( array (
-            'admin' => array ( 'Course categories' ),
-            'user1' => array ( 'Course categories' ),
-            'user2' => array ( 'Course categories' ),
-            'none'  => array ( 'Course categories' ),
-            'guest' => array ( 'Course categories' ),
-            'user3' => array ( 'Course categories' ),
-        ));
+        $this->_courselistincludes (  [
+            'admin' => [ 'Course categories' ],
+            'user1' => [ 'Course categories' ],
+            'user2' => [ 'Course categories' ],
+            'none'  => [ 'Course categories' ],
+            'guest' => [ 'Course categories' ],
+            'user3' => [ 'Course categories' ],
+        ]);
     }
 
     /**
@@ -668,18 +665,15 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // Users should see relevant courses under all rubrics.
-        $this->_courseunderrubric( array(
-            'user1' => array(
+        $this->_courseunderrubric( [
+            'user1' => [
                 'c_1'   => 'Ones',
-                'sc_1'  => 'Ones',
-                'cc2_1' => 'Ones',
                 'cc2_1' => 'Child category 2',
                 'cc2_2' => 'Child category 2',
                 'sc_1'  => 'Sibling category',
-                'sc_2'  => 'Sibling category',
                 'sc_2'  => 'Twos',
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -696,24 +690,24 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // Any user who sees the block should also see the "All courses" link.
-        $this->_allcourseslink ( array (
+        $this->_allcourseslink (  [
             'none'  => 'Search courses',
             'guest' => 'Search courses',
             'user1' => 'All courses',
             'admin' => 'Search courses',
-            'user3' => false
-        ));
+            'user3' => false,
+        ]);
 
         // Hide the All-courses link from all but admins.
         set_config('hideallcourseslink', 1, 'block_filtered_course_list');
 
         // Only an admin should see the "All courses" link.
-        $this->_allcourseslink ( array (
+        $this->_allcourseslink (  [
             'none'  => false,
             'guest' => false,
             'user1' => false,
             'admin' => 'Search courses',
-        ));
+        ]);
     }
 
     /**
@@ -730,25 +724,25 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // All users should see the block.
-        $this->_noblock ( array (
+        $this->_noblock (  [
             'none'  => false,
             'guest' => false,
             'user1' => false,
             'admin' => false,
             'user3' => false,
-        ));
+        ]);
 
         // Change the setting to hide the block from guests and anonymous visitors.
         set_config('hidefromguests', 1, 'block_filtered_course_list');
 
         // Now only admins and logged-in users should see the block.
-        $this->_noblock ( array (
+        $this->_noblock (  [
             'none'  => true,
             'guest' => true,
             'user1' => false,
             'admin' => false,
             'user3' => false,
-        ));
+        ]);
     }
 
     /**
@@ -765,19 +759,19 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // Enrollments that do not match appear under 'Other courses'.
-        $this->_courseunderrubric ( array (
-            'user1' => array (
+        $this->_courseunderrubric (  [
+            'user1' => [
                 'sc_1' => 'Other courses',
-            ),
-        ));
+            ],
+        ]);
 
         // Hide the catch-all 'Other courses' rubric.
         set_config('hideothercourses', 1, 'block_filtered_course_list');
 
         // No other courses are listed.
-        $this->_courselistexcludes ( array (
-            'user1' => array( 'Other courses' ),
-        ));
+        $this->_courselistexcludes (  [
+            'user1' => [ 'Other courses' ],
+        ]);
 
     }
 
@@ -795,8 +789,8 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // For users enrolled in courses the various rubrics are collapsible.
-        $this->_courselistincludes ( array (
-            'user1' => array (
+        $this->_courselistincludes (  [
+            'user1' => [
                 'collapsible',
                 'aria-multiselectable',
                 'aria-controls',
@@ -804,8 +798,8 @@ EOF;
                 'aria-selected',
                 'aria-labelledby',
                 'aria-hidden',
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -826,14 +820,14 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // All sections should be collapsed.
-        $this->_sectionexpanded ( array(
+        $this->_sectionexpanded ( [
             'Current courses'       => 'collapsed',
             'Future courses'        => 'collapsed',
             'Child courses'         => 'collapsed',
             'Unnumbered categories' => 'collapsed',
             'Category 1'         => 'collapsed',
             'Child category'        => 'collapsed',
-        ));
+        ]);
 
         // Now set a couple sections to be expanded by default.
         $filterconfig = <<<EOF
@@ -846,14 +840,14 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // The corresponding sections should be expanded.
-        $this->_sectionexpanded ( array(
+        $this->_sectionexpanded ( [
             'Current courses'       => 'expanded',
             'Future courses'        => 'collapsed',
             'Child courses'         => 'collapsed',
             'Unnumbered categories' => 'expanded',
             'Category 1'         => 'expanded',
             'Child category'        => 'expanded',
-        ));
+        ]);
 
         // Now test config lines that do not set expansion state or use invalid values.
         $filterconfig = <<<EOF
@@ -863,10 +857,10 @@ EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
         // All sections should be collapsed.
-        $this->_sectionexpanded ( array(
+        $this->_sectionexpanded ( [
             'Current courses'       => 'collapsed',
             'Future courses'        => 'collapsed',
-        ));
+        ]);
     }
 
     /**
@@ -884,11 +878,11 @@ EOF;
 
         // We should see the course under the original text.
         // This test would fail if the line break were interpreted.
-        $this->_courseunderrubric ( array (
-            'user1' => array (
+        $this->_courseunderrubric (  [
+            'user1' => [
                 'c_1' => 'Current <br />courses',
-            )
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -900,38 +894,38 @@ EOF;
         set_config('filters', '', 'block_filtered_course_list');
 
         // The block should not display links to categories below the top level.
-        $this->_courselistexcludes ( array (
-            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
-        ));
+        $this->_courselistexcludes (  [
+            'admin' => [ 'Course 1', 'Child', 'Grandchild' ],
+        ]);
 
         // The block should offer top-level category links to anonymous, guest, and admin.
-        $this->_courselistincludes ( array (
-            'admin' => array ( 'Category 1', 'Sibling' )
-        ));
+        $this->_courselistincludes (  [
+            'admin' => [ 'Category 1', 'Sibling' ],
+        ]);
 
         // Change the managerview setting to 'own'.
         set_config('managerview', 'own', 'block_filtered_course_list');
 
         // An admin enrolled in no courses should still see only the top level.
-        $this->_courselistexcludes ( array (
-            'admin' => array ( 'Course 1', 'Child', 'Grandchild' )
-        ));
+        $this->_courselistexcludes (  [
+            'admin' => [ 'Course 1', 'Child', 'Grandchild' ],
+        ]);
 
-        $this->_courselistincludes ( array (
-            'admin' => array ( 'Category 1', 'Sibling' )
-        ));
+        $this->_courselistincludes (  [
+            'admin' => [ 'Category 1', 'Sibling' ],
+        ]);
 
         // Put the admin in a course.
         $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['gc1_1']->id );
 
         // Admin should see the course listing as a regular user would.
-        $this->_courselistexcludes ( array (
-            'admin' => array ( 'Category 1', 'Sibling' )
-        ));
+        $this->_courselistexcludes (  [
+            'admin' => [ 'Category 1', 'Sibling' ],
+        ]);
 
-        $this->_courseunderrubric ( array (
-            'admin' => array ( 'gc1_1' => 'Other courses' )
-        ));
+        $this->_courseunderrubric (  [
+            'admin' => [ 'gc1_1' => 'Other courses' ],
+        ]);
 
     }
 
@@ -947,16 +941,16 @@ EOF;
         // Any tags should be stripped.
         $longrubric = 'Grandchild category 1 - gc1 - Child category 2 - Category 1 :: Child category 2 :: Grandchild category 1';
         $htmlentities = '&uuml;&amp;: HTML Entities (&uuml;&amp;shortname) : &uuml;&amp;IDNUMBER &lt; Sibling category';
-        $this->_courselistincludes ( array (
-            'user1' => array( 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category',
+        $this->_courselistincludes (  [
+            'user1' => [ 'Non-ascii matching (øthér) : ØTHÉR &lt; Sibling category',
                 'Category 1 -  - Top - Category 1',
                 $longrubric,
                 $htmlentities,
-             ),
-        ));
-        $this->_courselistexcludes ( array (
-            'user1' => array( '&amp;uuml;', '&amp;amp;' )
-        ));
+             ],
+        ]);
+        $this->_courselistexcludes (  [
+            'user1' => [ '&amp;uuml;', '&amp;amp;' ],
+        ]);
     }
 
     /**
@@ -971,14 +965,14 @@ EOF;
         $CFG->disablemycourses = 1;
 
         // Enrolled users, like guests, should see a generic list of categories.
-        $this->_courselistincludes ( array (
-            'user1' => array ( 'Category 1', 'Sibling' )
-        ));
+        $this->_courselistincludes (  [
+            'user1' => [ 'Category 1', 'Sibling' ],
+        ]);
 
         // Enrolled users, like guests, should not see subcategories or specific courses.
-        $this->_courselistexcludes ( array (
-            'user1' => array ( 'Course 1', 'Child', 'Grandchild' )
-        ));
+        $this->_courselistexcludes (  [
+            'user1' => [ 'Course 1', 'Child', 'Grandchild' ],
+        ]);
 
         // On the other hand, managerview = own trumps disablemycourses.
         set_config('managerview', 'own', 'block_filtered_course_list');
@@ -986,11 +980,11 @@ EOF;
         // Enroll admin in 'hc_1'.
         $this->getDataGenerator()->enrol_user( $this->adminid, $this->courses['hc_1']->id, 3 );
 
-        $this->_courseunderrubric ( array (
-            'admin' => array (
-                'hc_1' => 'Other courses'
-            )
-        ));
+        $this->_courseunderrubric (  [
+            'admin' => [
+                'hc_1' => 'Other courses',
+            ],
+        ]);
     }
 
     /**
@@ -1006,37 +1000,37 @@ EOF;
         $this->getDataGenerator()->enrol_user( $this->user1->id , $this->courses['c_1']->id );
 
         // While completion is not enabled site-wide.
-        $this->_courselistexcludes ( array (
-            'user1' => array ( 'complete' ),
-        ));
+        $this->_courselistexcludes (  [
+            'user1' => [ 'complete' ],
+        ]);
 
         // While completion is enabled site-wide, but not on the course.
         $CFG->enablecompletion = true;
-        $this->_courselistexcludes ( array (
-            'user1' => array ( 'complete' ),
-        ));
+        $this->_courselistexcludes (  [
+            'user1' => [ 'complete' ],
+        ]);
 
         // Enable completion on the course.
         $record = new stdClass();
         $record->id = $this->courses['c_1']->id;
         $record->enablecompletion = 1;
         $DB->update_record('course', $record);
-        $this->_courselistincludes ( array (
-            'user1' => array ( 'incomplete' ),
-        ));
+        $this->_courselistincludes (  [
+            'user1' => [ 'incomplete' ],
+        ]);
 
         // Finally, mark the completion.
-        $completion = new completion_completion(array(
+        $completion = new completion_completion([
             'course' => $this->courses['c_1']->id,
-            'userid' => $this->user1->id
-        ));
+            'userid' => $this->user1->id,
+        ]);
         $completion->mark_complete();
-        $this->_courselistincludes ( array (
-            'user1' => array ( 'complete' ),
-        ));
-        $this->_courselistexcludes ( array (
-            'user1' => array ( 'incomplete' ),
-        ));
+        $this->_courselistincludes (  [
+            'user1' => [ 'complete' ],
+        ]);
+        $this->_courselistexcludes (  [
+            'user1' => [ 'incomplete' ],
+        ]);
     }
 
     /**
@@ -1051,15 +1045,15 @@ enrolment | c | guest | Open to guests
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courselistincludes(array(
-            'user1' => array('Open to guests', 'Guest enrolment'),
-            'user3' => array('Open to guests', 'Guest enrolment'),
-            'none'  => array('Open to guests', 'Guest enrolment'),
-        ));
+        $this->_courselistincludes([
+            'user1' => ['Open to guests', 'Guest enrolment'],
+            'user3' => ['Open to guests', 'Guest enrolment'],
+            'none'  => ['Open to guests', 'Guest enrolment'],
+        ]);
 
-        $this->_courselistexcludes(array(
-            'user3' => array('Self enrolment'),
-        ));
+        $this->_courselistexcludes([
+            'user3' => ['Self enrolment'],
+        ]);
 
         // Include courses with self enrolment enabled.
         $filterconfig = <<<EOF
@@ -1067,15 +1061,15 @@ enrolment | c | self | Allowing self enrolment
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courselistincludes(array(
-            'user1' => array('Allowing self enrolment', 'Self enrolment'),
-            'user3' => array('Allowing self enrolment', 'Self enrolment'),
-            'none'  => array('Allowing self enrolment', 'Self enrolment'),
-        ));
+        $this->_courselistincludes([
+            'user1' => ['Allowing self enrolment', 'Self enrolment'],
+            'user3' => ['Allowing self enrolment', 'Self enrolment'],
+            'none'  => ['Allowing self enrolment', 'Self enrolment'],
+        ]);
 
-        $this->_courselistexcludes(array(
-            'user3' => array('Guest enrolment'),
-        ));
+        $this->_courselistexcludes([
+            'user3' => ['Guest enrolment'],
+        ]);
 
         // Include courses with either self or guest enrolment enabled.
         $filterconfig = <<<EOF
@@ -1083,14 +1077,12 @@ enrolment | c | self, guest | Self-serve
 EOF;
         set_config('filters', $filterconfig, 'block_filtered_course_list');
 
-        $this->_courselistincludes(array(
-            'user1' => array('Self-serve', 'Self enrolment'),
-            'user2' => array('Self-serve', 'Guest enrolment'),
-            'user3' => array('Self-serve', 'Self enrolment'),
-            'user3' => array('Self-serve', 'Guest enrolment'),
-            'none'  => array('Self-serve', 'Self enrolment'),
-            'none'  => array('Self-serve', 'Guest enrolment'),
-        ));
+        $this->_courselistincludes([
+            'user1' => ['Self-serve', 'Self enrolment'],
+            'user2' => ['Self-serve', 'Guest enrolment'],
+            'user3' => ['Self-serve', 'Guest enrolment'],
+            'none'  => ['Self-serve', 'Guest enrolment'],
+        ]);
     }
 
 
@@ -1106,24 +1098,24 @@ EOF;
         $this->adminid = $USER->id;
 
         // Set up 3 regular users.
-        $this->user1 = $this->getDataGenerator()->create_user(array(
+        $this->user1 = $this->getDataGenerator()->create_user([
             'username'  => 'user1',
             'firstname' => 'User',
             'lastname'  => 'One',
-            'email'     => 'user1@unittest.com'
-        ));
-        $this->user2 = $this->getDataGenerator()->create_user(array(
+            'email'     => 'user1@unittest.com',
+        ]);
+        $this->user2 = $this->getDataGenerator()->create_user([
             'username'  => 'user2',
             'firstname' => 'User',
             'lastname'  => 'Two',
-            'email'     => 'user2@unittest.com'
-        ));
-        $this->user3 = $this->getDataGenerator()->create_user(array(
+            'email'     => 'user2@unittest.com',
+        ]);
+        $this->user3 = $this->getDataGenerator()->create_user([
             'username'  => 'user3',
             'firstname' => 'User',
             'lastname'  => 'Three',
-            'email'     => 'user3@unittest.com'
-        ));
+            'email'     => 'user3@unittest.com',
+        ]);
 
     }
 
@@ -1144,14 +1136,14 @@ EOF;
      * @param int $start A first value to apply incrementally to several courses
      * @param int $end The value at which to stop generating courses
      */
-    private function _create_misc_courses( $start=1, $end=8 ) {
+    private function _create_misc_courses($start=1, $end=8 ) {
 
         for ($i = $start; $i <= $end; $i++) {
-            $this->courses["c_$i"] = $this->getDataGenerator()->create_course(array(
+            $this->courses["c_$i"] = $this->getDataGenerator()->create_course([
                 'fullname' => "Course $i in Misc",
                 'shortname' => "c_$i",
                 'idnumber' => strtoupper("c_$i"),
-            ));
+            ]);
         }
     }
 
@@ -1200,55 +1192,55 @@ EOF;
         $this->_create_misc_courses ( 1, 3 );
 
         // Create categories.
-        $this->categories['cc1'] = $this->getDataGenerator()->create_category( array(
+        $this->categories['cc1'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Child category 1',
             'parent'    => 1,
-            'idnumber' => 'cc1'
-        ));
-        $this->categories['cc2'] = $this->getDataGenerator()->create_category( array(
+            'idnumber' => 'cc1',
+        ]);
+        $this->categories['cc2'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Child category 2',
             'parent'    => 1,
-            'idnumber' => 'cc2'
-        ));
+            'idnumber' => 'cc2',
+        ]);
         $cc2id = $this->categories['cc2']->id;
-        $this->categories['gc1'] = $this->getDataGenerator()->create_category( array(
+        $this->categories['gc1'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Grandchild category 1',
             'parent'   => $cc2id,
-            'idnumber' => 'gc1'
-        ));
-        $this->categories['hc'] = $this->getDataGenerator()->create_category( array(
+            'idnumber' => 'gc1',
+        ]);
+        $this->categories['hc'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Hidden category',
             'parent'   => 1,
             'idnumber' => 'hc',
-            'visible'  => 0
-        ));
+            'visible'  => 0,
+        ]);
         $hcid = $this->categories['hc']->id;
-        $this->categories['hcc'] = $this->getDataGenerator()->create_category( array(
+        $this->categories['hcc'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Hidden category child',
             'parent'   => $hcid,
-            'idnumber' => 'hcc'
-        ));
-        $this->categories['hcvc'] = $this->getDataGenerator()->create_category( array(
+            'idnumber' => 'hcc',
+        ]);
+        $this->categories['hcvc'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Hidden category visible child',
             'parent'   => $hcid,
             'idnumber' => 'hcvc',
-        ));
+        ]);
         $this->categories['hcvc']->show();
-        $this->categories['sc'] = $this->getDataGenerator()->create_category( array(
+        $this->categories['sc'] = $this->getDataGenerator()->create_category( [
             'name'     => 'Sibling category',
-            'idnumber' => 'sc'
-        ));
+            'idnumber' => 'sc',
+        ]);
 
         // Create three courses in each category, the third of which is hidden.
         foreach ($this->categories as $id => $category) {
             for ($i = 1; $i <= 3; $i++) {
                 $shortname = "{$id}_$i";
-                $params = array (
+                $params = [
                     'fullname'  => "Course $i in $category->name",
                     'shortname' => $shortname,
                     'idnumber'  => strtoupper($shortname),
-                    'category'  => $category->id
-                );
+                    'category'  => $category->id,
+                ];
                 if ( $i % 3 == 0 ) {
                     $params['visible'] = 0;
                 } else {
@@ -1259,51 +1251,51 @@ EOF;
         }
 
         // Create a course with a non-ascii shortname in the Sibling category.
-        $params = array (
+        $params = [
             'fullname'  => 'Non-ascii matching',
             'shortname' => 'øthér',
             'idnumber'  => 'ØTHÉR',
-            'category'  => $this->categories['sc']->id
-        );
+            'category'  => $this->categories['sc']->id,
+        ];
         $this->courses['øthér'] = $this->getDataGenerator()->create_course( $params );
 
         // Create a course with HTML entities in the fullname and shortname.
-        $params = array(
+        $params = [
             'fullname'  => '&uuml;&amp;: HTML Entities',
             'shortname' => '&uuml;&amp;shortname',
             'idnumber'  => '&uuml;&amp;IDNUMBER',
-            'category'  => $this->categories['sc']->id
-        );
+            'category'  => $this->categories['sc']->id,
+        ];
         $this->courses['&uuml;&amp;shortname'] = $this->getDataGenerator()->create_course( $params );
 
         // Create a course with guest enrolment enabled in the Sibling category.
-        $params = array(
+        $params = [
             'fullname'  => 'Guest enrolment enabled',
             'shortname' => 'guestenrolment',
             'idnumber'  => 'GUESTENROLMENT',
-            'category'  => $this->categories['sc']->id
-        );
+            'category'  => $this->categories['sc']->id,
+        ];
         $this->courses['guestenrolment'] = $this->getDataGenerator()->create_course($params);
         $guestplugin = enrol_get_plugin('guest');
-        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
-        $instance = $guestplugin->add_instance($this->courses['guestenrolment'], array('status' => ENROL_INSTANCE_ENABLED,
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $instance = $guestplugin->add_instance($this->courses['guestenrolment'], ['status' => ENROL_INSTANCE_ENABLED,
                                                                 'name' => 'Test instance',
                                                                 'customint6' => 1,
-                                                                'roleid' => $studentrole->id));
+                                                                'roleid' => $studentrole->id]);
 
         // Create a course with self enrolment enabled in the Sibling category.
-        $params = array(
+        $params = [
             'fullname'  => 'Self enrolment enabled',
             'shortname' => 'selfenrolment',
             'idnumber'  => 'SELFENROLMENT',
-            'category'  => $this->categories['sc']->id
-        );
+            'category'  => $this->categories['sc']->id,
+        ];
         $this->courses['selfenrolment'] = $this->getDataGenerator()->create_course($params);
         $selfplugin = enrol_get_plugin('self');
-        $instanceid1 = $selfplugin->add_instance($this->courses['selfenrolment'], array('status' => ENROL_INSTANCE_ENABLED,
+        $instanceid1 = $selfplugin->add_instance($this->courses['selfenrolment'], ['status' => ENROL_INSTANCE_ENABLED,
                                                                 'name' => 'Test instance',
                                                                 'customint6' => 1,
-                                                                'roleid' => $studentrole->id));
+                                                                'roleid' => $studentrole->id]);
 
         // Enroll user1 as a student in all courses.
         foreach ($this->courses as $course) {
@@ -1337,7 +1329,7 @@ EOF;
      *
      * @param array $expectations A list of users and whether or not they should see any block
      */
-    private function _noblock ( $expectations=array() ) {
+    private function _noblock($expectations=[] ) {
         $page = new moodle_page;
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
@@ -1364,7 +1356,7 @@ EOF;
      *
      * @param array $expectations A list of users and whether or not they should see the link
      */
-    private function _allcourseslink ( $expectations=array() ) {
+    private function _allcourseslink($expectations=[] ) {
         $page = new moodle_page;
         foreach ($expectations as $user => $result) {
             $this->_switchuser ( $user );
@@ -1385,7 +1377,7 @@ EOF;
      *
      * @param array $expectations A list of users and courses they should see
      */
-    private function _courselistincludes ( $expectations=array() ) {
+    private function _courselistincludes($expectations=[] ) {
         $page = new moodle_page;
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
@@ -1403,7 +1395,7 @@ EOF;
      *
      * @param array $expectations A list of users and courses they should not see
      */
-    private function _courselistexcludes ( $expectations=array() ) {
+    private function _courselistexcludes($expectations=[] ) {
         $page = new moodle_page;
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
@@ -1421,7 +1413,7 @@ EOF;
      *
      * @param mixed $user Can be a user type or a specific user object
      */
-    private function _switchuser ( $user ) {
+    private function _switchuser($user ) {
         if ( $user == 'none' ) {
             $this->setUser( null );
         } else if ( $user == 'guest' ) {
@@ -1439,7 +1431,7 @@ EOF;
      * @param array $expectations A list of users and courses they should or should not see
      * @param string $relation 'under' indicates that the user should see the course, otherwise not
      */
-    private function _courseunderrubric ( $expectations=array() , $relation='under' ) {
+    private function _courseunderrubric($expectations=[] , $relation='under' ) {
         $page = new moodle_page;
         foreach ($expectations as $user => $courses) {
             $this->_switchuser ( $user );
@@ -1486,7 +1478,7 @@ EOF;
      * @param array $expectations A list of rubric titles
      * @param string $operator Indicates whether to expect expanded or collapsed
      */
-    private function _sectionexpanded ( $expectations=array(), $operator='' ) {
+    private function _sectionexpanded($expectations=[], $operator='' ) {
         $page = new moodle_page;
         $this->_switchuser('user1');
         $bi = new block_filtered_course_list;

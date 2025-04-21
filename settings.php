@@ -110,7 +110,7 @@ if ($ADMIN->fulltree) {
 
     $managerviews = array(
         BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_ALL => get_string('allcourses', 'block_filtered_course_list'),
-        BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list')
+        BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN => get_string('owncourses', 'block_filtered_course_list'),
     );
 
     $settings->add(new admin_setting_configselect('block_filtered_course_list/managerview',

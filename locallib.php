@@ -117,6 +117,11 @@ class block_filtered_course_list_rubric {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_filtered_course_list_lib {
+    /**
+     * Return all files implementing filters.
+     *
+     * @return array files
+     */
     public static function get_filter_files() {
         global $CFG;
 
@@ -137,6 +142,11 @@ class block_filtered_course_list_lib {
         return $files;
     }
 
+    /**
+     * Return all filter classes.
+     *
+     * @return array classes
+     */
     public static function get_filter_classes() {
         $exfilters = array_filter(get_declared_classes(), function($class) {
             return preg_match('/.*fcl_filter/', $class);

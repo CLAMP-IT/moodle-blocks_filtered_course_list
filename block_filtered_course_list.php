@@ -39,9 +39,9 @@ class block_filtered_course_list extends block_base {
     /** @var array Admin settings for the FCL block */
     private $fclconfig;
     /** @var array A list of rubric objects for display */
-    private $rubrics = array();
+    private $rubrics = [];
     /** @var arrray A list of courses for the current user */
-    private $mycourses = array();
+    private $mycourses = [];
     /** @var string A type of user for purposes of list display, should be 'user', 'manager' or 'guest' */
     private $usertype;
     /** @var string Type of list: 'generic_list', 'filtered_list' or 'empty_block' */
@@ -127,16 +127,16 @@ class block_filtered_course_list extends block_base {
         $this->content->text   = '';
         $this->content->footer = '';
 
-        $sortsettings = array(
-            array(
+        $sortsettings = [
+            [
                 $this->fclconfig->primarysort,
                 $this->fclconfig->primaryvector,
-            ),
-            array(
+            ],
+            [
                 $this->fclconfig->secondarysort,
                 $this->fclconfig->secondaryvector,
-            ),
-        );
+            ],
+        ];
 
         $sortstring = "visible DESC";
 
@@ -161,11 +161,11 @@ class block_filtered_course_list extends block_base {
         }
 
         $output = $this->page->get_renderer('block_filtered_course_list');
-        $params = array(
+        $params = [
             'usertype'           => $this->usertype,
             'liststyle'          => $this->liststyle,
             'hideallcourseslink' => $this->fclconfig->hideallcourseslink,
-        );
+        ];
         $footer = new \block_filtered_course_list\output\footer($params);
         $this->content->footer = $output->render($footer);
 
@@ -241,14 +241,14 @@ class block_filtered_course_list extends block_base {
                     return is_array($item);
                 }
             ),
-        'array_merge', array());
+        'array_merge', []);
 
         if ($this->fclconfig->hideothercourses == BLOCK_FILTERED_COURSE_LIST_FALSE &&
                 $this->liststyle != 'generic_list') {
 
             $mentionedcourses = array_unique(array_reduce(array_map(function($item) {
                 return $item->courses;
-            }, $this->rubrics), 'array_merge', array()), SORT_REGULAR);
+            }, $this->rubrics), 'array_merge', []), SORT_REGULAR);
 
             $othercourses = array_udiff($this->mycourses, $mentionedcourses, function($a, $b) {
                 return $a->id - $b->id;
