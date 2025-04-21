@@ -42,6 +42,8 @@ class behat_block_filtered_course_list extends behat_base {
      * Set up test filter.
      *
      * @param BeforeSuiteScope $scope scope passed by event fired after suite.
+     * // phpcs:ignore
+     * @BeforeSuite
      */
     public static function before_suite(BeforeSuiteScope $scope) {
         $frompath = __DIR__ . '/data/external_filter.php';
@@ -55,6 +57,8 @@ class behat_block_filtered_course_list extends behat_base {
      * Remove test filter.
      *
      * @param AfterSuiteScope $scope scope passed by event fired after suite.
+     * // phpcs:ignore
+     * @AfterSuite
      */
     public static function after_suite(AfterSuiteScope $scope) {
         $rmpath = __DIR__ . '/data/fcl_filter.php';
