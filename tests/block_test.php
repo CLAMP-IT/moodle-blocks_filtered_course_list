@@ -66,6 +66,7 @@ class block_test extends advanced_testcase {
      * General setup for PHPUnit testing
      */
     protected function setUp(): void {
+        parent::setUp();
 
         global $CFG;
         unset ( $CFG->maxcategorydepth );
