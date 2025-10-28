@@ -200,12 +200,15 @@ class block_filtered_course_list extends block_base {
             $liststyle = 'generic_list';
         }
 
-        if (
+	// FIXME Removed this condition since it disables filters rendering entirely. I humbly say
+	// that I don't fully understand the meaning of $liststyle values and the expected
+	// behaviour.
+        /*if (
             $this->usertype == 'manager' &&
             $this->fclconfig->managerview != BLOCK_FILTERED_COURSE_LIST_ADMIN_VIEW_OWN
         ) {
             $liststyle = "generic_list";
-        }
+        }*/
 
         if (
             $this->fclconfig->hidefromguests == BLOCK_FILTERED_COURSE_LIST_TRUE && $this->usertype == 'guest'

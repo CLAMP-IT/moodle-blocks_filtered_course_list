@@ -68,3 +68,4 @@ $string['secondarysort']            = 'Secondary sort';
 $string['secondaryvector']          = 'Secondary sort vector';
 $string['starredcourses']    = 'Starred Courses';
 $string['top']                      = 'Top';
+$string['roleenrolment']    = 'Courses as {$a}';
