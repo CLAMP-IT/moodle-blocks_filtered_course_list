@@ -1,5 +1,9 @@
 ## Changelog
 
+### Unreleased
+
+* Revise icon size
+
 ### [v4.4.6]
 
 * Rename `master` branch to `main`
