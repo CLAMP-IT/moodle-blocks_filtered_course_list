@@ -1,5 +1,10 @@
 ## Changelog
 
+### Unreleased
+
+* Drop testing support on `main` branch for pre-Moodle 5.2 releases
+* Create `MOODLE_501_STABLE` branch for pre-Moodle 5.2 releases
+
 ### [v4.4.6]
 
 * Rename `master` branch to `main`
