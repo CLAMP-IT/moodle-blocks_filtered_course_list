@@ -6,6 +6,7 @@
 * Revise icon size
 * Remove leading whitespace from list items
 * Change release numbering scheme; major.minor corresponds to minimum supported Moodle core release
+* Drop testing for Moodle 4.4
 
 ### [v4.4.6]
 
