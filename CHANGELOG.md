@@ -1,8 +1,11 @@
 ## Changelog
 
-### Unreleased
+### [v4.5.0]
 
+* Create `MOODLE_501_STABLE` for pre-Moodle 5.2 releases
 * Revise icon size
+* Remove leading whitespace from list items
+* Change release numbering scheme; major.minor corresponds to minimum supported Moodle core release
 
 ### [v4.4.6]
 
