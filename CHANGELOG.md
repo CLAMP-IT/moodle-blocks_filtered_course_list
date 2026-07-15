@@ -1,11 +1,13 @@
 ## Changelog
 
-### Unreleased
+### [v5.2.0]
 
 * Drop testing support on `main` branch for pre-Moodle 5.2 releases
 * Create `MOODLE_501_STABLE` branch for pre-Moodle 5.2 releases
 * Revise icon size
+* Remove leading whitespace from list items
 * Add composer support
+* Change release numbering scheme; major.minor corresponds to minimum supported Moodle core release
 
 ### [v4.4.6]
 
