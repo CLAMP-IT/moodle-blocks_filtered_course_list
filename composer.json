@@ -1,6 +1,6 @@
 {
     "name": "lafayettecollege/moodle-block_filtered_course_list",
-    "description": "A description of my Moodle block plugin",
+    "description": "The Filtered course list block displays a configurable list of a user's courses. It is intended as a replacement for the My courses block, although both may be used.",
     "type": "moodle-block",
     "require": {
         "composer/installers": "*"
