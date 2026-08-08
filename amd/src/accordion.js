@@ -16,11 +16,33 @@
 /**
  * This file contains an AMD/jQuery module to expand and collapse course rubrics.
  *
- * @package    block_filtered_course_list
+ * @package
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
+define(['jquery'], function($) {
+
+
+    // Switching to moodle 4.5.x native cookies
+    /**
+     * setCookie function
+     * @function setCookie
+     * @param {name} name
+     * @param {value} value
+     */
+    function setCookie(name, value) {
+        document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + '; path=/';
+    }
+    /**
+     * getCookie function
+     * @function getCookie
+     * @param {name} name
+     * @return the value
+     */
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + encodeURIComponent(name) + '=([^;]+)'));
+        return match ? encodeURIComponent(match[1]) : null;
+    }
 
     /**
      * Expand a rubric.
@@ -35,7 +57,7 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         $(rubric).attr('aria-expanded', 'true');
         $(rubric).next().attr('aria-hidden', 'false');
         if (persist == 1) {
-            cookie.set(rubric.dataset.hash, 'expanded');
+            setCookie(rubric.dataset.hash, 'expanded');
         }
     }
 
@@ -52,7 +74,7 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         $(rubric).attr('aria-expanded', 'false');
         $(rubric).next().attr('aria-hidden', 'true');
         if (persist == 1) {
-            cookie.set(rubric.dataset.hash, 'collapsed');
+            setCookie(rubric.dataset.hash, 'collapsed');
         }
     }
 
@@ -60,7 +82,7 @@ define(['jquery', 'block_filtered_course_list/cookie'], function($, cookie) {
         init: function(params) {
             var blockid = params.blockid;
             $('#' + blockid + ' .block-fcl__rubric').each(function() {
-                var state = cookie.get(this.dataset.hash);
+                var state = getCookie(this.dataset.hash);
                 if (!($(this).hasClass('block-fcl__rubric--expanded')) && (!state || state == 'collapsed')) {
                     collapseRubric(this, params.persist);
                 }
