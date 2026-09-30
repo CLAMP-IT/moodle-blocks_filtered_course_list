@@ -45,10 +45,11 @@ require_once(dirname(__FILE__) . '/../renderer.php');
  * PHPUnit tests
  *
  * @package    block_filtered_course_list
+ * @covers     \block_filtered_course_list\lib
  * @copyright  2016 CLAMP
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_test extends advanced_testcase {
+final class block_test extends advanced_testcase {
     /** @var int The admin user's id number */
     private $adminid;
     /** @var object A test user */
